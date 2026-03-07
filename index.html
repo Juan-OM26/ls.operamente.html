@@ -221,10 +221,11 @@ nav {
 
 /* ── SCROLL INDICATOR ── */
 .scroll-hint {
-  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   color: var(--text-muted); font-size: 11px; font-family: 'DM Mono', monospace;
   animation: fadeUp 1s ease 1s both;
+  z-index: 2;
 }
 .scroll-line {
   width: 1px; height: 40px;
@@ -437,8 +438,6 @@ section { position: relative; z-index: 1; }
   opacity: 0.7;
   transition: opacity 0.2s;
   position: relative;
-  transform-origin: bottom;
-  animation: barGrow 1s ease both;
 }
 @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 .bar:hover { opacity: 1; }
@@ -666,10 +665,18 @@ footer {
 
 /* ── SEPARATOR ── */
 .sep {
-  width: 80px; height: 1px;
+  width: 120px; height: 1px;
   background: var(--grad);
-  margin: 0 auto 60px;
-  opacity: 0.4;
+  margin: 0 auto 48px;
+  opacity: 0.5;
+}
+.section-divider {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--glass-border), transparent);
+  position: relative; z-index: 1;
 }
 
 /* ── TIMELINE BAR ── */
@@ -733,7 +740,7 @@ footer {
     </div>
     <div class="stat-divider"></div>
     <div class="stat">
-      <div class="stat-num" style="font-size: clamp(28px,3vw,40px);">$53K</div>
+      <div class="stat-num count-up" data-target="53" data-prefix="$" data-suffix="K" style="font-size: clamp(28px,3vw,40px);">$0K</div>
       <div class="stat-label">Pipeline USD</div>
     </div>
     <div class="stat-divider"></div>
@@ -749,6 +756,7 @@ footer {
   <div class="scroll-hint"><div class="scroll-line"></div></div>
 </section>
 
+<div class="section-divider"></div>
 <!-- PROOF SECTION -->
 <section class="proof" id="proof">
   <div class="section-label">La prueba</div>
@@ -867,6 +875,7 @@ footer {
   </div>
 </section>
 
+<div class="section-divider"></div>
 <!-- METRICS SHOWCASE -->
 <section class="metrics-showcase">
   <div class="sep"></div>
@@ -903,6 +912,7 @@ footer {
   </div>
 </section>
 
+<div class="section-divider"></div>
 <!-- CTA -->
 <section class="conv-section" id="cta">
   <div class="conv-card">
@@ -931,13 +941,14 @@ footer {
 function animateCounters() {
   document.querySelectorAll('.count-up[data-target]').forEach(el => {
     const target = parseInt(el.dataset.target);
+    const prefix = el.dataset.prefix || '';
     const suffix = el.dataset.suffix || '';
     let current = 0;
     const step = target / 60;
     const timer = setInterval(() => {
       current += step;
       if (current >= target) { current = target; clearInterval(timer); }
-      el.textContent = Math.floor(current) + suffix;
+      el.textContent = prefix + Math.floor(current) + suffix;
     }, 20);
   });
 }
@@ -956,9 +967,15 @@ if (chartEl) {
     const pct = (d.val / maxVal) * 90;
     chartEl.innerHTML += `
       <div class="bar-group">
-        <div class="bar" style="height:${pct}px; animation-delay:${i*0.06}s;"></div>
+        <div class="bar" data-height="${pct}" style="height:0px; transition: height 0.6s ease ${i*0.07}s;"></div>
         <div class="bar-day">${d.day}</div>
       </div>`;
+  });
+}
+
+function animateBars() {
+  document.querySelectorAll('.bar[data-height]').forEach(bar => {
+    bar.style.height = bar.dataset.height + 'px';
   });
 }
 
@@ -1046,7 +1063,7 @@ const mainObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       if (entry.target.id === 'proof') {
-        if (!countersStarted) { countersStarted = true; animateCounters(); }
+        if (!countersStarted) { countersStarted = true; animateCounters(); setTimeout(animateBars, 400); }
         if (!chatStarted) { chatStarted = true; setTimeout(renderNextMessage, 600); }
         mainObserver.unobserve(entry.target);
       }
@@ -1073,7 +1090,7 @@ setTimeout(() => {
     if (rect.top < window.innerHeight && !chatStarted) {
       chatStarted = true;
       countersStarted = true;
-      animateCounters();
+      animateCounters(); setTimeout(animateBars, 400);
       setTimeout(renderNextMessage, 400);
     }
   }
