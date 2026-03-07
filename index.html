@@ -251,7 +251,7 @@ section { position: relative; z-index: 1; }
 
 /* ── PROOF SECTION ── */
 .proof {
-  padding: 24px 24px 24px;
+  padding: 48px 24px 48px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -449,7 +449,7 @@ section { position: relative; z-index: 1; }
 
 /* ── FLOW SECTION ── */
 .flow {
-  padding: 32px 24px 32px;
+  padding: 48px 24px 48px;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
@@ -512,7 +512,7 @@ section { position: relative; z-index: 1; }
 
 /* ── METRICS SHOWCASE ── */
 .metrics-showcase {
-  padding: 32px 24px 32px;
+  padding: 48px 24px 48px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -555,7 +555,7 @@ section { position: relative; z-index: 1; }
 
 /* ── CONVERSION BAR ── */
 .conv-section {
-  padding: 32px 24px 32px;
+  padding: 48px 24px 48px;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -621,22 +621,65 @@ footer {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-  nav { padding: 16px 20px; }
+  nav { padding: 14px 20px; }
   .nav-pill { display: none; }
-  .proof-grid { grid-template-columns: 1fr; }
-  .metrics-grid { grid-template-columns: 1fr 1fr; }
-  .kpi-row { grid-template-columns: 1fr 1fr 1fr; }
-  .hero-stats { gap: 24px; }
+
+  /* Hero */
+  .hero { padding: 100px 20px 48px; }
+  .hero-stats { gap: 20px; flex-wrap: wrap; justify-content: center; }
   .stat-divider { display: none; }
-  .conv-card { padding: 32px 24px; }
-  .flow-step { grid-template-columns: 44px 1fr; gap: 16px; }
+  .hero-cta-group { flex-direction: column; align-items: center; gap: 12px; }
+  .btn-primary, .btn-ghost { width: 100%; max-width: 320px; justify-content: center; }
+
+  /* Proof grid — stack vertically */
+  .proof-grid { grid-template-columns: 1fr; gap: 20px; }
+  .proof { padding: 32px 16px 32px; }
+  .chat-panel { min-height: 360px; }
+  .dash-panel { min-height: auto; }
+  .kpi-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .kpi-mini { padding: 10px 8px; }
+  .kpi-mini-val { font-size: 20px; }
+  .insight-row { flex-direction: column; gap: 8px; }
+
+  /* Flow */
+  .flow { padding: 32px 16px 32px; }
+  .flow-step { grid-template-columns: 44px 1fr; gap: 14px; padding: 20px 0; }
   .step-num { width: 44px; height: 44px; font-size: 18px; }
+  .step-title { font-size: 18px; }
+
+  /* Metrics */
+  .metrics-showcase { padding: 32px 16px 32px; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .metric-val { font-size: 32px; }
+
+  /* CTA */
+  .conv-section { padding: 32px 16px 32px; }
+  .conv-card { padding: 32px 20px; }
+  .conv-title { font-size: 26px; }
+  .conv-actions { flex-direction: column; align-items: center; }
+  .btn-wa, .btn-ghost { width: 100%; max-width: 320px; justify-content: center; }
+
+  /* Footer */
+  footer { padding: 24px 20px; flex-direction: column; align-items: center; text-align: center; gap: 12px; }
 }
 
 @media (max-width: 480px) {
-  .metrics-grid { grid-template-columns: 1fr; }
-  .kpi-row { grid-template-columns: 1fr; }
-  .hero-cta-group { flex-direction: column; align-items: center; }
+  nav { padding: 12px 16px; }
+  .logo img { height: 22px; }
+
+  .hero { padding: 88px 16px 40px; }
+  .hero-stats { gap: 16px; }
+
+  .metrics-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi-row { grid-template-columns: repeat(3, 1fr); }
+  .kpi-mini-val { font-size: 18px; }
+
+  .chart-bars { height: 80px; }
+
+  .proof { padding: 24px 12px 24px; }
+  .flow { padding: 24px 12px 24px; }
+  .metrics-showcase { padding: 24px 12px 24px; }
+  .conv-section { padding: 24px 12px 24px; }
 }
 
 
@@ -652,15 +695,20 @@ footer {
 .logo-text em { font-style: italic; font-weight: 300; }
 
 /* ── SEPARATOR ── */
+.sep-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px 0;
+  position: relative; z-index: 1;
+}
 .sep {
   width: 0px; height: 1px;
   background: var(--grad);
-  margin: 32px auto 32px;
   opacity: 0.6;
   border-radius: 1px;
   transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: block;
-  position: relative; z-index: 1;
 }
 .sep.animated {
   width: 120px;
@@ -747,9 +795,10 @@ footer {
   
 </section>
 
+<div class="sep-wrapper"><div class="sep"></div></div>
+
 <!-- PROOF SECTION -->
 <section class="proof" id="proof">
-  <div class="sep"></div>
   <div class="section-label">La prueba</div>
   <h2 class="section-title">Tu llegaste exactamente<br><span style="background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">así</span></h2>
   <p style="color: var(--text-secondary); max-width: 500px; font-weight: 300; margin-top: 12px;">
@@ -824,9 +873,10 @@ footer {
   </div>
 </section>
 
+<div class="sep-wrapper"><div class="sep"></div></div>
+
 <!-- FLOW SECTION -->
 <section class="flow" id="como-funciona">
-  <div class="sep"></div>
   <div class="section-label">El sistema</div>
   <h2 class="section-title">Cómo funciona<br><span style="background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">de principio a fin</span></h2>
 
@@ -866,9 +916,10 @@ footer {
   </div>
 </section>
 
+<div class="sep-wrapper"><div class="sep"></div></div>
+
 <!-- METRICS SHOWCASE -->
 <section class="metrics-showcase">
-  <div class="sep"></div>
   <div style="text-align:center;">
     <div class="section-label" style="justify-content: center;">Los números</div>
     <h2 class="section-title">Resultados que<br><span style="background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">hablan solos</span></h2>
@@ -902,9 +953,10 @@ footer {
   </div>
 </section>
 
+<div class="sep-wrapper"><div class="sep"></div></div>
+
 <!-- CTA -->
 <section class="conv-section" id="cta">
-  <div class="sep"></div>
   <div class="conv-card">
     <h2 class="conv-title">¿Tu negocio también<br><span style="background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">puede hacer esto</span>?</h2>
     <p class="conv-sub">En 30 minutos te mostramos cómo implementar exactamente este sistema para tu industria y tu equipo.</p>
