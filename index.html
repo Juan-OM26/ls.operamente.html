@@ -927,66 +927,68 @@ function animateCounters() {
 
 // ── CHART BARS ──
 const weekData = [
-  { day: 'L', val: 8 },
-  { day: 'M', val: 12 },
-  { day: 'X', val: 9 },
-  { day: 'J', val: 11 },
-  { day: 'V', val: 10 },
-  { day: 'S', val: 5 },
-  { day: 'D', val: 3 },
-  { day: 'L', val: 9 },
-  { day: 'M', val: 13 },
-  { day: 'X', val: 10 },
-  { day: 'J', val: 12 },
-  { day: 'V', val: 11 },
+  { day: 'L', val: 8 }, { day: 'M', val: 12 }, { day: 'X', val: 9 },
+  { day: 'J', val: 11 }, { day: 'V', val: 10 }, { day: 'S', val: 5 },
+  { day: 'D', val: 3 }, { day: 'L', val: 9 }, { day: 'M', val: 13 },
+  { day: 'X', val: 10 }, { day: 'J', val: 12 }, { day: 'V', val: 11 },
 ];
 const maxVal = Math.max(...weekData.map(d => d.val));
 const chartEl = document.getElementById('chartBars');
-weekData.forEach((d, i) => {
-  const pct = (d.val / maxVal) * 90;
-  chartEl.innerHTML += `
-    <div class="bar-group">
-      <div class="bar" style="height:${pct}px; animation-delay:${i*0.06}s;"></div>
-      <div class="bar-day">${d.day}</div>
-    </div>`;
-});
+if (chartEl) {
+  weekData.forEach((d, i) => {
+    const pct = (d.val / maxVal) * 90;
+    chartEl.innerHTML += `
+      <div class="bar-group">
+        <div class="bar" style="height:${pct}px; animation-delay:${i*0.06}s;"></div>
+        <div class="bar-day">${d.day}</div>
+      </div>`;
+  });
+}
 
 // ── CHAT SIMULATION ──
 const messages = [
-  { type: 'bot', text: '¡Hola! Soy el AI Concierge de Operamente. ¿En qué área te gustaría explorar cómo la IA puede ayudarte?', delay: 800 },
-  { type: 'user', text: 'Quiero mejorar mis ventas y que mi equipo no pierda tanto tiempo en leads fríos', delay: 2200 },
-  { type: 'bot', text: 'Perfecto, eso es exactamente lo que resolvemos. ¿Tu equipo de ventas actualmente atiende leads por WhatsApp o correo?', delay: 4000 },
-  { type: 'user', text: 'Por WhatsApp principalmente', delay: 5800 },
-  { type: 'bot', text: '🎯 Ideal. Podemos automatizar calificación, seguimiento y agendamiento de citas directamente desde WhatsApp. ¿Te gustaría ver los resultados que hemos logrado con este sistema?', delay: 7500 },
-  { type: 'user', text: 'Sí, cuéntame más', delay: 9200 },
-  { type: 'bot', text: '✅ En el último mes logramos 67 citas confirmadas con una conversión del 73%. Te agendo una llamada de 30 min para mostrarte cómo funciona en tu industria específica. ¿Cuándo tienes disponibilidad?', delay: 11000 },
+  { type: 'bot', text: '¡Hola! Soy el AI Concierge de Operamente. ¿En qué área te gustaría explorar cómo la IA puede ayudarte?', delay: 0 },
+  { type: 'user', text: 'Quiero mejorar mis ventas y que mi equipo no pierda tanto tiempo en leads fríos', delay: 2000 },
+  { type: 'bot', text: 'Perfecto, eso es exactamente lo que resolvemos. ¿Tu equipo atiende leads por WhatsApp o correo?', delay: 4200 },
+  { type: 'user', text: 'Por WhatsApp principalmente', delay: 6200 },
+  { type: 'bot', text: '🎯 Ideal. Automatizamos calificación, seguimiento y agendamiento directo desde WhatsApp. ¿Te gustaría ver los resultados que logramos?', delay: 8500 },
+  { type: 'user', text: 'Sí, cuéntame más', delay: 10500 },
+  { type: 'bot', text: '✅ Este mes: 67 citas confirmadas, 73% conversión, $53K en pipeline — generado 100% por el agente. ¿Cuándo tienes 30 min para una llamada?', delay: 13000 },
 ];
 
 let msgIndex = 0;
+let chatStarted = false;
+let countersStarted = false;
+
 function renderNextMessage() {
   if (msgIndex >= messages.length) return;
   const msg = messages[msgIndex];
   const chatEl = document.getElementById('chatMessages');
+  if (!chatEl) return;
 
-  // Show typing for bot
   if (msg.type === 'bot') {
     const typingEl = document.createElement('div');
     typingEl.className = 'typing';
     typingEl.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
     chatEl.appendChild(typingEl);
     chatEl.scrollTop = chatEl.scrollHeight;
-    setTimeout(() => { typingEl.classList.add('show'); }, 50);
+    setTimeout(() => typingEl.classList.add('show'), 50);
     setTimeout(() => {
       typingEl.remove();
       addMessage(msg, chatEl);
-    }, 1000);
+      msgIndex++;
+      if (msgIndex < messages.length) {
+        const nextDelay = messages[msgIndex].delay - msg.delay;
+        setTimeout(renderNextMessage, nextDelay);
+      }
+    }, 1200);
   } else {
     addMessage(msg, chatEl);
-  }
-
-  msgIndex++;
-  if (msgIndex < messages.length) {
-    setTimeout(renderNextMessage, messages[msgIndex].delay - msg.delay);
+    msgIndex++;
+    if (msgIndex < messages.length) {
+      const nextDelay = messages[msgIndex].delay - msg.delay;
+      setTimeout(renderNextMessage, nextDelay);
+    }
   }
 }
 
@@ -999,32 +1001,74 @@ function addMessage(msg, chatEl) {
   setTimeout(() => el.classList.add('show'), 50);
 }
 
-// ── INTERSECTION OBSERVER ──
-const observer = new IntersectionObserver((entries) => {
+// ── SCROLL REVEAL — todos los elementos ──
+document.querySelectorAll(
+  '.metric-card, .kpi-mini, .insight-chip, .chat-panel, .dash-panel, .conv-card'
+).forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = `opacity 0.55s ease ${(i % 4) * 0.08}s, transform 0.55s ease ${(i % 4) * 0.08}s`;
+});
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll(
+  '.metric-card, .kpi-mini, .insight-chip, .chat-panel, .dash-panel, .conv-card'
+).forEach(el => revealObserver.observe(el));
+
+// ── INTERSECTION OBSERVER — chat + counters + flow ──
+const mainObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       if (entry.target.id === 'proof') {
-        animateCounters();
-        setTimeout(renderNextMessage, 600);
+        if (!countersStarted) { countersStarted = true; animateCounters(); }
+        if (!chatStarted) { chatStarted = true; setTimeout(renderNextMessage, 600); }
+        mainObserver.unobserve(entry.target);
       }
       if (entry.target.id === 'flowSteps') {
         entry.target.querySelectorAll('.flow-step').forEach((step, i) => {
-          setTimeout(() => step.classList.add('visible'), i * 180);
+          setTimeout(() => step.classList.add('visible'), i * 200);
         });
+        mainObserver.unobserve(entry.target);
       }
-      observer.unobserve(entry.target);
     }
   });
-}, { threshold: 0.15 });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 
-document.getElementById('proof')?.let ? null : null;
 ['proof', 'flowSteps'].forEach(id => {
   const el = document.getElementById(id);
-  if (el) observer.observe(el);
+  if (el) mainObserver.observe(el);
 });
 
-// Start chat after a bit if proof section already visible
+// Fallback si proof ya es visible al cargar
 setTimeout(() => {
   const proof = document.getElementById('proof');
   if (proof) {
     const rect = proof.getBoundingClientRect();
+    if (rect.top < window.innerHeight && !chatStarted) {
+      chatStarted = true;
+      countersStarted = true;
+      animateCounters();
+      setTimeout(renderNextMessage, 400);
+    }
+  }
+}, 400);
+
+// ── LOGO FALLBACK ──
+document.querySelectorAll('.logo img').forEach(img => {
+  img.onerror = function() {
+    const parent = this.parentElement;
+    parent.innerHTML = `<span style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;background:linear-gradient(135deg,#6A2DE2,#F52F83);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Oper<em style="font-weight:300;">amente</em></span>`;
+  };
+});
+</script>
+</body>
+</html>
