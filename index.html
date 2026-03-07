@@ -262,7 +262,7 @@ section { position: relative; z-index: 1; }
 
 /* ── PROOF SECTION ── */
 .proof {
-  padding: 100px 24px;
+  padding: 60px 24px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -271,7 +271,8 @@ section { position: relative; z-index: 1; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
-  margin-top: 60px;
+  margin-top: 48px;
+  align-items: stretch;
 }
 
 /* ── CHAT SIMULATOR ── */
@@ -281,6 +282,9 @@ section { position: relative; z-index: 1; }
   border-radius: 24px;
   overflow: hidden;
   position: relative;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
 }
 
 .chat-header {
@@ -303,8 +307,10 @@ section { position: relative; z-index: 1; }
 
 .chat-messages {
   padding: 20px;
+  flex: 1;
   min-height: 380px;
   display: flex; flex-direction: column; gap: 12px;
+  overflow-y: auto;
 }
 
 .msg {
@@ -374,6 +380,7 @@ section { position: relative; z-index: 1; }
   border-radius: 24px;
   padding: 24px;
   display: flex; flex-direction: column; gap: 16px;
+  min-height: 500px;
 }
 
 .dash-header-row {
@@ -415,12 +422,13 @@ section { position: relative; z-index: 1; }
 .kpi-mini-delta { font-size: 11px; color: #22C55E; margin-top: 4px; }
 
 /* ── BAR CHART ── */
-.chart-area { flex: 1; }
+.chart-area { flex: 1; display: flex; flex-direction: column; }
 .chart-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .chart-title { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
 .chart-bars {
   display: flex; align-items: flex-end; gap: 6px;
   height: 100px;
+  flex: 1;
 }
 .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .bar {
@@ -454,7 +462,7 @@ section { position: relative; z-index: 1; }
 
 /* ── FLOW SECTION ── */
 .flow {
-  padding: 100px 24px;
+  padding: 60px 24px;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
@@ -517,7 +525,7 @@ section { position: relative; z-index: 1; }
 
 /* ── METRICS SHOWCASE ── */
 .metrics-showcase {
-  padding: 100px 24px;
+  padding: 60px 24px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -560,7 +568,7 @@ section { position: relative; z-index: 1; }
 
 /* ── CONVERSION BAR ── */
 .conv-section {
-  padding: 60px 24px;
+  padding: 40px 24px;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -644,6 +652,18 @@ footer {
   .hero-cta-group { flex-direction: column; align-items: center; }
 }
 
+
+.logo-text {
+  font-family: "Fraunces", serif;
+  font-size: 20px;
+  font-weight: 700;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.logo-text em { font-style: italic; font-weight: 300; }
+
 /* ── SEPARATOR ── */
 .sep {
   width: 80px; height: 1px;
@@ -677,7 +697,7 @@ footer {
 
 <!-- NAV -->
 <nav>
-  <div class="logo"><img src="https://raw.githubusercontent.com/Juan-OM26/operamente-dashboard/main/public/logo/Operamente-dark.png" alt="Operamente" /></div>
+  <div class="logo"><img src="https://raw.githubusercontent.com/Juan-OM26/operamente-dashboard/main/public/logo/Operamente-dark.png" alt="Operamente" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" /><span class="logo-text" style="display:none">Oper<em>amente</em></span></div>
   <div class="nav-pill">
     <div class="live-dot"></div>
     Demo en vivo
@@ -726,10 +746,7 @@ footer {
     <a href="#cta" class="btn-primary">Quiero esto en mi negocio →</a>
     <a href="#como-funciona" class="btn-ghost">Ver cómo funciona</a>
   </div>
-  <div class="scroll-hint">
-    <span>scroll</span>
-    <div class="scroll-line"></div>
-  </div>
+  <div class="scroll-hint"><div class="scroll-line"></div></div>
 </section>
 
 <!-- PROOF SECTION -->
@@ -904,7 +921,7 @@ footer {
 </section>
 
 <footer>
-  <div class="logo"><img src="https://raw.githubusercontent.com/Juan-OM26/operamente-dashboard/main/public/logo/Operamente-dark.png" alt="Operamente" /></div>
+  <div class="logo"><img src="https://raw.githubusercontent.com/Juan-OM26/operamente-dashboard/main/public/logo/Operamente-dark.png" alt="Operamente" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" /><span class="logo-text" style="display:none">Oper<em>amente</em></span></div>
   <div class="footer-copy">© 2026 Operamente · Sistemas de IA para operaciones y ventas</div>
   <div style="font-size:11px; color: var(--text-muted); font-family: 'DM Mono', monospace;">demo.operamente.com</div>
 </footer>
