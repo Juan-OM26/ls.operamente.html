@@ -231,7 +231,7 @@ section { position: relative; z-index: 1; }
   color: var(--text-muted);
   letter-spacing: 2px;
   text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 16px;
   display: flex; align-items: center; gap: 12px;
 }
 .section-label::before {
@@ -251,7 +251,7 @@ section { position: relative; z-index: 1; }
 
 /* ── PROOF SECTION ── */
 .proof {
-  padding: 0 24px 60px;
+  padding: 32px 24px 32px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -449,7 +449,7 @@ section { position: relative; z-index: 1; }
 
 /* ── FLOW SECTION ── */
 .flow {
-  padding: 0 24px 60px;
+  padding: 32px 24px 32px;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
@@ -512,7 +512,7 @@ section { position: relative; z-index: 1; }
 
 /* ── METRICS SHOWCASE ── */
 .metrics-showcase {
-  padding: 0 24px 60px;
+  padding: 32px 24px 32px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -555,7 +555,7 @@ section { position: relative; z-index: 1; }
 
 /* ── CONVERSION BAR ── */
 .conv-section {
-  padding: 0 24px 60px;
+  padding: 32px 24px 32px;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -692,9 +692,8 @@ footer {
 <!-- NAV -->
 <nav>
   <div class="logo">
-  <img src="https://raw.githubusercontent.com/Juan-OM26/operamente-dashboard/main/public/logo/Operamente-dark.png" 
-       alt="Operamente" 
-       crossorigin="anonymous"
+  <img src="https://cdn.jsdelivr.net/gh/Juan-OM26/operamente-dashboard@main/public/logo/Operamente-dark.png" 
+       alt="Operamente"
        onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'logo-text',innerHTML:'Oper<em>amente</em>'}))" />
 </div>
   <div class="nav-pill">
@@ -713,7 +712,7 @@ footer {
     Caso de Éxito Real · Operamente
   </div>
   <h1 class="hero-title">
-    Así cerramos<br>
+    Así agendamos<br>
     <span class="grad">67 citas</span> este mes<br>
     <span class="italic">con un AI Agent</span>
   </h1>
@@ -728,7 +727,7 @@ footer {
     <div class="stat-divider"></div>
     <div class="stat">
       <div class="stat-num count-up" data-target="73">0</div>
-      <div class="stat-label">% Conversión</div>
+      <div class="stat-label">% Agendamiento</div>
     </div>
     <div class="stat-divider"></div>
     <div class="stat">
@@ -788,7 +787,7 @@ footer {
         </div>
         <div class="kpi-mini">
           <div class="kpi-mini-val gold">73%</div>
-          <div class="kpi-mini-label">Conversión</div>
+          <div class="kpi-mini-label">Agendamiento</div>
           <div class="kpi-mini-delta">+12% ↑</div>
         </div>
         <div class="kpi-mini">
@@ -810,7 +809,7 @@ footer {
       <div class="insight-row">
         <div class="insight-chip">
           <strong>🕑 HORA PICO</strong>
-          2PM — 73% más conversión
+          2PM — 73% tasa de agendamiento
         </div>
         <div class="insight-chip">
           <strong>📅 MEJOR DÍA</strong>
@@ -844,7 +843,7 @@ footer {
       <div class="step-num">2</div>
       <div class="step-content">
         <div class="step-title">El agente califica y guía</div>
-        <div class="step-desc">Entiende el contexto, detecta intención de compra y ofrece el slot de cita ideal según el historial de conversión. Sin pasos manuales.</div>
+        <div class="step-desc">Entiende el contexto, detecta intención de compra y ofrece el slot de cita ideal según el historial de agendamiento. Sin pasos manuales.</div>
         <span class="step-tag">IA CONVERSACIONAL</span>
       </div>
     </div>
@@ -860,7 +859,7 @@ footer {
       <div class="step-num">4</div>
       <div class="step-content">
         <div class="step-title">Tú ves todo en el dashboard</div>
-        <div class="step-desc">Métricas en tiempo real. Tasas de conversión, horas pico, pipeline en USD, actividad del agente. Datos que te permiten optimizar cada semana.</div>
+        <div class="step-desc">Métricas en tiempo real. Tasas de agendamiento, horas pico, pipeline en USD, actividad del agente. Datos que te permiten optimizar cada semana.</div>
         <span class="step-tag">DASHBOARD PERSONALIZADO</span>
       </div>
     </div>
@@ -885,8 +884,8 @@ footer {
     <div class="metric-card">
       <div class="metric-icon">📈</div>
       <div class="metric-val">73<span style="font-size:20px;">%</span></div>
-      <div class="metric-label">Tasa de conversión lead → cita</div>
-      <div class="metric-note">+340% vs antes del AI Agent</div>
+      <div class="metric-label">Tasa de agendamiento lead → cita</div>
+      <div class="metric-note">+340% vs proceso manual anterior</div>
     </div>
     <div class="metric-card">
       <div class="metric-icon">💰</div>
@@ -923,13 +922,12 @@ footer {
 
 <footer>
   <div class="logo">
-  <img src="https://raw.githubusercontent.com/Juan-OM26/operamente-dashboard/main/public/logo/Operamente-dark.png" 
-       alt="Operamente" 
-       crossorigin="anonymous"
+  <img src="https://cdn.jsdelivr.net/gh/Juan-OM26/operamente-dashboard@main/public/logo/Operamente-dark.png" 
+       alt="Operamente"
        onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'logo-text',innerHTML:'Oper<em>amente</em>'}))" />
 </div>
   <div class="footer-copy">© 2026 Operamente · Sistemas de IA para operaciones y ventas</div>
-  <div style="font-size:11px; color: var(--text-muted); font-family: 'DM Mono', monospace;">demo.operamente.com</div>
+  <div style="font-size:11px; color: var(--text-muted); font-family: 'DM Mono', monospace;">www.operamente.com</div>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
@@ -983,7 +981,7 @@ const messages = [
   { type: 'user', text: 'Por WhatsApp principalmente', delay: 6200 },
   { type: 'bot', text: '🎯 Ideal. Automatizamos calificación, seguimiento y agendamiento directo desde WhatsApp. ¿Te gustaría ver los resultados que logramos?', delay: 8500 },
   { type: 'user', text: 'Sí, cuéntame más', delay: 10500 },
-  { type: 'bot', text: '✅ Este mes: 67 citas confirmadas, 73% conversión, $53K en pipeline — generado 100% por el agente. ¿Cuándo tienes 30 min para una llamada?', delay: 13000 },
+  { type: 'bot', text: '✅ Este mes: 67 citas confirmadas, 73% agendamiento, $53K en pipeline — generado 100% por el agente. ¿Cuándo tienes 30 min para una llamada?', delay: 13000 },
 ];
 
 let msgIndex = 0;
