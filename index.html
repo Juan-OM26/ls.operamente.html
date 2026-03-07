@@ -120,7 +120,7 @@ nav {
   min-height: 100vh;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   text-align: center;
-  padding: 120px 24px 80px;
+  padding: 120px 24px 60px;
 }
 
 .hero-badge {
@@ -220,19 +220,7 @@ nav {
 @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ── SCROLL INDICATOR ── */
-.scroll-hint {
-  position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  color: var(--text-muted); font-size: 11px; font-family: 'DM Mono', monospace;
-  animation: fadeUp 1s ease 1s both;
-  z-index: 2;
-}
-.scroll-line {
-  width: 1px; height: 40px;
-  background: linear-gradient(to bottom, transparent, var(--text-muted));
-  animation: scroll-pulse 2s ease-in-out infinite;
-}
-@keyframes scroll-pulse { 0%,100% { opacity: 0.3; transform: scaleY(1); } 50% { opacity: 1; transform: scaleY(0.6); } }
+
 
 /* ── SECTION ── */
 section { position: relative; z-index: 1; }
@@ -263,7 +251,7 @@ section { position: relative; z-index: 1; }
 
 /* ── PROOF SECTION ── */
 .proof {
-  padding: 60px 24px;
+  padding: 0 24px 60px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -461,7 +449,7 @@ section { position: relative; z-index: 1; }
 
 /* ── FLOW SECTION ── */
 .flow {
-  padding: 60px 24px;
+  padding: 0 24px 60px;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
@@ -524,7 +512,7 @@ section { position: relative; z-index: 1; }
 
 /* ── METRICS SHOWCASE ── */
 .metrics-showcase {
-  padding: 60px 24px;
+  padding: 0 24px 60px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -567,7 +555,7 @@ section { position: relative; z-index: 1; }
 
 /* ── CONVERSION BAR ── */
 .conv-section {
-  padding: 40px 24px;
+  padding: 0 24px 60px;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -665,18 +653,17 @@ footer {
 
 /* ── SEPARATOR ── */
 .sep {
-  width: 120px; height: 1px;
+  width: 0px; height: 1px;
   background: var(--grad);
-  margin: 0 auto 48px;
-  opacity: 0.5;
-}
-.section-divider {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--glass-border), transparent);
+  margin: 32px auto 32px;
+  opacity: 0.6;
+  border-radius: 1px;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
   position: relative; z-index: 1;
+}
+.sep.animated {
+  width: 120px;
 }
 
 /* ── TIMELINE BAR ── */
@@ -704,7 +691,12 @@ footer {
 
 <!-- NAV -->
 <nav>
-  <div class="logo"><img src="https://github.com/Juan-OM26/operamente-dashboard/blob/fc0ca6e06b36b0c2e8702d41fe8da2e387e79f29/public/logo/Operamente.png" alt="Operamente" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" /><span class="logo-text" style="display:none">Oper<em>amente</em></span></div>
+  <div class="logo">
+  <img src="https://raw.githubusercontent.com/Juan-OM26/operamente-dashboard/main/public/logo/Operamente-dark.png" 
+       alt="Operamente" 
+       crossorigin="anonymous"
+       onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'logo-text',innerHTML:'Oper<em>amente</em>'}))" />
+</div>
   <div class="nav-pill">
     <div class="live-dot"></div>
     Demo en vivo
@@ -753,12 +745,12 @@ footer {
     <a href="#cta" class="btn-primary">Quiero esto en mi negocio →</a>
     <a href="#como-funciona" class="btn-ghost">Ver cómo funciona</a>
   </div>
-  <div class="scroll-hint"><div class="scroll-line"></div></div>
+  
 </section>
 
-<div class="section-divider"></div>
 <!-- PROOF SECTION -->
 <section class="proof" id="proof">
+  <div class="sep"></div>
   <div class="section-label">La prueba</div>
   <h2 class="section-title">Tu llegaste exactamente<br><span style="background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">así</span></h2>
   <p style="color: var(--text-secondary); max-width: 500px; font-weight: 300; margin-top: 12px;">
@@ -875,7 +867,6 @@ footer {
   </div>
 </section>
 
-<div class="section-divider"></div>
 <!-- METRICS SHOWCASE -->
 <section class="metrics-showcase">
   <div class="sep"></div>
@@ -912,9 +903,9 @@ footer {
   </div>
 </section>
 
-<div class="section-divider"></div>
 <!-- CTA -->
 <section class="conv-section" id="cta">
+  <div class="sep"></div>
   <div class="conv-card">
     <h2 class="conv-title">¿Tu negocio también<br><span style="background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">puede hacer esto</span>?</h2>
     <p class="conv-sub">En 30 minutos te mostramos cómo implementar exactamente este sistema para tu industria y tu equipo.</p>
@@ -931,7 +922,12 @@ footer {
 </section>
 
 <footer>
-  <div class="logo"><img src="https://github.com/Juan-OM26/operamente-dashboard/blob/fc0ca6e06b36b0c2e8702d41fe8da2e387e79f29/public/logo/Operamente.png" alt="Operamente" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" /><span class="logo-text" style="display:none">Oper<em>amente</em></span></div>
+  <div class="logo">
+  <img src="https://raw.githubusercontent.com/Juan-OM26/operamente-dashboard/main/public/logo/Operamente-dark.png" 
+       alt="Operamente" 
+       crossorigin="anonymous"
+       onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'logo-text',innerHTML:'Oper<em>amente</em>'}))" />
+</div>
   <div class="footer-copy">© 2026 Operamente · Sistemas de IA para operaciones y ventas</div>
   <div style="font-size:11px; color: var(--text-muted); font-family: 'DM Mono', monospace;">demo.operamente.com</div>
 </footer>
@@ -1081,6 +1077,17 @@ const mainObserver = new IntersectionObserver((entries) => {
   const el = document.getElementById(id);
   if (el) mainObserver.observe(el);
 });
+
+// Animate all .sep lines on scroll
+const sepObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('animated'), 100);
+      sepObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.sep').forEach(sep => sepObserver.observe(sep));
 
 // Fallback si proof ya es visible al cargar
 setTimeout(() => {
