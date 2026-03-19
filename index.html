@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Operamente — AI Concierge en Acción</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── VARIABLES ── */
 :root {
   --violet: #5B2BD5;
   --magenta: #E8237A;
-  --violet-soft: #7C5CE8;
   --pearl: #F7F6F4;
   --pearl-2: #EEECEA;
   --dark: #12101A;
@@ -17,341 +18,469 @@
   --text-dark: #12101A;
   --text-mid: #4A4560;
   --text-light: #8E8AAA;
-  --white: #FFFFFF;
-  --grad: linear-gradient(135deg, var(--violet) 0%, var(--magenta) 100%);
+  --grad: linear-gradient(135deg, #5B2BD5 0%, #E8237A 100%);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { font-family: 'Sora', sans-serif; background: var(--pearl); color: var(--text-dark); overflow-x: hidden; }
+body { font-family: 'Sora', sans-serif; background: var(--pearl); color: var(--text-dark); overflow-x: hidden; line-height: 1.6; }
 
-/* NAV */
+/* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 18px 48px;
+  padding: 16px 48px;
   display: flex; align-items: center; justify-content: space-between;
-  background: rgba(247,246,244,0.88); backdrop-filter: blur(16px);
+  background: rgba(247,246,244,0.92); backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(91,43,213,0.08);
 }
-.logo img { height: 36px; width: auto; display: block; }
-.logo-fallback { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.nav-logo { display: flex; align-items: center; }
+.nav-logo img { height: 34px; width: auto; display: block; }
+.nav-logo-svg { display: none; }
 .nav-pill {
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 7px;
   background: var(--dark); border-radius: 100px; padding: 7px 16px;
-  font-size: 11px; color: rgba(255,255,255,0.5); font-family:'JetBrains Mono',monospace;
+  font-size: 11px; color: rgba(255,255,255,0.5);
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.3px;
 }
-.live-dot { width:6px; height:6px; background:#22C55E; border-radius:50%; box-shadow:0 0 6px #22C55E; animation:blink 2s ease-in-out infinite; }
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+.live-dot {
+  width: 6px; height: 6px; background: #22C55E; border-radius: 50%;
+  box-shadow: 0 0 6px #22C55E; animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
 .nav-cta {
-  background:var(--grad); color:white; border:none;
-  padding:10px 24px; border-radius:100px;
-  font-family:'Sora',sans-serif; font-size:13px; font-weight:600;
-  cursor:pointer; text-decoration:none;
-  transition:opacity 0.2s,transform 0.2s;
-  display:inline-flex; align-items:center; gap:8px;
+  background: var(--grad); color: white; border: none;
+  padding: 10px 22px; border-radius: 100px;
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: opacity .2s, transform .2s;
 }
-.nav-cta:hover{opacity:.88;transform:translateY(-1px)}
+.nav-cta:hover { opacity: .87; transform: translateY(-1px); }
 
-/* HERO */
+/* ── HERO ── */
 .hero {
   background: var(--dark); min-height: 100vh;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 120px 24px 80px;
-  position: relative; overflow: hidden;
+  padding: 120px 24px 80px; position: relative; overflow: hidden;
 }
 .hero-lines {
-  position:absolute; inset:0; pointer-events:none;
-  background-image: repeating-linear-gradient(90deg,transparent,transparent 28px,rgba(91,43,213,0.06) 28px,rgba(91,43,213,0.06) 29px);
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(
+    90deg, transparent, transparent 28px,
+    rgba(91,43,213,0.055) 28px, rgba(91,43,213,0.055) 29px
+  );
 }
 .hero-orb {
-  position:absolute; width:560px; height:560px; border-radius:50%;
-  background:radial-gradient(ellipse,rgba(232,35,122,0.22) 0%,rgba(91,43,213,0.14) 50%,transparent 70%);
-  top:50%; left:50%; transform:translate(-50%,-50%); filter:blur(50px);
-  animation:orb 8s ease-in-out infinite; pointer-events:none;
+  position: absolute; width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(232,35,122,0.18) 0%, rgba(91,43,213,0.12) 45%, transparent 70%);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  filter: blur(60px); animation: orb 9s ease-in-out infinite; pointer-events: none;
 }
-@keyframes orb{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.12)}}
-/* TERMINAL */
+@keyframes orb { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.1)} }
+
+/* Terminal */
 .terminal {
-  width: 100%; max-width: 680px;
-  background: rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.08);
+  width: 100%; max-width: 660px; margin-bottom: 52px;
+  background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.08);
   border-radius: 14px; overflow: hidden;
-  margin-bottom: 56px;
+  backdrop-filter: blur(10px);
   position: relative; z-index: 1;
-  animation: fadeUp .8s ease .1s both;
-  backdrop-filter: blur(8px);
+  animation: fadeUp .7s ease .1s both;
 }
-.terminal-bar {
-  background: rgba(255,255,255,0.05);
-  padding: 10px 16px;
-  display: flex; align-items: center; gap: 7px;
+.term-bar {
+  background: rgba(255,255,255,0.04); padding: 10px 16px;
+  display: flex; align-items: center; gap: 6px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.t-dot { width: 10px; height: 10px; border-radius: 50%; }
-.t-dot-r{background:#FF5F57}.t-dot-y{background:#FEBC2E}.t-dot-g{background:#28C840}
-.t-label { margin-left: 8px; font-family:'JetBrains Mono',monospace; font-size:11px; color:rgba(255,255,255,0.25); }
-.terminal-body { padding: 20px 22px; min-height: 180px; }
-.t-line {
-  font-family: 'JetBrains Mono', monospace; font-size: 13px;
-  line-height: 1.9; display: flex; align-items: baseline; gap: 10px;
-  opacity: 0; transition: opacity 0.3s;
+.td { width: 11px; height: 11px; border-radius: 50%; }
+.td-r{background:#FF5F57} .td-y{background:#FEBC2E} .td-g{background:#28C840}
+.term-title { margin-left: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.22); letter-spacing: .3px; }
+.term-body { padding: 20px 22px; min-height: 196px; }
+.tl {
+  font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
+  line-height: 1.95; display: flex; align-items: baseline; gap: 0;
+  opacity: 0; transition: opacity .25s ease;
 }
-.t-line.show { opacity: 1; }
-.t-prompt { color: rgba(91,43,213,0.8); flex-shrink: 0; }
-.t-text { color: rgba(255,255,255,0.7); }
-.t-val { font-weight: 600; }
-.t-val.green { color: #22C55E; }
-.t-val.magenta { color: var(--magenta); }
-.t-val.violet { color: #A78BFA; }
-.t-val.gold { color: #FBBF24; }
+.tl.show { opacity: 1; }
+.tl-prompt { color: rgba(91,43,213,0.75); margin-right: 8px; flex-shrink: 0; }
+.tl-key { color: rgba(255,255,255,0.5); }
+.tl-sep { color: rgba(255,255,255,0.2); margin: 0 6px; }
+.tl-val { font-weight: 500; }
+.tl-val.green { color: #22C55E; }
+.tl-val.magenta { color: #E8237A; }
+.tl-val.violet { color: #A78BFA; }
+.tl-val.gold { color: #FBBF24; }
+.tl-val.white { color: rgba(255,255,255,0.7); }
 .t-cursor {
-  display: inline-block; width: 8px; height: 14px;
-  background: var(--magenta); margin-left: 3px; vertical-align: middle;
-  animation: cursor-blink 1s step-end infinite;
+  display: inline-block; width: 7px; height: 13px; background: #E8237A;
+  vertical-align: middle; margin-left: 4px;
+  animation: cur 1s step-end infinite;
 }
-@keyframes cursor-blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes cur { 0%,100%{opacity:1} 50%{opacity:0} }
 
-/* TRANSFORM SPLIT */
-.transform-split {
-  width: 100%; max-width: 900px;
-  display: grid; grid-template-columns: 1fr 2px 1fr;
-  gap: 0; position: relative; z-index: 1;
-  animation: fadeUp .8s ease .3s both;
-  margin-bottom: 48px;
-}
-.split-col {
-  padding: 28px 36px;
-}
-.split-col.left { text-align: right; }
-.split-col.right { text-align: left; }
-.split-label {
-  font-family: 'JetBrains Mono', monospace; font-size: 10px;
-  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;
-  display: block;
-}
-.split-label.bad { color: rgba(255,255,255,0.2); }
-.split-label.good { color: var(--magenta); }
-.split-item {
-  font-size: 13px; line-height: 2.0; display: block;
-}
-.split-item.bad { color: rgba(255,255,255,0.25); text-decoration: line-through; text-decoration-color: rgba(255,255,255,0.1); }
-.split-item.good { color: rgba(255,255,255,0.75); font-weight: 500; }
-.split-item.good::before { content: '✓ '; color: #22C55E; font-size: 11px; }
-.split-divider {
-  width: 2px;
-  background: linear-gradient(to bottom, transparent, var(--magenta), transparent);
-  border-radius: 2px; opacity: 0.6;
-  position: relative;
-}
-.split-divider::after {
-  content: '';
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--magenta); box-shadow: 0 0 12px var(--magenta);
-}
-
-/* HERO COPY */
-.hero-phrase {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(13px,1.4vw,16px); font-weight: 400; font-style: italic;
-  color: rgba(255,255,255,0.3); margin-bottom: 32px;
+/* Split */
+.hero-split {
+  width: 100%; max-width: 860px; margin-bottom: 44px;
+  display: grid; grid-template-columns: 1fr 1px 1fr;
   position: relative; z-index: 1;
-  animation: fadeUp .8s ease .45s both;
-  letter-spacing: 0.2px;
+  animation: fadeUp .7s ease .25s both;
+}
+.split-side { padding: 24px 36px; }
+.split-side.left { text-align: right; }
+.split-side.right { text-align: left; }
+.split-lbl {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 16px; display: block;
+}
+.split-lbl.bad { color: rgba(255,255,255,0.18); }
+.split-lbl.good { color: var(--magenta); }
+.split-row { display: block; font-size: 13px; line-height: 2.1; }
+.split-row.bad { color: rgba(255,255,255,0.2); text-decoration: line-through; text-decoration-color: rgba(255,255,255,0.1); }
+.split-row.good { color: rgba(255,255,255,0.75); font-weight: 500; }
+.split-row.good::before { content: '✓ '; color: #22C55E; font-size: 10px; }
+.split-bar {
+  background: linear-gradient(to bottom, transparent 0%, var(--magenta) 40%, var(--magenta) 60%, transparent 100%);
+  opacity: .5; position: relative;
+}
+.split-bar::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--magenta); box-shadow: 0 0 10px var(--magenta);
+}
+
+/* Hero phrase + CTAs */
+.hero-phrase {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  color: rgba(255,255,255,0.25); margin-bottom: 32px;
+  position: relative; z-index: 1;
+  animation: fadeUp .7s ease .38s both;
 }
 .hero-ctas {
   display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
   position: relative; z-index: 1;
-  animation: fadeUp .8s ease .55s both;
+  animation: fadeUp .7s ease .46s both;
 }
-.btn-primary { background:var(--grad); color:white; border:none; padding:15px 36px; border-radius:100px; font-family:'Sora',sans-serif; font-size:14px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:10px; transition:transform .2s,box-shadow .2s; box-shadow:0 0 40px rgba(232,35,122,.28); }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(232,35,122,.5)}
-.btn-ghost { background:rgba(255,255,255,.06); color:rgba(255,255,255,.65); border:1px solid rgba(255,255,255,.12); padding:15px 36px; border-radius:100px; font-family:'Sora',sans-serif; font-size:14px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:10px; transition:background .2s; }
-.btn-ghost:hover{background:rgba(255,255,255,.1)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-/* DIVIDER */
-.div-wrap { display:flex; justify-content:center; padding:28px 0; }
-.div-line { width:0; height:1px; background:var(--grad); border-radius:1px; transition:width 1.2s cubic-bezier(.4,0,.2,1); }
-.div-line.show{width:100px}
-
-/* PROOF */
-.proof { background:var(--pearl); padding:64px 24px; }
-.proof-in { max-width:1160px; margin:0 auto; }
-.eyebrow { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); display:flex; align-items:center; gap:12px; margin-bottom:14px; }
-.eyebrow::before{content:'';width:20px;height:1px;background:var(--text-light);display:block}
-.sec-title { font-family:'Playfair Display',serif; font-size:clamp(32px,4vw,52px); font-weight:900; line-height:1.05; letter-spacing:-1.5px; margin-bottom:10px; }
-.sec-bracket { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-light); margin-bottom:48px; }
-.proof-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:stretch; }
-
-/* CHAT */
-.chat-wrap { background:var(--dark-2); border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,.06); display:flex; flex-direction:column; min-height:480px; }
-.chat-top { padding:15px 20px; background:var(--dark-3); display:flex; align-items:center; gap:12px; border-bottom:1px solid rgba(255,255,255,.05); }
-.chat-av { width:34px; height:34px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
-.chat-nm { font-size:13px; font-weight:600; color:white; }
-.chat-on { font-size:11px; color:#22C55E; display:flex; align-items:center; gap:4px; }
-.chat-on::before{content:'';width:5px;height:5px;background:#22C55E;border-radius:50%;display:inline-block}
-.chat-tag2 { margin-left:auto; background:rgba(91,43,213,.2); border:1px solid rgba(91,43,213,.3); color:#A78BFA; border-radius:100px; font-size:10px; padding:3px 10px; font-family:'JetBrains Mono',monospace; }
-.chat-msgs { flex:1; padding:18px; display:flex; flex-direction:column; gap:10px; overflow-y:auto; }
-.msg { max-width:82%; padding:10px 14px; border-radius:14px; font-size:13px; line-height:1.5; opacity:0; transform:translateY(8px); transition:opacity .35s,transform .35s; }
-.msg.show{opacity:1;transform:translateY(0)}
-.msg-bot { background:var(--dark-3); color:rgba(255,255,255,.85); border:1px solid rgba(255,255,255,.06); align-self:flex-start; border-bottom-left-radius:4px; }
-.msg-user { background:var(--grad); color:white; align-self:flex-end; border-bottom-right-radius:4px; }
-.typing { display:flex; gap:4px; align-items:center; padding:10px 14px; background:var(--dark-3); border:1px solid rgba(255,255,255,.06); border-radius:14px; border-bottom-left-radius:4px; align-self:flex-start; opacity:0; transition:opacity .3s; max-width:56px; }
-.typing.show{opacity:1}
-.dot{width:5px;height:5px;background:rgba(255,255,255,.3);border-radius:50%;animation:td 1.2s ease-in-out infinite}
-.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
-@keyframes td{0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-4px);opacity:1}}
-
-/* DASHBOARD */
-.dash-wrap { background:white; border-radius:20px; border:1px solid rgba(18,16,26,.08); padding:24px; display:flex; flex-direction:column; gap:18px; box-shadow:0 4px 24px rgba(18,16,26,.06); }
-.dash-hd { display:flex; align-items:center; justify-content:space-between; padding-bottom:16px; border-bottom:1px solid rgba(18,16,26,.06); }
-.dash-t { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; }
-.dash-p { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-light); background:var(--pearl-2); padding:4px 10px; border-radius:6px; }
-.kpi-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-.kpi { background:var(--pearl); border-radius:12px; padding:14px; text-align:center; border:1px solid rgba(18,16,26,.06); }
-.kv { font-family:'Playfair Display',serif; font-size:28px; font-weight:900; line-height:1; margin-bottom:4px; }
-.kv.vc{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.kv.gd{color:#D97706}.kv.gn{color:#059669}
-.kl { font-size:9px; color:var(--text-light); font-family:'JetBrains Mono',monospace; letter-spacing:.5px; text-transform:uppercase; }
-.kdelta{font-size:10px;color:#059669;margin-top:3px}
-.bars-wrap{}
-.bars-lbl{font-size:11px;color:var(--text-mid);font-weight:500;margin-bottom:10px}
-.bars{display:flex;align-items:flex-end;gap:5px;height:88px}
-.bg{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-.b{width:100%;border-radius:4px 4px 0 0;background:var(--grad);opacity:.75;height:0;transition:height .7s cubic-bezier(.4,0,.2,1),opacity .2s}
-.b:hover{opacity:1}
-.bd{font-size:8px;color:var(--text-light);font-family:'JetBrains Mono',monospace}
-.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.chip{background:var(--pearl);border-radius:10px;padding:10px 12px;border:1px solid rgba(18,16,26,.06)}
-.chip-l{font-size:9px;font-family:'JetBrains Mono',monospace;letter-spacing:.8px;text-transform:uppercase;color:var(--violet-soft);font-weight:500;margin-bottom:3px}
-.chip-v{font-size:12px;color:var(--text-dark);font-weight:500;line-height:1.3}
-
-/* HOW */
-.how{background:var(--dark);padding:72px 24px;position:relative;overflow:hidden}
-.how-lines{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(90deg,transparent,transparent 28px,rgba(91,43,213,.04) 28px,rgba(91,43,213,.04) 29px)}
-.how-in{max-width:960px;margin:0 auto;position:relative;z-index:1}
-.how-hd{text-align:center;margin-bottom:56px}
-.how-title{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,50px);font-weight:900;letter-spacing:-1.5px;color:white;margin-bottom:10px}
-.how-br{font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(255,255,255,.28)}
-.steps{display:flex;flex-direction:column}
-.step{display:grid;grid-template-columns:52px 1fr;gap:28px;padding:30px 0;border-bottom:1px solid rgba(255,255,255,.05);opacity:0;transform:translateX(-16px);transition:opacity .5s ease,transform .5s ease}
-.step:last-child{border-bottom:none}
-.step.show{opacity:1;transform:translateX(0)}
-.snum{width:52px;height:52px;border-radius:50%;background:var(--grad);color:white;font-family:'Playfair Display',serif;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sbody{padding-top:4px}
-.stitle{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:white;margin-bottom:8px;letter-spacing:-.5px}
-.sdesc{font-size:13px;color:rgba(255,255,255,.4);line-height:1.65;font-weight:300}
-.stag{display:inline-block;margin-top:12px;background:rgba(91,43,213,.2);border:1px solid rgba(91,43,213,.3);color:#A78BFA;border-radius:6px;font-size:9px;font-family:'JetBrains Mono',monospace;padding:3px 10px;letter-spacing:1px;text-transform:uppercase}
-
-/* RESULTS */
-.results{background:var(--pearl);padding:72px 24px}
-.results-in{max-width:1160px;margin:0 auto}
-.rg{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}
-.rc{background:white;border-radius:18px;padding:28px 22px;border:1px solid rgba(18,16,26,.07);box-shadow:0 2px 16px rgba(18,16,26,.05);position:relative;overflow:hidden;opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease,box-shadow .25s}
-.rc.show{opacity:1;transform:translateY(0)}
-.rc:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(18,16,26,.1)}
-.rc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
-.r-icon{font-size:22px;margin-bottom:14px}
-.r-val{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;line-height:1;margin-bottom:8px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.r-lbl{font-size:13px;color:var(--text-mid);margin-bottom:14px;line-height:1.4}
-.r-note{font-size:10px;color:var(--text-light);font-family:'JetBrains Mono',monospace;border-top:1px solid rgba(18,16,26,.06);padding-top:12px}
-
-/* CTA */
-.cta-sec{background:var(--dark);padding:80px 24px;position:relative;overflow:hidden}
-.cta-lines{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(90deg,transparent,transparent 28px,rgba(91,43,213,.04) 28px,rgba(91,43,213,.04) 29px)}
-.cta-in{max-width:700px;margin:0 auto;text-align:center;position:relative;z-index:1}
-.cta-ey{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:20px}
-.cta-ey::before,.cta-ey::after{content:'';width:20px;height:1px;background:rgba(255,255,255,.2);display:block}
-.cta-title{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,58px);font-weight:900;color:white;letter-spacing:-2px;line-height:1.0;margin-bottom:14px}
-.cta-title .accent{font-style:italic;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.cta-br{font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(255,255,255,.28);margin-bottom:40px}
-.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.btn-wa{background:#22C55E;color:white;border:none;padding:15px 36px;border-radius:100px;font-family:'Sora',sans-serif;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:transform .2s,box-shadow .2s;box-shadow:0 0 30px rgba(34,197,94,.28)}
-.btn-wa:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(34,197,94,.5)}
-.btn-out{background:transparent;color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.15);padding:15px 36px;border-radius:100px;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:background .2s}
-.btn-out:hover{background:rgba(255,255,255,.06)}
-
-/* FOOTER */
-footer{background:var(--dark-2);padding:26px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;border-top:1px solid rgba(255,255,255,.05)}
-.ft-logo img{height:30px;width:auto}
-.ft-copy{font-size:11px;color:rgba(255,255,255,.22);font-family:'JetBrains Mono',monospace}
-.ft-url{font-size:11px;color:rgba(255,255,255,.18);font-family:'JetBrains Mono',monospace}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-  nav{padding:14px 20px}.nav-pill{display:none}
-  .hero{padding:90px 20px 60px}
-  .hero-ctas{flex-direction:column;align-items:center}
-  .btn-primary,.btn-ghost{width:100%;max-width:320px;justify-content:center}
-  .transform-split{grid-template-columns:1fr 2px 1fr}
-  .split-col{padding:20px 16px}
-  .split-item{font-size:12px}
-  .terminal{max-width:100%}
-  .btn-primary,.btn-ghost,.btn-wa,.btn-out{width:100%;max-width:320px;justify-content:center}
-  .proof{padding:48px 16px}.proof-grid{grid-template-columns:1fr}
-  .how{padding:48px 16px}.results{padding:48px 16px}
-  .rg{grid-template-columns:1fr 1fr;gap:12px}
-  .cta-sec{padding:60px 20px}.cta-btns{flex-direction:column;align-items:center}
-  footer{padding:22px 20px;flex-direction:column;align-items:center;text-align:center}
-  .chips{grid-template-columns:1fr}
+.btn-primary {
+  background: var(--grad); color: white; border: none;
+  padding: 14px 34px; border-radius: 100px;
+  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 9px;
+  box-shadow: 0 0 40px rgba(232,35,122,0.25);
+  transition: transform .2s, box-shadow .2s;
 }
-@media(max-width:480px){
-  .rg{grid-template-columns:1fr}
-  .kpi-row{gap:8px}
-  .bars{height:72px}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(232,35,122,0.45); }
+.btn-ghost {
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.65);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 14px 34px; border-radius: 100px;
+  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 500;
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 9px;
+  transition: background .2s;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.1); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── DIVIDER ── */
+.div-wrap { display: flex; justify-content: center; padding: 28px 0; background: var(--pearl); position: relative; z-index: 1; }
+.div-wrap.on-dark { background: var(--dark); }
+.div-line { width: 0; height: 1px; background: var(--grad); border-radius: 1px; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+.div-line.show { width: 100px; }
+
+/* ── SHARED SECTION STYLES ── */
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-light);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+.eyebrow::before { content:''; width:18px; height:1px; background:var(--text-light); display:block; flex-shrink:0; }
+.eyebrow.light { color: rgba(255,255,255,0.28); }
+.eyebrow.light::before { background: rgba(255,255,255,0.28); }
+.eyebrow.centered { justify-content: center; }
+.eyebrow.centered::before { display:none; }
+.eyebrow.centered::after { content:''; width:18px; height:1px; background:currentColor; display:block; flex-shrink:0; }
+
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 4vw, 50px); font-weight: 900;
+  line-height: 1.05; letter-spacing: -1.5px; margin-bottom: 10px;
+}
+.sec-bracket {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--text-light); margin-bottom: 44px;
+}
+
+/* ── PROOF SECTION ── */
+.proof { background: var(--pearl); padding: 60px 24px; }
+.proof-inner { max-width: 1140px; margin: 0 auto; }
+.proof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+
+/* Chat */
+.chat-wrap {
+  background: var(--dark-2); border-radius: 20px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  display: flex; flex-direction: column; min-height: 480px;
+}
+.chat-head {
+  background: var(--dark-3); padding: 14px 18px;
+  display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;
+}
+.chat-av {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--grad); display: flex; align-items: center;
+  justify-content: center; font-size: 15px; flex-shrink: 0;
+}
+.chat-nm { font-size: 13px; font-weight: 600; color: white; }
+.chat-on { font-size: 11px; color: #22C55E; display: flex; align-items: center; gap: 4px; }
+.chat-on::before { content:''; width:5px; height:5px; background:#22C55E; border-radius:50%; display:inline-block; }
+.chat-badge {
+  margin-left: auto; background: rgba(91,43,213,0.2);
+  border: 1px solid rgba(91,43,213,0.35); color: #A78BFA;
+  border-radius: 100px; font-size: 10px; padding: 3px 10px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.chat-body {
+  flex: 1; padding: 18px; display: flex; flex-direction: column;
+  gap: 10px; overflow-y: auto;
+}
+.msg {
+  max-width: 82%; padding: 10px 14px; border-radius: 14px;
+  font-size: 13px; line-height: 1.5;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .35s ease, transform .35s ease;
+}
+.msg.show { opacity: 1; transform: translateY(0); }
+.msg-bot {
+  background: var(--dark-3); color: rgba(255,255,255,0.82);
+  border: 1px solid rgba(255,255,255,0.06);
+  align-self: flex-start; border-bottom-left-radius: 4px;
+}
+.msg-user {
+  background: var(--grad); color: white;
+  align-self: flex-end; border-bottom-right-radius: 4px;
+}
+.typing {
+  display: flex; gap: 4px; align-items: center;
+  padding: 10px 14px; background: var(--dark-3);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px; border-bottom-left-radius: 4px;
+  align-self: flex-start; opacity: 0; transition: opacity .3s;
+  max-width: 60px;
+}
+.typing.show { opacity: 1; }
+.dot { width: 5px; height: 5px; background: rgba(255,255,255,0.3); border-radius: 50%; animation: bounce 1.2s ease-in-out infinite; }
+.dot:nth-child(2){animation-delay:.2s} .dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce { 0%,100%{transform:translateY(0);opacity:.3} 50%{transform:translateY(-4px);opacity:1} }
+
+/* Dashboard */
+.dash-wrap {
+  background: white; border-radius: 20px; padding: 22px;
+  border: 1px solid rgba(18,16,26,0.08);
+  box-shadow: 0 4px 24px rgba(18,16,26,0.06);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.dash-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid rgba(18,16,26,0.06); }
+.dash-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--text-dark); }
+.dash-period { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-light); background: var(--pearl-2); padding: 4px 10px; border-radius: 6px; }
+
+.kpi-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.kpi-card { background: var(--pearl); border-radius: 12px; padding: 12px; text-align: center; border: 1px solid rgba(18,16,26,0.06); }
+.kpi-val { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+.kpi-val.vc { background: var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.kpi-val.gd { color: #D97706; }
+.kpi-val.gn { color: #059669; }
+.kpi-lbl { font-size: 9px; color: var(--text-light); font-family: 'JetBrains Mono', monospace; letter-spacing: .5px; text-transform: uppercase; }
+.kpi-delta { font-size: 10px; color: #059669; margin-top: 3px; }
+
+.chart-lbl { font-size: 11px; color: var(--text-mid); font-weight: 500; margin-bottom: 8px; }
+.bars { display: flex; align-items: flex-end; gap: 4px; height: 86px; }
+.bg { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.b { width: 100%; border-radius: 4px 4px 0 0; background: var(--grad); opacity: .75; height: 0; transition: height .65s cubic-bezier(.4,0,.2,1); }
+.b:hover { opacity: 1; }
+.bd { font-size: 8px; color: var(--text-light); font-family: 'JetBrains Mono', monospace; }
+
+.chips { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.chip { background: var(--pearl); border-radius: 10px; padding: 9px 11px; border: 1px solid rgba(18,16,26,0.06); }
+.chip-l { font-size: 9px; font-family: 'JetBrains Mono', monospace; letter-spacing: .8px; text-transform: uppercase; color: #7C5CE8; font-weight: 500; margin-bottom: 3px; }
+.chip-v { font-size: 11px; color: var(--text-dark); font-weight: 500; line-height: 1.3; }
+
+/* ── HOW ── */
+.how { background: var(--dark); padding: 60px 24px; position: relative; overflow: hidden; }
+.how-bg { position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(90deg,transparent,transparent 28px,rgba(91,43,213,0.04) 28px,rgba(91,43,213,0.04) 29px); }
+.how-inner { max-width: 880px; margin: 0 auto; position: relative; z-index: 1; }
+.how-head { text-align: center; margin-bottom: 52px; }
+.how-title { font-family: 'Playfair Display', serif; font-size: clamp(28px,4vw,48px); font-weight: 900; letter-spacing: -1.5px; color: white; margin-bottom: 10px; }
+.how-bracket { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.25); }
+
+.steps { display: flex; flex-direction: column; }
+.step {
+  display: grid; grid-template-columns: 50px 1fr; gap: 26px;
+  padding: 28px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  opacity: 0; transform: translateX(-14px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.step:last-child { border-bottom: none; }
+.step.show { opacity: 1; transform: translateX(0); }
+.step-num {
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--grad); color: white; flex-shrink: 0;
+  font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+}
+.step-body { padding-top: 4px; }
+.step-title { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700; color: white; margin-bottom: 8px; letter-spacing: -.5px; }
+.step-desc { font-size: 13.5px; color: rgba(255,255,255,0.38); line-height: 1.65; font-weight: 300; }
+.step-tag { display: inline-block; margin-top: 11px; background: rgba(91,43,213,0.18); border: 1px solid rgba(91,43,213,0.3); color: #A78BFA; border-radius: 6px; font-size: 9px; font-family: 'JetBrains Mono', monospace; padding: 3px 10px; letter-spacing: 1px; text-transform: uppercase; }
+
+/* ── RESULTS ── */
+.results { background: var(--pearl); padding: 60px 24px; }
+.results-inner { max-width: 1140px; margin: 0 auto; }
+.results-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-top: 44px; }
+.rc {
+  background: white; border-radius: 18px; padding: 26px 20px;
+  border: 1px solid rgba(18,16,26,0.07); box-shadow: 0 2px 16px rgba(18,16,26,0.05);
+  position: relative; overflow: hidden;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity .5s ease, transform .5s ease, box-shadow .25s;
+}
+.rc.show { opacity: 1; transform: translateY(0); }
+.rc:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(18,16,26,0.1); }
+.rc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--grad); }
+.rc-icon { font-size: 20px; margin-bottom: 12px; }
+.rc-val { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 900; line-height: 1; margin-bottom: 8px; background: var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.rc-lbl { font-size: 12.5px; color: var(--text-mid); margin-bottom: 12px; line-height: 1.4; }
+.rc-note { font-size: 10px; color: var(--text-light); font-family: 'JetBrains Mono', monospace; border-top: 1px solid rgba(18,16,26,0.06); padding-top: 10px; }
+
+/* ── CTA ── */
+.cta-sec { background: var(--dark); padding: 72px 24px; position: relative; overflow: hidden; }
+.cta-bg { position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(90deg,transparent,transparent 28px,rgba(91,43,213,0.04) 28px,rgba(91,43,213,0.04) 29px); }
+.cta-inner { max-width: 680px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.cta-title { font-family: 'Playfair Display', serif; font-size: clamp(30px,5vw,56px); font-weight: 900; color: white; letter-spacing: -2px; line-height: 1.0; margin-bottom: 14px; }
+.cta-title .accent { font-style: italic; background: var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.cta-bracket { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.25); margin-bottom: 36px; }
+.cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-wa {
+  background: #22C55E; color: white; border: none;
+  padding: 14px 32px; border-radius: 100px;
+  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 9px;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 0 28px rgba(34,197,94,0.25);
+}
+.btn-wa:hover { transform: translateY(-2px); box-shadow: 0 0 48px rgba(34,197,94,0.45); }
+.btn-outline {
+  background: transparent; color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.14);
+  padding: 14px 32px; border-radius: 100px;
+  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 500;
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 9px;
+  transition: background .2s;
+}
+.btn-outline:hover { background: rgba(255,255,255,0.07); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--dark-2); padding: 24px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 14px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.ft-logo img { height: 28px; width: auto; }
+.ft-logo-svg { display: none; }
+.ft-copy { font-size: 11px; color: rgba(255,255,255,0.2); font-family: 'JetBrains Mono', monospace; }
+.ft-url { font-size: 11px; color: rgba(255,255,255,0.18); font-family: 'JetBrains Mono', monospace; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  nav { padding: 13px 20px; }
+  .nav-pill { display: none; }
+  .hero { padding: 88px 18px 56px; }
+  .terminal { max-width: 100%; }
+  .tl { font-size: 11.5px; }
+  .hero-split { grid-template-columns: 1fr 1px 1fr; }
+  .split-side { padding: 16px 14px; }
+  .split-row { font-size: 12px; }
+  .hero-ctas { flex-direction: column; align-items: center; }
+  .btn-primary,.btn-ghost,.btn-wa,.btn-outline { width: 100%; max-width: 310px; justify-content: center; }
+  .proof { padding: 44px 16px; }
+  .proof-grid { grid-template-columns: 1fr; gap: 20px; }
+  .chat-wrap { min-height: 380px; }
+  .chips { grid-template-columns: 1fr; }
+  .how { padding: 48px 16px; }
+  .results { padding: 48px 16px; }
+  .results-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cta-sec { padding: 56px 20px; }
+  .cta-btns { flex-direction: column; align-items: center; }
+  footer { padding: 20px 20px; flex-direction: column; align-items: center; text-align: center; }
+}
+@media (max-width: 480px) {
+  .results-grid { grid-template-columns: 1fr; }
+  .kpi-row { gap: 8px; }
+  .bars { height: 70px; }
+  .hero-split { grid-template-columns: 1fr; }
+  .split-bar { display: none; }
+  .split-side.left { text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 20px; }
 }
 </style>
 </head>
 <body>
 
+<!-- ═══ NAV ═══ -->
 <nav>
-  <div class="logo">
-    <img src="https://raw.githubusercontent.com/Juan-OM26/operamente-demo.html/main/public/Operamente.png" alt="Operamente"
-         style="height:36px;width:auto"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
-    <div style="display:none"><svg height="36" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5B2BD5"/><stop offset="100%" stop-color="#E8237A"/></linearGradient></defs>
-  <circle cx="20" cy="20" r="18" fill="url(#lg)"/>
-  <text x="20" y="26" text-anchor="middle" font-family="serif" font-size="16" font-weight="bold" fill="white">om</text>
-  <text x="46" y="27" font-family="Georgia,serif" font-size="18" font-weight="700" fill="#12101A" letter-spacing="-0.5">operamente</text>
-</svg></div>
+  <div class="nav-logo">
+    <img
+      src="https://raw.githubusercontent.com/Juan-OM26/operamente-demo.html/main/public/Operamente.png"
+      alt="Operamente"
+      onerror="this.style.display='none'; document.querySelector('.nav-logo-svg').style.display='block'"
+    />
+    <svg class="nav-logo-svg" height="34" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5B2BD5"/><stop offset="100%" stop-color="#E8237A"/></linearGradient></defs>
+      <circle cx="20" cy="20" r="18" fill="url(#g1)"/>
+      <text x="20" y="26" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="white">om</text>
+      <text x="46" y="27" font-family="Georgia,serif" font-size="19" font-weight="700" fill="#12101A" letter-spacing="-0.5">operamente</text>
+    </svg>
   </div>
   <div class="nav-pill"><div class="live-dot"></div>demo en vivo</div>
   <a href="#cta" class="nav-cta">Empieza una conversación →</a>
 </nav>
 
-<!-- HERO -->
+<!-- ═══ HERO ═══ -->
 <section class="hero">
   <div class="hero-lines"></div>
   <div class="hero-orb"></div>
 
-  <!-- TERMINAL -->
+  <!-- Terminal -->
   <div class="terminal">
-    <div class="terminal-bar">
-      <div class="t-dot t-dot-r"></div>
-      <div class="t-dot t-dot-y"></div>
-      <div class="t-dot t-dot-g"></div>
-      <span class="t-label">operamente · AI Concierge · activo</span>
+    <div class="term-bar">
+      <div class="td td-r"></div>
+      <div class="td td-y"></div>
+      <div class="td td-g"></div>
+      <span class="term-title">operamente · ai-concierge · session_active</span>
     </div>
-    <div class="terminal-body" id="termBody"></div>
+    <div class="term-body" id="termBody"></div>
   </div>
 
-  <!-- SPLIT -->
-  <div class="transform-split">
-    <div class="split-col left">
-      <span class="split-label bad">Sin Operamente</span>
-      <span class="split-item bad">Lead escribe a las 9PM</span>
-      <span class="split-item bad">Nadie responde</span>
-      <span class="split-item bad">Lead se enfría</span>
-      <span class="split-item bad">Oportunidad perdida</span>
+  <!-- Before / After -->
+  <div class="hero-split">
+    <div class="split-side left">
+      <span class="split-lbl bad">Sin Operamente</span>
+      <span class="split-row bad">Lead escribe a las 9PM</span>
+      <span class="split-row bad">Nadie responde</span>
+      <span class="split-row bad">Lead se enfría</span>
+      <span class="split-row bad">Oportunidad perdida</span>
     </div>
-    <div class="split-divider"></div>
-    <div class="split-col right">
-      <span class="split-label good">Con Operamente</span>
-      <span class="split-item good">Respuesta en 4 minutos</span>
-      <span class="split-item good">Lead calificado al instante</span>
-      <span class="split-item good">Cita confirmada</span>
-      <span class="split-item good">Pipeline activo</span>
+    <div class="split-bar"></div>
+    <div class="split-side right">
+      <span class="split-lbl good">Con Operamente</span>
+      <span class="split-row good">Respuesta en 4 minutos</span>
+      <span class="split-row good">Lead calificado al instante</span>
+      <span class="split-row good">Cita confirmada</span>
+      <span class="split-row good">Pipeline activo</span>
     </div>
   </div>
 
@@ -363,130 +492,209 @@ footer{background:var(--dark-2);padding:26px 48px;display:flex;align-items:cente
   </div>
 </section>
 
+<!-- ═══ DIVIDER ═══ -->
 <div class="div-wrap"><div class="div-line"></div></div>
 
-<!-- PROOF -->
+<!-- ═══ PROOF ═══ -->
 <section class="proof" id="proof">
-  <div class="proof-in">
+  <div class="proof-inner">
     <div class="eyebrow">La prueba</div>
     <h2 class="sec-title">Tu llegaste exactamente así</h2>
     <p class="sec-bracket">[ Esta es una conversación real con nuestro AI Concierge ]</p>
+
     <div class="proof-grid">
+
+      <!-- Chat -->
       <div class="chat-wrap">
-        <div class="chat-top">
+        <div class="chat-head">
           <div class="chat-av">🤖</div>
-          <div><div class="chat-nm">Operamente AI</div><div class="chat-on">Activo ahora</div></div>
-          <div class="chat-tag2">AI Concierge</div>
+          <div>
+            <div class="chat-nm">Operamente AI</div>
+            <div class="chat-on">Activo ahora</div>
+          </div>
+          <div class="chat-badge">AI Concierge</div>
         </div>
-        <div class="chat-msgs" id="chatEl"></div>
+        <div class="chat-body" id="chatEl"></div>
       </div>
+
+      <!-- Dashboard -->
       <div class="dash-wrap">
-        <div class="dash-hd">
-          <div class="dash-t">AI Concierge Analytics</div>
-          <div class="dash-p">Mar 2026</div>
+        <div class="dash-head">
+          <div class="dash-title">AI Concierge Analytics</div>
+          <div class="dash-period">Mar 2026</div>
         </div>
+
         <div class="kpi-row">
-          <div class="kpi"><div class="kv vc count-up" data-target="67">0</div><div class="kl">Citas conf.</div><div class="kdelta">+34% ↑</div></div>
-          <div class="kpi"><div class="kv gd">73%</div><div class="kl">Agendamiento</div><div class="kdelta" style="color:#D97706">+18% ↑</div></div>
-          <div class="kpi"><div class="kv gn count-up" data-target="4" data-suffix="m">0m</div><div class="kl">Resp. prom.</div><div class="kdelta">-68% ↓</div></div>
+          <div class="kpi-card">
+            <div class="kpi-val vc count-up" data-target="67">0</div>
+            <div class="kpi-lbl">Citas conf.</div>
+            <div class="kpi-delta">+34% ↑</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val gd">73%</div>
+            <div class="kpi-lbl">Agendamiento</div>
+            <div class="kpi-delta" style="color:#D97706">+18% ↑</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val gn count-up" data-target="4" data-suffix="m">0m</div>
+            <div class="kpi-lbl">Resp. prom.</div>
+            <div class="kpi-delta">-68% ↓</div>
+          </div>
         </div>
-        <div class="bars-wrap">
-          <div class="bars-lbl">Citas por día</div>
+
+        <div>
+          <div class="chart-lbl">Citas por día</div>
           <div class="bars" id="barsEl"></div>
         </div>
+
         <div class="chips">
           <div class="chip"><div class="chip-l">Hora pico</div><div class="chip-v">2PM — mayor tasa</div></div>
           <div class="chip"><div class="chip-l">Mejor día</div><div class="chip-v">Martes · 12 citas</div></div>
           <div class="chip"><div class="chip-l">Pipeline</div><div class="chip-v">$53,200 USD</div></div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
 
+<!-- ═══ DIVIDER ═══ -->
 <div class="div-wrap"><div class="div-line"></div></div>
 
-<!-- HOW -->
+<!-- ═══ HOW IT WORKS ═══ -->
 <section class="how" id="como-funciona">
-  <div class="how-lines"></div>
-  <div class="how-in">
-    <div class="how-hd">
-      <div class="eyebrow" style="color:rgba(255,255,255,.3);justify-content:center">El sistema</div>
+  <div class="how-bg"></div>
+  <div class="how-inner">
+    <div class="how-head">
+      <div class="eyebrow light centered">El sistema</div>
       <div class="how-title">Cómo funciona de principio a fin</div>
-      <div class="how-br">[ Operación ordenada › Ejecución impecable › Crecimiento sostenido ]</div>
+      <div class="how-bracket">[ Operación ordenada › Ejecución impecable › Crecimiento sostenido ]</div>
     </div>
     <div class="steps" id="stepsEl">
-      <div class="step"><div class="snum">1</div><div class="sbody"><div class="stitle">El lead escribe por WhatsApp</div><div class="sdesc">El AI Concierge responde en menos de 4 minutos, cualquier hora del día. Califica al prospecto con preguntas naturales — sin que se sienta un cuestionario.</div><span class="stag">Respuesta inmediata 24/7</span></div></div>
-      <div class="step"><div class="snum">2</div><div class="sbody"><div class="stitle">El agente califica y guía</div><div class="sdesc">Detecta intención real y ofrece el slot de cita ideal. Sin pasos manuales, sin fricción. Tu equipo solo habla con quien realmente quiere agendar.</div><span class="stag">IA conversacional</span></div></div>
-      <div class="step"><div class="snum">3</div><div class="sbody"><div class="stitle">La cita se agenda sola</div><div class="sdesc">Confirmación automática, recordatorios, y el prospecto llega al calendario de tu equipo listo para cerrar. Cero gestión manual.</div><span class="stag">Automatización total</span></div></div>
-      <div class="step"><div class="snum">4</div><div class="sbody"><div class="stitle">Tú ves todo en tiempo real</div><div class="sdesc">Dashboard con métricas accionables: tasa de agendamiento, horas pico, pipeline activo. Datos para optimizar cada semana sin conjeturas.</div><span class="stag">Dashboard personalizado</span></div></div>
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">El lead escribe por WhatsApp</div>
+          <div class="step-desc">El AI Concierge responde en menos de 4 minutos, cualquier hora del día. Califica al prospecto con preguntas naturales — sin que se sienta un cuestionario.</div>
+          <span class="step-tag">Respuesta inmediata 24/7</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">El agente califica y guía</div>
+          <div class="step-desc">Detecta intención real y ofrece el slot de cita ideal. Sin pasos manuales, sin fricción. Tu equipo solo habla con quien realmente quiere agendar.</div>
+          <span class="step-tag">IA conversacional</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">La cita se agenda sola</div>
+          <div class="step-desc">Confirmación automática, recordatorios, y el prospecto llega al calendario de tu equipo listo para cerrar. Cero gestión manual.</div>
+          <span class="step-tag">Automatización total</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Tú ves todo en tiempo real</div>
+          <div class="step-desc">Dashboard con métricas accionables: tasa de agendamiento, horas pico, pipeline activo. Datos para optimizar cada semana sin conjeturas.</div>
+          <span class="step-tag">Dashboard personalizado</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- ═══ DIVIDER ═══ -->
 <div class="div-wrap"><div class="div-line"></div></div>
 
-<!-- RESULTS -->
+<!-- ═══ RESULTS ═══ -->
 <section class="results">
-  <div class="results-in">
+  <div class="results-inner">
     <div class="eyebrow">Los números</div>
     <h2 class="sec-title">Resultados que hablan solos</h2>
     <p class="sec-bracket">[ Basados en el desempeño real del AI Concierge de Operamente ]</p>
-    <div class="rg">
-      <div class="rc"><div class="r-icon">⚡</div><div class="r-val">&lt;4<span style="font-size:20px">min</span></div><div class="r-lbl">Tiempo promedio de respuesta al lead</div><div class="r-note">vs 3–5 hrs promedio de la industria</div></div>
-      <div class="rc"><div class="r-icon">📅</div><div class="r-val">73<span style="font-size:20px">%</span></div><div class="r-lbl">Tasa de agendamiento lead → cita</div><div class="r-note">+340% vs proceso manual anterior</div></div>
-      <div class="rc"><div class="r-icon">💰</div><div class="r-val">$53<span style="font-size:20px">K</span></div><div class="r-lbl">Pipeline activo generado este mes</div><div class="r-note">100% generado por el agente</div></div>
-      <div class="rc"><div class="r-icon">🕐</div><div class="r-val">24<span style="font-size:20px">/7</span></div><div class="r-lbl">Disponibilidad sin equipo extra</div><div class="r-note">Sin horas extra, sin errores humanos</div></div>
+    <div class="results-grid">
+      <div class="rc">
+        <div class="rc-icon">⚡</div>
+        <div class="rc-val">&lt;4<span style="font-size:18px">min</span></div>
+        <div class="rc-lbl">Tiempo promedio de respuesta al lead</div>
+        <div class="rc-note">vs 3–5 hrs promedio de la industria</div>
+      </div>
+      <div class="rc">
+        <div class="rc-icon">📅</div>
+        <div class="rc-val">73<span style="font-size:18px">%</span></div>
+        <div class="rc-lbl">Tasa de agendamiento lead → cita</div>
+        <div class="rc-note">+340% vs proceso manual anterior</div>
+      </div>
+      <div class="rc">
+        <div class="rc-icon">💰</div>
+        <div class="rc-val">$53<span style="font-size:18px">K</span></div>
+        <div class="rc-lbl">Pipeline activo generado este mes</div>
+        <div class="rc-note">100% generado por el agente</div>
+      </div>
+      <div class="rc">
+        <div class="rc-icon">🕐</div>
+        <div class="rc-val">24<span style="font-size:18px">/7</span></div>
+        <div class="rc-lbl">Disponibilidad sin equipo extra</div>
+        <div class="rc-note">Sin horas extra, sin errores humanos</div>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- ═══ DIVIDER ═══ -->
 <div class="div-wrap"><div class="div-line"></div></div>
 
-<!-- CTA -->
+<!-- ═══ CTA ═══ -->
 <section class="cta-sec" id="cta">
-  <div class="cta-lines"></div>
-  <div class="cta-in">
-    <div class="cta-ey">Siguiente paso</div>
+  <div class="cta-bg"></div>
+  <div class="cta-inner">
+    <div class="eyebrow light centered" style="margin-bottom:20px">Siguiente paso</div>
     <h2 class="cta-title">¿Tu empresa también<br>puede <span class="accent">hacer esto</span>?</h2>
-    <p class="cta-br">[ 30 minutos · Sin compromiso · Diagnóstico real ]</p>
+    <p class="cta-bracket">[ 30 minutos · Sin compromiso · Diagnóstico real ]</p>
     <div class="cta-btns">
       <a href="https://wa.me/1234567890?text=Hola%2C%20vi%20el%20demo%20de%20Operamente%20y%20quiero%20saber%20m%C3%A1s" class="btn-wa" target="_blank">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.1 1.508 5.832L0 24l6.335-1.482A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.935 0-3.74-.52-5.29-1.427l-.38-.225-3.925.918.936-3.82-.247-.393A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
         Escríbenos por WhatsApp
       </a>
-      <a href="/cdn-cgi/l/email-protection#355d5a5954755a4550475458505b41501b565a58" class="btn-out">Agenda una llamada →</a>
+      <a href="mailto:hola@operamente.com" class="btn-outline">Agenda una llamada →</a>
     </div>
   </div>
 </section>
 
+<!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="ft-logo">
-    <img src="https://raw.githubusercontent.com/Juan-OM26/operamente-demo.html/main/public/Operamente.png" alt="Operamente"
-         style="height:30px;width:auto"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
-    <div style="display:none"><svg height="28" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5B2BD5"/><stop offset="100%" stop-color="#E8237A"/></linearGradient></defs>
-  <circle cx="20" cy="20" r="18" fill="url(#lg2)"/>
-  <text x="20" y="26" text-anchor="middle" font-family="serif" font-size="16" font-weight="bold" fill="white">om</text>
-  <text x="46" y="27" font-family="Georgia,serif" font-size="18" font-weight="700" fill="white" opacity="0.7" letter-spacing="-0.5">operamente</text>
-</svg></div>
+    <img
+      src="https://raw.githubusercontent.com/Juan-OM26/operamente-demo.html/main/public/Operamente.png"
+      alt="Operamente"
+      onerror="this.style.display='none'; document.querySelector('.ft-logo-svg').style.display='block'"
+    />
+    <svg class="ft-logo-svg" height="26" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5B2BD5"/><stop offset="100%" stop-color="#E8237A"/></linearGradient></defs>
+      <circle cx="20" cy="20" r="18" fill="url(#g2)"/>
+      <text x="20" y="26" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="white">om</text>
+      <text x="46" y="27" font-family="Georgia,serif" font-size="19" font-weight="700" fill="white" opacity="0.55" letter-spacing="-0.5">operamente</text>
+    </svg>
   </div>
   <div class="ft-copy">© 2026 Operamente · Sistemas de IA para operaciones y ventas</div>
   <div class="ft-url">www.operamente.com</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// TERMINAL ANIMATION
+<script>
+// ══ TERMINAL ══
 const termLines = [
-  { prompt: '>', text: 'Inicializando AI Concierge', val: null, delay: 400 },
-  { prompt: '>', text: 'Lead detectado', val: 'Andrea Morales · WhatsApp', color: 'violet', delay: 1100 },
-  { prompt: '>', text: 'Tiempo de respuesta', val: '3 min 42 seg', color: 'green', delay: 1900 },
-  { prompt: '>', text: 'Intención detectada', val: 'Alta — agenda cita', color: 'magenta', delay: 2800 },
-  { prompt: '>', text: 'Slot ofrecido', val: 'Martes 2:00 PM', color: 'violet', delay: 3700 },
-  { prompt: '>', text: 'Estado', val: 'CITA CONFIRMADA ✓', color: 'green', delay: 4600 },
-  { prompt: '>', text: 'Pipeline actualizado', val: '+$2,400 USD', color: 'gold', delay: 5500 },
-  { prompt: '>', text: 'Intervención humana requerida', val: 'ninguna', color: 'green', delay: 6400 },
+  { key: 'Sistema',            val: 'Inicializando AI Concierge...',   color: 'white',   delay: 500  },
+  { key: 'Lead detectado',     val: 'Andrea Morales · WhatsApp',       color: 'violet',  delay: 1200 },
+  { key: 'Tiempo respuesta',   val: '3 min 42 seg',                    color: 'green',   delay: 2000 },
+  { key: 'Intención',          val: 'Alta — quiere agendar cita',      color: 'magenta', delay: 2900 },
+  { key: 'Slot ofrecido',      val: 'Martes 14:00 PM',                 color: 'violet',  delay: 3800 },
+  { key: 'Estado',             val: 'CITA CONFIRMADA ✓',               color: 'green',   delay: 4700 },
+  { key: 'Pipeline',           val: '+$2,400 USD',                     color: 'gold',    delay: 5600 },
+  { key: 'Intervención human', val: 'ninguna',                         color: 'green',   delay: 6500 },
 ];
 
 function runTerminal() {
@@ -494,89 +702,126 @@ function runTerminal() {
   if (!el) return;
   termLines.forEach((line, i) => {
     setTimeout(() => {
-      // Remove cursor from previous
       el.querySelectorAll('.t-cursor').forEach(c => c.remove());
       const row = document.createElement('div');
-      row.className = 't-line';
-      const valHtml = line.val
-        ? `<span class="t-text">: </span><span class="t-val ${line.color || ''}">${line.val}</span>`
-        : '<span class="t-text">...</span>';
-      row.innerHTML = `<span class="t-prompt">${line.prompt}</span><span class="t-text">${line.text}</span>${valHtml}`;
+      row.className = 'tl';
+      row.innerHTML = `<span class="tl-prompt">›</span><span class="tl-key">${line.key}</span><span class="tl-sep">·</span><span class="tl-val ${line.color}">${line.val}</span>`;
       el.appendChild(row);
-      setTimeout(() => row.classList.add('show'), 30);
-      // Add cursor on last line
-      if (i === termLines.length - 1) {
-        setTimeout(() => {
-          const cursor = document.createElement('span');
-          cursor.className = 't-cursor';
-          row.appendChild(cursor);
-        }, 200);
-      }
       el.scrollTop = el.scrollHeight;
+      setTimeout(() => row.classList.add('show'), 30);
+      if (i === termLines.length - 1) {
+        setTimeout(() => { const c = document.createElement('span'); c.className = 't-cursor'; row.appendChild(c); }, 200);
+      }
     }, line.delay);
   });
 }
+setTimeout(runTerminal, 700);
 
-// Start terminal on load
-setTimeout(runTerminal, 600);
+// ══ CHART BARS ══
+const barData = [8,12,9,11,10,5,3,9,13,10,12,11];
+const dayLabels = ['L','M','X','J','V','S','D','L','M','X','J','V'];
+const maxBar = Math.max(...barData);
+const barsEl = document.getElementById('barsEl');
+if (barsEl) {
+  barData.forEach((v, i) => {
+    const h = (v / maxBar) * 80;
+    barsEl.innerHTML += `<div class="bg"><div class="b" data-h="${h}" style="transition-delay:${i * 0.055}s"></div><div class="bd">${dayLabels[i]}</div></div>`;
+  });
+}
+function animateBars() {
+  document.querySelectorAll('.b[data-h]').forEach(b => {
+    if (!b.dataset.done) { b.dataset.done = '1'; b.style.height = b.dataset.h + 'px'; }
+  });
+}
 
-// COUNTERS
+// ══ COUNTERS ══
 function animateCounters() {
   document.querySelectorAll('.count-up[data-target]').forEach(el => {
-    if (el.dataset.done) return; el.dataset.done = '1';
-    const target = +el.dataset.target, suffix = el.dataset.suffix || '';
-    let cur = 0; const step = target / 55;
-    const t = setInterval(() => { cur += step; if (cur >= target) { cur = target; clearInterval(t); } el.textContent = Math.floor(cur) + suffix; }, 18);
+    if (el.dataset.done) return;
+    el.dataset.done = '1';
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    let cur = 0;
+    const step = target / 55;
+    const t = setInterval(() => {
+      cur += step;
+      if (cur >= target) { cur = target; clearInterval(t); }
+      el.textContent = Math.floor(cur) + suffix;
+    }, 18);
   });
-  // pipeline
-  const p = document.getElementById('pipeline');
-  if (p && !p.dataset.done) { p.dataset.done='1'; let c=0; const t=setInterval(()=>{ c+=53/55; if(c>=53){clearInterval(t);p.textContent='$53K';return;} p.textContent='$'+Math.floor(c)+'K'; },18); }
 }
 
-// BARS
-const bd=[8,12,9,11,10,5,3,9,13,10,12,11], dy=['L','M','X','J','V','S','D','L','M','X','J','V'];
-const maxB=Math.max(...bd), bEl=document.getElementById('barsEl');
-bd.forEach((v,i)=>{ const h=(v/maxB)*82; bEl.innerHTML+=`<div class="bg"><div class="b" data-h="${h}" style="transition-delay:${i*.05}s"></div><div class="bd">${dy[i]}</div></div>`; });
-function animateBars() { document.querySelectorAll('.b[data-h]').forEach(b=>{ if(!b.dataset.done){b.dataset.done='1';b.style.height=b.dataset.h+'px';} }); }
-
-// CHAT
-const msgs=[
-  {t:'bot',text:'¡Hola! Soy el AI Concierge de Operamente. ¿En qué área quisieras explorar cómo la IA puede ayudarte?',d:0},
-  {t:'user',text:'Quiero que mi equipo deje de perder tiempo con leads que nunca agendan',d:2200},
-  {t:'bot',text:'Entiendo perfectamente. ¿Tu equipo actualmente atiende esos leads por WhatsApp?',d:4400},
-  {t:'user',text:'Sí, y es caótico — nunca sabemos quién va a confirmar',d:6300},
-  {t:'bot',text:'🎯 Exactamente lo que resolvemos. Automatizamos calificación y agendamiento directo desde WhatsApp. Tu equipo solo habla con quien ya quiere agendar. ¿Te gustaría ver los resultados?',d:8700},
-  {t:'user',text:'Claro, adelante',d:10600},
-  {t:'bot',text:'✅ Este mes: 67 citas agendadas · 73% tasa de agendamiento · $53K en pipeline listo para tu equipo de ventas. ¿Cuándo tienes 30 min para una llamada?',d:13100},
+// ══ CHAT ══
+const chatMsgs = [
+  { t: 'bot',  text: '¡Hola! Soy el AI Concierge de Operamente. ¿En qué área quisieras explorar cómo la IA puede ayudarte?', d: 0 },
+  { t: 'user', text: 'Quiero que mi equipo deje de perder tiempo con leads que nunca agendan', d: 2200 },
+  { t: 'bot',  text: 'Entiendo perfectamente. ¿Tu equipo actualmente atiende esos leads por WhatsApp?', d: 4500 },
+  { t: 'user', text: 'Sí, y es caótico — nunca sabemos quién va a confirmar', d: 6400 },
+  { t: 'bot',  text: '🎯 Exactamente lo que resolvemos. Automatizamos calificación y agendamiento directo desde WhatsApp. Tu equipo solo habla con quien ya quiere agendar. ¿Te gustaría ver los números?', d: 8800 },
+  { t: 'user', text: 'Claro, adelante', d: 10700 },
+  { t: 'bot',  text: '✅ Este mes: 67 citas agendadas · 73% tasa de agendamiento · $53K en pipeline listo para tu equipo de ventas. ¿Cuándo tienes 30 min para una llamada?', d: 13200 },
 ];
-let mi=0, chatOn=false;
+let msgIdx = 0, chatStarted = false;
+
 function nextMsg() {
-  if(mi>=msgs.length) return;
-  const m=msgs[mi], el=document.getElementById('chatEl'); if(!el) return;
-  if(m.t==='bot'){
-    const ty=document.createElement('div'); ty.className='typing';
-    ty.innerHTML='<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-    el.appendChild(ty); el.scrollTop=el.scrollHeight;
-    setTimeout(()=>ty.classList.add('show'),40);
-    setTimeout(()=>{ ty.remove(); addM(m,el); mi++; if(mi<msgs.length) setTimeout(nextMsg,msgs[mi].d-m.d); },1100);
-  } else { addM(m,el); mi++; if(mi<msgs.length) setTimeout(nextMsg,msgs[mi].d-m.d); }
+  if (msgIdx >= chatMsgs.length) return;
+  const m = chatMsgs[msgIdx];
+  const el = document.getElementById('chatEl');
+  if (!el) return;
+  if (m.t === 'bot') {
+    const ty = document.createElement('div');
+    ty.className = 'typing';
+    ty.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+    el.appendChild(ty); el.scrollTop = el.scrollHeight;
+    setTimeout(() => ty.classList.add('show'), 40);
+    setTimeout(() => {
+      ty.remove(); addMsg(m, el); msgIdx++;
+      if (msgIdx < chatMsgs.length) setTimeout(nextMsg, chatMsgs[msgIdx].d - m.d);
+    }, 1100);
+  } else {
+    addMsg(m, el); msgIdx++;
+    if (msgIdx < chatMsgs.length) setTimeout(nextMsg, chatMsgs[msgIdx].d - m.d);
+  }
 }
-function addM(m,el){ const d=document.createElement('div'); d.className=`msg msg-${m.t}`; d.textContent=m.text; el.appendChild(d); el.scrollTop=el.scrollHeight; setTimeout(()=>d.classList.add('show'),40); }
+function addMsg(m, el) {
+  const d = document.createElement('div');
+  d.className = `msg msg-${m.t}`; d.textContent = m.text;
+  el.appendChild(d); el.scrollTop = el.scrollHeight;
+  setTimeout(() => d.classList.add('show'), 40);
+}
 
-// OBSERVERS
-const io = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(!e.isIntersecting) return;
-    const t=e.target;
-    if(t.classList.contains('div-line')){ t.classList.add('show'); io.unobserve(t); return; }
-    if(t.id==='proof'){ animateCounters(); animateBars(); if(!chatOn){chatOn=true;setTimeout(nextMsg,500);} io.unobserve(t); return; }
-    if(t.id==='stepsEl'){ t.querySelectorAll('.step').forEach((s,i)=>setTimeout(()=>s.classList.add('show'),i*190)); io.unobserve(t); return; }
-    if(t.classList.contains('rc')){ t.classList.add('show'); io.unobserve(t); return; }
+// ══ INTERSECTION OBSERVERS ══
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const t = e.target;
+    if (t.classList.contains('div-line')) {
+      t.classList.add('show'); io.unobserve(t); return;
+    }
+    if (t.id === 'proof') {
+      animateCounters(); animateBars();
+      if (!chatStarted) { chatStarted = true; setTimeout(nextMsg, 600); }
+      io.unobserve(t); return;
+    }
+    if (t.id === 'stepsEl') {
+      t.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 180));
+      io.unobserve(t); return;
+    }
+    if (t.classList.contains('rc')) {
+      t.classList.add('show'); io.unobserve(t); return;
+    }
   });
-},{threshold:0.07,rootMargin:'0px 0px -30px 0px'});
+}, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
 
-document.querySelectorAll('.div-line,#proof,#stepsEl,.rc').forEach(el=>io.observe(el));
+document.querySelectorAll('.div-line, #proof, #stepsEl, .rc').forEach(el => io.observe(el));
 
-setTimeout(()=>{
-  const p=document.getElementById('proof');
-  if(p&&p.getBoundingClien
+// Fallback if proof already visible
+setTimeout(() => {
+  const p = document.getElementById('proof');
+  if (p && p.getBoundingClientRect().top < window.innerHeight && !chatStarted) {
+    chatStarted = true; animateCounters(); animateBars(); setTimeout(nextMsg, 400);
+  }
+}, 400);
+</script>
+</body>
+</html>
