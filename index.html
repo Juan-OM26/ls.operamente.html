@@ -29,11 +29,11 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 16px 48px;
   display: flex; align-items: center; justify-content: space-between;
-  background: rgba(247,246,244,0.92); backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(91,43,213,0.08);
+  background: rgba(18,16,26,0.92); backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(91,43,213,0.15);
 }
 .nav-logo { display: flex; align-items: center; }
-.nav-logo img { height: 34px; width: auto; display: block; }
+.nav-logo img { height: 34px; width: auto; display: block; filter: brightness(0) invert(1); }
 .nav-logo-svg { display: none; }
 .nav-pill {
   display: flex; align-items: center; gap: 7px;
@@ -53,6 +53,7 @@ nav {
   cursor: pointer; text-decoration: none;
   display: inline-flex; align-items: center; gap: 8px;
   transition: opacity .2s, transform .2s;
+  box-shadow: 0 0 20px rgba(232,35,122,0.2);
 }
 .nav-cta:hover { opacity: .87; transform: translateY(-1px); }
 
@@ -547,7 +548,7 @@ footer {
 <section class="proof" id="proof">
   <div class="proof-inner">
     <div class="eyebrow">Así se ve por dentro</div>
-    <h2 class="sec-title">Tu llegaste exactamente así</h2>
+    <h2 class="sec-title">El sistema en vivo</h2>
     <p class="sec-bracket">[ Esta es una conversación real con nuestro AI Concierge ]</p>
 
     <div class="proof-grid">
@@ -615,7 +616,7 @@ footer {
   <div class="how-inner">
     <div class="how-head">
       <div class="eyebrow light centered">El flujo</div>
-      <div class="how-title">Cuatro momentos.<br>Cero intervención.</div>
+      <div class="how-title">Cuatro momentos. Cero intervención.</div>
       <div class="how-bracket">[ Operación ordenada › Ejecución impecable › Crecimiento sostenido ]</div>
     </div>
     <div class="steps" id="stepsEl">
