@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Operamente — AI Concierge en Acción</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ── VARIABLES ── */
 :root {
@@ -383,6 +383,46 @@ nav {
 }
 .btn-outline:hover { background: rgba(255,255,255,0.07); }
 
+
+/* ── NARRATIVE CLOSE ── */
+.narrative {
+  background: var(--pearl); padding: 72px 24px;
+}
+.narrative-inner {
+  max-width: 760px; margin: 0 auto; text-align: center;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.narrative-inner.show {
+  opacity: 1; transform: translateY(0);
+}
+.narrative-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 3.5vw, 38px);
+  font-weight: 700; font-style: italic;
+  line-height: 1.3; letter-spacing: -0.5px;
+  color: var(--text-dark);
+  margin: 24px 0 28px;
+  border: none; padding: 0;
+  position: relative;
+}
+.narrative-quote::before {
+  content: '"';
+  position: absolute; top: -20px; left: -10px;
+  font-size: 80px; line-height: 1;
+  background: var(--grad);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  font-family: 'Playfair Display', serif;
+  opacity: 0.3;
+}
+.narrative-sub {
+  font-size: 16px; color: var(--text-mid);
+  line-height: 1.7; font-weight: 300;
+}
+.narrative-sub em {
+  font-style: italic; color: var(--text-dark); font-weight: 500;
+}
+
 /* ── FOOTER ── */
 footer {
   background: var(--dark-2); padding: 24px 48px;
@@ -454,6 +494,14 @@ footer {
   <div class="hero-lines"></div>
   <div class="hero-orb"></div>
 
+  <!-- Hero title -->
+  <div class="hero-heading" style="position:relative;z-index:1;text-align:center;margin-bottom:44px;animation:fadeUp .7s ease both;">
+    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:18px;">[ AI Concierge · Operamente ]</p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,5.5vw,72px);font-weight:900;line-height:1.05;letter-spacing:-2px;color:white;">
+      Un sistema que opera.<br><span style="font-style:italic;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Una empresa que crece.</span>
+    </h1>
+  </div>
+
   <!-- Terminal -->
   <div class="terminal">
     <div class="term-bar">
@@ -498,7 +546,7 @@ footer {
 <!-- ═══ PROOF ═══ -->
 <section class="proof" id="proof">
   <div class="proof-inner">
-    <div class="eyebrow">La prueba</div>
+    <div class="eyebrow">Así se ve por dentro</div>
     <h2 class="sec-title">Tu llegaste exactamente así</h2>
     <p class="sec-bracket">[ Esta es una conversación real con nuestro AI Concierge ]</p>
 
@@ -566,8 +614,8 @@ footer {
   <div class="how-bg"></div>
   <div class="how-inner">
     <div class="how-head">
-      <div class="eyebrow light centered">El sistema</div>
-      <div class="how-title">Cómo funciona de principio a fin</div>
+      <div class="eyebrow light centered">El flujo</div>
+      <div class="how-title">Cuatro momentos.<br>Cero intervención.</div>
       <div class="how-bracket">[ Operación ordenada › Ejecución impecable › Crecimiento sostenido ]</div>
     </div>
     <div class="steps" id="stepsEl">
@@ -610,38 +658,16 @@ footer {
 <!-- ═══ DIVIDER ═══ -->
 <div class="div-wrap"><div class="div-line"></div></div>
 
-<!-- ═══ RESULTS ═══ -->
-<section class="results">
-  <div class="results-inner">
-    <div class="eyebrow">Los números</div>
-    <h2 class="sec-title">Resultados que hablan solos</h2>
-    <p class="sec-bracket">[ Basados en el desempeño real del AI Concierge de Operamente ]</p>
-    <div class="results-grid">
-      <div class="rc">
-        <div class="rc-icon">⚡</div>
-        <div class="rc-val">&lt;4<span style="font-size:18px">min</span></div>
-        <div class="rc-lbl">Tiempo promedio de respuesta al lead</div>
-        <div class="rc-note">vs 3–5 hrs promedio de la industria</div>
-      </div>
-      <div class="rc">
-        <div class="rc-icon">📅</div>
-        <div class="rc-val">73<span style="font-size:18px">%</span></div>
-        <div class="rc-lbl">Tasa de agendamiento lead → cita</div>
-        <div class="rc-note">+340% vs proceso manual anterior</div>
-      </div>
-      <div class="rc">
-        <div class="rc-icon">💰</div>
-        <div class="rc-val">$53<span style="font-size:18px">K</span></div>
-        <div class="rc-lbl">Pipeline activo generado este mes</div>
-        <div class="rc-note">100% generado por el agente</div>
-      </div>
-      <div class="rc">
-        <div class="rc-icon">🕐</div>
-        <div class="rc-val">24<span style="font-size:18px">/7</span></div>
-        <div class="rc-lbl">Disponibilidad sin equipo extra</div>
-        <div class="rc-note">Sin horas extra, sin errores humanos</div>
-      </div>
-    </div>
+<!-- ═══ NARRATIVE CLOSE ═══ -->
+<section class="narrative">
+  <div class="narrative-inner">
+    <div class="eyebrow">Lo que viste es real</div>
+    <blockquote class="narrative-quote">
+      "67 citas agendadas este mes.<br>
+      Ninguna requirió que alguien estuviera despierto<br>
+      a las 9PM esperando un mensaje."
+    </blockquote>
+    <p class="narrative-sub">Eso es lo que significa un sistema diseñado con propósito.<br>No automatización genérica — <em>inteligencia operativa a medida.</em></p>
   </div>
 </section>
 
@@ -660,7 +686,7 @@ footer {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.1 1.508 5.832L0 24l6.335-1.482A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.935 0-3.74-.52-5.29-1.427l-.38-.225-3.925.918.936-3.82-.247-.393A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
         Escríbenos por WhatsApp
       </a>
-      <a href="mailto:hola@operamente.com" class="btn-outline">Agenda una llamada →</a>
+      <a href="/cdn-cgi/l/email-protection#84ecebe8e5c4ebf4e1f6e5e9e1eaf0e1aae7ebe9" class="btn-outline">Agenda una llamada →</a>
     </div>
   </div>
 </section>
@@ -684,7 +710,196 @@ footer {
   <div class="ft-url">www.operamente.com</div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ══════════════════════════════════
+// OPERAMENTE DEMO — MAIN SCRIPT
+// ══════════════════════════════════
+
+// ── 1. TERMINAL ──
+const termLines = [
+  { key: 'Sistema',            val: 'Inicializando AI Concierge...',  color: 'white',   delay: 500  },
+  { key: 'Lead detectado',     val: 'Andrea Morales · WhatsApp',      color: 'violet',  delay: 1200 },
+  { key: 'Tiempo respuesta',   val: '3 min 42 seg',                   color: 'green',   delay: 2000 },
+  { key: 'Intención',          val: 'Alta — quiere agendar cita',     color: 'magenta', delay: 2900 },
+  { key: 'Slot ofrecido',      val: 'Martes 14:00 PM',                color: 'violet',  delay: 3800 },
+  { key: 'Estado',             val: 'CITA CONFIRMADA ✓',              color: 'green',   delay: 4700 },
+  { key: 'Pipeline',           val: '+$2,400 USD',                    color: 'gold',    delay: 5600 },
+  { key: 'Intervención humana',val: 'ninguna',                        color: 'green',   delay: 6500 },
+];
+
+function runTerminal() {
+  const el = document.getElementById('termBody');
+  if (!el) return;
+  termLines.forEach((line, i) => {
+    setTimeout(() => {
+      el.querySelectorAll('.t-cursor').forEach(c => c.remove());
+      const row = document.createElement('div');
+      row.className = 'tl';
+      row.innerHTML = '<span class="tl-prompt">›</span>'
+        + '<span class="tl-key">' + line.key + '</span>'
+        + '<span class="tl-sep">·</span>'
+        + '<span class="tl-val ' + line.color + '">' + line.val + '</span>';
+      el.appendChild(row);
+      el.scrollTop = el.scrollHeight;
+      setTimeout(() => row.classList.add('show'), 30);
+      if (i === termLines.length - 1) {
+        setTimeout(() => {
+          const c = document.createElement('span');
+          c.className = 't-cursor';
+          row.appendChild(c);
+        }, 200);
+      }
+    }, line.delay);
+  });
+}
+setTimeout(runTerminal, 700);
+
+// ── 2. CHART BARS ──
+const barData = [8,12,9,11,10,5,3,9,13,10,12,11];
+const dayLabels = ['L','M','X','J','V','S','D','L','M','X','J','V'];
+const maxBar = Math.max.apply(null, barData);
+const barsEl = document.getElementById('barsEl');
+if (barsEl) {
+  barData.forEach(function(v, i) {
+    const h = (v / maxBar) * 80;
+    barsEl.innerHTML += '<div class="bg"><div class="b" data-h="' + h + '" style="transition-delay:' + (i * 0.055) + 's"></div><div class="bd">' + dayLabels[i] + '</div></div>';
+  });
+}
+function animateBars() {
+  document.querySelectorAll('.b[data-h]').forEach(function(b) {
+    if (!b.dataset.done) { b.dataset.done = '1'; b.style.height = b.dataset.h + 'px'; }
+  });
+}
+
+// ── 3. COUNTERS ──
+function animateCounters() {
+  document.querySelectorAll('.count-up[data-target]').forEach(function(el) {
+    if (el.dataset.done) return;
+    el.dataset.done = '1';
+    var target = parseInt(el.dataset.target);
+    var suffix = el.dataset.suffix || '';
+    var cur = 0, step = target / 55;
+    var t = setInterval(function() {
+      cur += step;
+      if (cur >= target) { cur = target; clearInterval(t); }
+      el.textContent = Math.floor(cur) + suffix;
+    }, 18);
+  });
+}
+
+// ── 4. PROOF CARDS REVEAL ──
+function animateProofCards() {
+  document.querySelectorAll('.kpi-card, .chip').forEach(function(el, i) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(12px)';
+    el.style.transition = 'opacity .4s ease ' + (0.1 + i * 0.06) + 's, transform .4s ease ' + (0.1 + i * 0.06) + 's';
+    setTimeout(function() {
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }, 80 + i * 60);
+  });
+}
+
+// ── 5. CHAT ──
+var chatMsgs = [
+  { t: 'bot',  text: '¡Hola! Soy el AI Concierge de Operamente. ¿En qué área quisieras explorar cómo la IA puede ayudarte?', d: 0 },
+  { t: 'user', text: 'Quiero que mi equipo deje de perder tiempo con leads que nunca agendan', d: 2200 },
+  { t: 'bot',  text: 'Entiendo perfectamente. ¿Tu equipo actualmente atiende esos leads por WhatsApp?', d: 4500 },
+  { t: 'user', text: 'Sí, y es caótico — nunca sabemos quién va a confirmar', d: 6400 },
+  { t: 'bot',  text: '🎯 Exactamente lo que resolvemos. Automatizamos calificación y agendamiento directo desde WhatsApp. Tu equipo solo habla con quien ya quiere agendar.', d: 8800 },
+  { t: 'user', text: 'Claro, cuéntame más', d: 10700 },
+  { t: 'bot',  text: '✅ Este mes: 67 citas agendadas · 73% tasa de agendamiento · $53K en pipeline listo para tu equipo de ventas. ¿Cuándo tienes 30 min para una llamada?', d: 13200 },
+];
+var msgIdx = 0, chatStarted = false;
+
+function nextMsg() {
+  if (msgIdx >= chatMsgs.length) return;
+  var m = chatMsgs[msgIdx];
+  var el = document.getElementById('chatEl');
+  if (!el) return;
+  if (m.t === 'bot') {
+    var ty = document.createElement('div');
+    ty.className = 'typing';
+    ty.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+    el.appendChild(ty);
+    el.scrollTop = el.scrollHeight;
+    setTimeout(function() { ty.classList.add('show'); }, 40);
+    setTimeout(function() {
+      ty.remove();
+      addMsg(m, el);
+      msgIdx++;
+      if (msgIdx < chatMsgs.length) setTimeout(nextMsg, chatMsgs[msgIdx].d - m.d);
+    }, 1100);
+  } else {
+    addMsg(m, el);
+    msgIdx++;
+    if (msgIdx < chatMsgs.length) setTimeout(nextMsg, chatMsgs[msgIdx].d - m.d);
+  }
+}
+
+function addMsg(m, el) {
+  var d = document.createElement('div');
+  d.className = 'msg msg-' + m.t;
+  d.textContent = m.text;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+  setTimeout(function() { d.classList.add('show'); }, 40);
+}
+
+// ── 6. INTERSECTION OBSERVERS ──
+var io = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (!e.isIntersecting) return;
+    var t = e.target;
+
+    // Divider lines
+    if (t.classList.contains('div-line')) {
+      t.classList.add('show');
+      io.unobserve(t);
+      return;
+    }
+    // Proof section
+    if (t.id === 'proof') {
+      animateCounters();
+      animateBars();
+      animateProofCards();
+      if (!chatStarted) { chatStarted = true; setTimeout(nextMsg, 600); }
+      io.unobserve(t);
+      return;
+    }
+    // How it works steps
+    if (t.id === 'stepsEl') {
+      t.querySelectorAll('.step').forEach(function(s, i) {
+        setTimeout(function() { s.classList.add('show'); }, i * 190);
+      });
+      io.unobserve(t);
+      return;
+    }
+    // Narrative close
+    if (t.classList.contains('narrative-inner')) {
+      t.classList.add('show');
+      io.unobserve(t);
+      return;
+    }
+  });
+}, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.div-line, #proof, #stepsEl, .narrative-inner').forEach(function(el) {
+  io.observe(el);
+});
+
+// Fallback: if proof already visible on page load
+setTimeout(function() {
+  var p = document.getElementById('proof');
+  if (p && p.getBoundingClientRect().top < window.innerHeight && !chatStarted) {
+    chatStarted = true;
+    animateCounters();
+    animateBars();
+    animateProofCards();
+    setTimeout(nextMsg, 400);
+  }
+}, 400);
+</script><script>
 // ══ TERMINAL ══
 const termLines = [
   { key: 'Sistema',            val: 'Inicializando AI Concierge...',   color: 'white',   delay: 500  },
@@ -735,6 +950,18 @@ function animateBars() {
 }
 
 // ══ COUNTERS ══
+function animateProofCards() {
+  document.querySelectorAll('.kpi-card, .chip').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(14px)';
+    el.style.transition = `opacity .45s ease ${0.1 + i * 0.07}s, transform .45s ease ${0.1 + i * 0.07}s`;
+    setTimeout(() => {
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }, 100 + i * 70);
+  });
+}
+
 function animateCounters() {
   document.querySelectorAll('.count-up[data-target]').forEach(el => {
     if (el.dataset.done) return;
@@ -799,7 +1026,7 @@ const io = new IntersectionObserver(entries => {
       t.classList.add('show'); io.unobserve(t); return;
     }
     if (t.id === 'proof') {
-      animateCounters(); animateBars();
+      animateCounters(); animateBars(); animateProofCards();
       if (!chatStarted) { chatStarted = true; setTimeout(nextMsg, 600); }
       io.unobserve(t); return;
     }
@@ -807,21 +1034,15 @@ const io = new IntersectionObserver(entries => {
       t.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 180));
       io.unobserve(t); return;
     }
-    if (t.classList.contains('rc')) {
+    if (t.classList.contains('narrative-inner')) {
       t.classList.add('show'); io.unobserve(t); return;
     }
   });
 }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
 
-document.querySelectorAll('.div-line, #proof, #stepsEl, .rc').forEach(el => io.observe(el));
+document.querySelectorAll('.div-line, #proof, #stepsEl, .narrative-inner').forEach(el => io.observe(el));
 
 // Fallback if proof already visible
 setTimeout(() => {
   const p = document.getElementById('proof');
-  if (p && p.getBoundingClientRect().top < window.innerHeight && !chatStarted) {
-    chatStarted = true; animateCounters(); animateBars(); setTimeout(nextMsg, 400);
-  }
-}, 400);
-</script>
-</body>
-</html>
+  if (p && p.getBoundingClientRect().top < window.inne
