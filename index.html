@@ -3,1047 +3,1096 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Operamente — AI Concierge Demo</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>operamente · inteligencia comercial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ── VARIABLES ── */
 :root {
-  --violet: #5B2BD5;
-  --magenta: #E8237A;
-  --pearl: #F7F6F4;
-  --pearl-2: #EEECEA;
-  --dark: #12101A;
-  --dark-2: #1C1928;
-  --dark-3: #261F38;
-  --text-dark: #12101A;
-  --text-mid: #4A4560;
-  --text-light: #8E8AAA;
-  --grad: linear-gradient(135deg, #5B2BD5 0%, #E8237A 100%);
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: 'Sora', sans-serif; background: var(--pearl); color: var(--text-dark); overflow-x: hidden; line-height: 1.6; }
-
-/* ── NAV ── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 16px 48px;
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(18,16,26,0.92); backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(91,43,213,0.15);
-}
-.nav-logo { display: flex; align-items: center; }
-.nav-logo img { height: 34px; width: auto; display: block; filter: brightness(0) invert(1); }
-.nav-logo-svg { display: none; }
-.nav-pill {
-  display: flex; align-items: center; gap: 7px;
-  background: var(--dark); border-radius: 100px; padding: 7px 16px;
-  font-size: 11px; color: rgba(255,255,255,0.5);
-  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.3px;
-}
-.live-dot {
-  width: 6px; height: 6px; background: #22C55E; border-radius: 50%;
-  box-shadow: 0 0 6px #22C55E; animation: blink 2s ease-in-out infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
-.nav-cta {
-  background: var(--grad); color: white; border: none;
-  padding: 10px 22px; border-radius: 100px;
-  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600;
-  cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center; gap: 8px;
-  transition: opacity .2s, transform .2s;
-  box-shadow: 0 0 20px rgba(232,35,122,0.2);
-}
-.nav-cta:hover { opacity: .87; transform: translateY(-1px); }
-
-/* ── HERO ── */
-.hero {
-  background: var(--dark); min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 120px 24px 80px; position: relative; overflow: hidden;
-}
-.hero-lines {
-  position: absolute; inset: 0; pointer-events: none;
-  background-image: repeating-linear-gradient(
-    90deg, transparent, transparent 28px,
-    rgba(91,43,213,0.055) 28px, rgba(91,43,213,0.055) 29px
-  );
-}
-.hero-orb {
-  position: absolute; width: 600px; height: 600px; border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(232,35,122,0.18) 0%, rgba(91,43,213,0.12) 45%, transparent 70%);
-  top: 50%; left: 50%; transform: translate(-50%,-50%);
-  filter: blur(60px); animation: orb 9s ease-in-out infinite; pointer-events: none;
-}
-@keyframes orb { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.1)} }
-
-/* Terminal */
-.terminal {
-  width: 100%; max-width: 660px; margin-bottom: 52px;
-  background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px; overflow: hidden;
-  backdrop-filter: blur(10px);
-  position: relative; z-index: 1;
-  animation: fadeUp .7s ease .1s both;
-}
-.term-bar {
-  background: rgba(255,255,255,0.04); padding: 10px 16px;
-  display: flex; align-items: center; gap: 6px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.td { width: 11px; height: 11px; border-radius: 50%; }
-.td-r{background:#FF5F57} .td-y{background:#FEBC2E} .td-g{background:#28C840}
-.term-title { margin-left: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.22); letter-spacing: .3px; }
-.term-body { padding: 20px 22px; min-height: 196px; }
-.tl {
-  font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
-  line-height: 1.95; display: flex; align-items: baseline; gap: 0;
-  opacity: 0; transition: opacity .25s ease;
-}
-.tl.show { opacity: 1; }
-.tl-prompt { color: rgba(91,43,213,0.75); margin-right: 8px; flex-shrink: 0; }
-.tl-key { color: rgba(255,255,255,0.5); }
-.tl-sep { color: rgba(255,255,255,0.2); margin: 0 6px; }
-.tl-val { font-weight: 500; }
-.tl-val.green { color: #22C55E; }
-.tl-val.magenta { color: #E8237A; }
-.tl-val.violet { color: #A78BFA; }
-.tl-val.gold { color: #FBBF24; }
-.tl-val.white { color: rgba(255,255,255,0.7); }
-.t-cursor {
-  display: inline-block; width: 7px; height: 13px; background: #E8237A;
-  vertical-align: middle; margin-left: 4px;
-  animation: cur 1s step-end infinite;
-}
-@keyframes cur { 0%,100%{opacity:1} 50%{opacity:0} }
-
-/* Split */
-.hero-split {
-  width: 100%; max-width: 860px; margin-bottom: 44px;
-  display: grid; grid-template-columns: 1fr 1px 1fr;
-  position: relative; z-index: 1;
-  animation: fadeUp .7s ease .25s both;
-}
-.split-side { padding: 24px 36px; }
-.split-side.left { text-align: right; }
-.split-side.right { text-align: left; }
-.split-lbl {
-  font-family: 'JetBrains Mono', monospace; font-size: 9px;
-  letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 16px; display: block;
-}
-.split-lbl.bad { color: rgba(255,255,255,0.18); }
-.split-lbl.good { color: var(--magenta); }
-.split-row { display: block; font-size: 13px; line-height: 2.1; }
-.split-row.bad { color: rgba(255,255,255,0.2); text-decoration: line-through; text-decoration-color: rgba(255,255,255,0.1); }
-.split-row.good { color: rgba(255,255,255,0.75); font-weight: 500; }
-.split-row.good::before { content: '✓ '; color: #22C55E; font-size: 10px; }
-.split-bar {
-  background: linear-gradient(to bottom, transparent 0%, var(--magenta) 40%, var(--magenta) 60%, transparent 100%);
-  opacity: .5; position: relative;
-}
-.split-bar::after {
-  content: ''; position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--magenta); box-shadow: 0 0 10px var(--magenta);
+  --bg:       #08080d;
+  --surface:  #0f0f17;
+  --surface2: #14141e;
+  --border:   rgba(255,255,255,0.06);
+  --border2:  rgba(255,255,255,0.12);
+  --text:     #eeedf8;
+  --sub:      #9997b0;
+  --muted:    #4a4862;
+  --accent:   #7c6af7;
+  --accent2:  rgba(124,106,247,0.15);
+  --accent3:  rgba(124,106,247,0.06);
+  --green:    #5fe8a0;
+  --green2:   rgba(95,232,160,0.1);
+  --amber:    #f7c26b;
+  --amber2:   rgba(247,194,107,0.1);
+  --red:      #f07070;
+  --red2:     rgba(240,112,112,0.1);
 }
 
-/* Hero phrase + CTAs */
-.hero-phrase {
-  font-family: 'JetBrains Mono', monospace; font-size: 13px;
-  color: rgba(255,255,255,0.25); margin-bottom: 32px;
-  position: relative; z-index: 1;
-  animation: fadeUp .7s ease .38s both;
-}
-.hero-ctas {
-  display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
-  position: relative; z-index: 1;
-  animation: fadeUp .7s ease .46s both;
-}
-.btn-primary {
-  background: var(--grad); color: white; border: none;
-  padding: 14px 34px; border-radius: 100px;
-  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600;
-  cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center; gap: 9px;
-  box-shadow: 0 0 40px rgba(232,35,122,0.25);
-  transition: transform .2s, box-shadow .2s;
-}
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(232,35,122,0.45); }
-.btn-ghost {
-  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.65);
-  border: 1px solid rgba(255,255,255,0.12);
-  padding: 14px 34px; border-radius: 100px;
-  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 500;
-  cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center; gap: 9px;
-  transition: background .2s;
-}
-.btn-ghost:hover { background: rgba(255,255,255,0.1); }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-
-/* ── DIVIDER ── */
-.div-wrap { display: flex; justify-content: center; padding: 28px 0; background: var(--pearl); position: relative; z-index: 1; }
-.div-wrap.on-dark { background: var(--dark); }
-.div-line { width: 0; height: 1px; background: var(--grad); border-radius: 1px; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
-.div-line.show { width: 100px; }
-
-/* ── SHARED SECTION STYLES ── */
-.eyebrow {
-  font-family: 'JetBrains Mono', monospace; font-size: 10px;
-  letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-light);
-  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
-}
-.eyebrow::before { content:''; width:18px; height:1px; background:var(--text-light); display:block; flex-shrink:0; }
-.eyebrow.light { color: rgba(255,255,255,0.28); }
-.eyebrow.light::before { background: rgba(255,255,255,0.28); }
-.eyebrow.centered { justify-content: center; }
-.eyebrow.centered::before { display:none; }
-.eyebrow.centered::after { content:''; width:18px; height:1px; background:currentColor; display:block; flex-shrink:0; }
-
-.sec-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(30px, 4vw, 50px); font-weight: 900;
-  line-height: 1.05; letter-spacing: -1.5px; margin-bottom: 10px;
-}
-.sec-bracket {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  color: var(--text-light); margin-bottom: 44px;
-}
-
-/* ── PROOF SECTION ── */
-.proof { background: var(--pearl); padding: 60px 24px; }
-.proof-inner { max-width: 1140px; margin: 0 auto; }
-.proof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
-
-/* Chat */
-.chat-wrap {
-  background: var(--dark-2); border-radius: 20px; overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.06);
-  display: flex; flex-direction: column; min-height: 480px;
-}
-.chat-head {
-  background: var(--dark-3); padding: 14px 18px;
-  display: flex; align-items: center; gap: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;
-}
-.chat-av {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: var(--grad); display: flex; align-items: center;
-  justify-content: center; font-size: 15px; flex-shrink: 0;
-}
-.chat-nm { font-size: 13px; font-weight: 600; color: white; }
-.chat-on { font-size: 11px; color: #22C55E; display: flex; align-items: center; gap: 4px; }
-.chat-on::before { content:''; width:5px; height:5px; background:#22C55E; border-radius:50%; display:inline-block; }
-.chat-badge {
-  margin-left: auto; background: rgba(91,43,213,0.2);
-  border: 1px solid rgba(91,43,213,0.35); color: #A78BFA;
-  border-radius: 100px; font-size: 10px; padding: 3px 10px;
+body {
+  background: var(--bg);
+  color: var(--text);
   font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
-.chat-body {
-  flex: 1; padding: 18px; display: flex; flex-direction: column;
-  gap: 10px; overflow-y: auto;
-}
-.msg {
-  max-width: 82%; padding: 10px 14px; border-radius: 14px;
-  font-size: 13px; line-height: 1.5;
-  opacity: 0; transform: translateY(8px);
-  transition: opacity .35s ease, transform .35s ease;
-}
-.msg.show { opacity: 1; transform: translateY(0); }
-.msg-bot {
-  background: var(--dark-3); color: rgba(255,255,255,0.82);
-  border: 1px solid rgba(255,255,255,0.06);
-  align-self: flex-start; border-bottom-left-radius: 4px;
-}
-.msg-user {
-  background: var(--grad); color: white;
-  align-self: flex-end; border-bottom-right-radius: 4px;
-}
-.typing {
-  display: flex; gap: 4px; align-items: center;
-  padding: 10px 14px; background: var(--dark-3);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 14px; border-bottom-left-radius: 4px;
-  align-self: flex-start; opacity: 0; transition: opacity .3s;
-  max-width: 60px;
-}
-.typing.show { opacity: 1; }
-.dot { width: 5px; height: 5px; background: rgba(255,255,255,0.3); border-radius: 50%; animation: bounce 1.2s ease-in-out infinite; }
-.dot:nth-child(2){animation-delay:.2s} .dot:nth-child(3){animation-delay:.4s}
-@keyframes bounce { 0%,100%{transform:translateY(0);opacity:.3} 50%{transform:translateY(-4px);opacity:1} }
 
-/* Dashboard */
-.dash-wrap {
-  background: white; border-radius: 20px; padding: 22px;
-  border: 1px solid rgba(18,16,26,0.08);
-  box-shadow: 0 4px 24px rgba(18,16,26,0.06);
-  display: flex; flex-direction: column; gap: 16px;
+/* Grain overlay */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:1000;
+  opacity:0.4;
 }
-.dash-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid rgba(18,16,26,0.06); }
-.dash-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--text-dark); }
-.dash-period { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-light); background: var(--pearl-2); padding: 4px 10px; border-radius: 6px; }
 
-.kpi-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
-.kpi-card { background: var(--pearl); border-radius: 12px; padding: 12px; text-align: center; border: 1px solid rgba(18,16,26,0.06); }
-.kpi-val { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
-.kpi-val.vc { background: var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.kpi-val.gd { color: #D97706; }
-.kpi-val.gn { color: #059669; }
-.kpi-lbl { font-size: 9px; color: var(--text-light); font-family: 'JetBrains Mono', monospace; letter-spacing: .5px; text-transform: uppercase; }
-.kpi-delta { font-size: 10px; color: #059669; margin-top: 3px; }
-
-.chart-lbl { font-size: 11px; color: var(--text-mid); font-weight: 500; margin-bottom: 8px; }
-.bars { display: flex; align-items: flex-end; gap: 4px; height: 86px; }
-.bg { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
-.b { width: 100%; border-radius: 4px 4px 0 0; background: var(--grad); opacity: .75; height: 0; transition: height .65s cubic-bezier(.4,0,.2,1); }
-.b:hover { opacity: 1; }
-.bd { font-size: 8px; color: var(--text-light); font-family: 'JetBrains Mono', monospace; }
-
-.chips { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
-.chip { background: var(--pearl); border-radius: 10px; padding: 9px 11px; border: 1px solid rgba(18,16,26,0.06); }
-.chip-l { font-size: 9px; font-family: 'JetBrains Mono', monospace; letter-spacing: .8px; text-transform: uppercase; color: #7C5CE8; font-weight: 500; margin-bottom: 3px; }
-.chip-v { font-size: 11px; color: var(--text-dark); font-weight: 500; line-height: 1.3; }
-
-/* ── HOW ── */
-.how { background: var(--dark); padding: 60px 24px; position: relative; overflow: hidden; }
-.how-bg { position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(90deg,transparent,transparent 28px,rgba(91,43,213,0.04) 28px,rgba(91,43,213,0.04) 29px); }
-.how-inner { max-width: 880px; margin: 0 auto; position: relative; z-index: 1; }
-.how-head { text-align: center; margin-bottom: 52px; }
-.how-title { font-family: 'Playfair Display', serif; font-size: clamp(28px,4vw,48px); font-weight: 900; letter-spacing: -1.5px; color: white; margin-bottom: 10px; }
-.how-bracket { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.25); }
-
-.steps { display: flex; flex-direction: column; }
-.step {
-  display: grid; grid-template-columns: 50px 1fr; gap: 26px;
-  padding: 28px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-  opacity: 0; transform: translateX(-14px);
-  transition: opacity .5s ease, transform .5s ease;
+/* Vertical lines */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background: repeating-linear-gradient(90deg, transparent, transparent 99px, rgba(255,255,255,0.015) 99px, rgba(255,255,255,0.015) 100px);
+  pointer-events:none;
+  z-index:0;
 }
-.step:last-child { border-bottom: none; }
-.step.show { opacity: 1; transform: translateX(0); }
-.step-num {
-  width: 50px; height: 50px; border-radius: 50%;
-  background: var(--grad); color: white; flex-shrink: 0;
-  font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 900;
+
+/* LAYOUT */
+.shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* SIDEBAR */
+aside {
+  background: var(--surface);
+  border-right: 0.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 32px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.logo-wrap {
+  padding: 0 24px 32px;
+  border-bottom: 0.5px solid var(--border);
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+.logo em { color: var(--accent); font-style: normal; }
+.logo-sub {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.nav {
+  padding: 24px 0;
+  flex: 1;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  cursor: pointer;
+  color: var(--sub);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover { color: var(--text); background: var(--accent3); }
+.nav-item.active { color: var(--text); border-left-color: var(--accent); background: var(--accent3); }
+.nav-icon { font-size: 14px; width: 16px; text-align: center; opacity: 0.7; }
+
+.sidebar-footer {
+  padding: 24px;
+  border-top: 0.5px solid var(--border);
+}
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--sub);
+}
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+/* MAIN */
+main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: -0.3px;
+}
+.page-title span { color: var(--sub); font-size: 13px; font-family: 'JetBrains Mono', monospace; margin-left: 12px; font-weight: 300; }
+
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.date-tag {
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+
+/* CONTENT */
+.content { padding: 36px 40px; flex: 1; }
+
+/* PANELS */
+.panel-grid {
+  display: none;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.2s ease;
+}
+.panel-grid.active { display: flex; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px);} to{opacity:1;transform:none;} }
+
+/* SECTION LABEL */
+.sec-label {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.sec-label::after { content:''; flex:1; height:0.5px; background:var(--border); }
+
+/* CARD */
+.card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+.card-sm { padding: 16px 20px; }
+
+/* METRIC GRID */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.metric {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+  transition: border-color 0.15s;
+}
+.metric:hover { border-color: var(--border2); }
+.metric-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.metric-label {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.metric-sub { font-size: 10px; color: var(--sub); margin-top: 2px; }
+
+/* BÚSQUEDA FORM */
+.search-builder { display: flex; flex-direction: column; gap: 10px; }
+
+.query-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+  animation: fadeIn 0.15s ease;
+}
+.query-num {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 300;
+}
+
+input[type=text], select {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+  width: 100%;
+}
+input[type=text]:focus, select:focus {
+  border-color: var(--accent);
+  background: rgba(124,106,247,0.04);
+}
+input[type=text]::placeholder { color: var(--muted); }
+select option { background: #1a1a2e; color: var(--text); }
+
+.btn-del {
+  background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  width: 38px; height: 38px;
+  font-size: 14px;
+  transition: all 0.15s;
   display: flex; align-items: center; justify-content: center;
 }
-.step-body { padding-top: 4px; }
-.step-title { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700; color: white; margin-bottom: 8px; letter-spacing: -.5px; }
-.step-desc { font-size: 13.5px; color: rgba(255,255,255,0.38); line-height: 1.65; font-weight: 300; }
-.step-tag { display: inline-block; margin-top: 11px; background: rgba(91,43,213,0.18); border: 1px solid rgba(91,43,213,0.3); color: #A78BFA; border-radius: 6px; font-size: 9px; font-family: 'JetBrains Mono', monospace; padding: 3px 10px; letter-spacing: 1px; text-transform: uppercase; }
+.btn-del:hover { border-color: var(--red); color: var(--red); background: var(--red2); }
 
-/* ── RESULTS ── */
-.results { background: var(--pearl); padding: 60px 24px; }
-.results-inner { max-width: 1140px; margin: 0 auto; }
-.results-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-top: 44px; }
-.rc {
-  background: white; border-radius: 18px; padding: 26px 20px;
-  border: 1px solid rgba(18,16,26,0.07); box-shadow: 0 2px 16px rgba(18,16,26,0.05);
-  position: relative; overflow: hidden;
-  opacity: 0; transform: translateY(16px);
-  transition: opacity .5s ease, transform .5s ease, box-shadow .25s;
+.btn-add-query {
+  background: none;
+  border: 0.5px dashed var(--border2);
+  border-radius: 8px;
+  color: var(--sub);
+  cursor: pointer;
+  padding: 10px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  text-align: center;
+  transition: all 0.15s;
+  margin-top: 4px;
 }
-.rc.show { opacity: 1; transform: translateY(0); }
-.rc:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(18,16,26,0.1); }
-.rc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--grad); }
-.rc-icon { font-size: 20px; margin-bottom: 12px; }
-.rc-val { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 900; line-height: 1; margin-bottom: 8px; background: var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.rc-lbl { font-size: 12.5px; color: var(--text-mid); margin-bottom: 12px; line-height: 1.4; }
-.rc-note { font-size: 10px; color: var(--text-light); font-family: 'JetBrains Mono', monospace; border-top: 1px solid rgba(18,16,26,0.06); padding-top: 10px; }
+.btn-add-query:hover { border-color: var(--accent); color: var(--accent); background: var(--accent3); }
 
-/* ── CTA ── */
-.cta-sec { background: var(--dark); padding: 72px 24px; position: relative; overflow: hidden; }
-.cta-bg { position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(90deg,transparent,transparent 28px,rgba(91,43,213,0.04) 28px,rgba(91,43,213,0.04) 29px); }
-.cta-inner { max-width: 680px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
-.cta-title { font-family: 'Playfair Display', serif; font-size: clamp(30px,5vw,56px); font-weight: 900; color: white; letter-spacing: -2px; line-height: 1.0; margin-bottom: 14px; }
-.cta-title .accent { font-style: italic; background: var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.cta-bracket { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.25); margin-bottom: 36px; }
-.cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-.btn-wa {
-  background: #22C55E; color: white; border: none;
-  padding: 14px 32px; border-radius: 100px;
-  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600;
-  cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center; gap: 9px;
-  transition: transform .2s, box-shadow .2s;
-  box-shadow: 0 0 28px rgba(34,197,94,0.25);
+/* CONFIG */
+.config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
 }
-.btn-wa:hover { transform: translateY(-2px); box-shadow: 0 0 48px rgba(34,197,94,0.45); }
-.btn-outline {
-  background: transparent; color: rgba(255,255,255,0.6);
-  border: 1px solid rgba(255,255,255,0.14);
-  padding: 14px 32px; border-radius: 100px;
-  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 500;
-  cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center; gap: 9px;
-  transition: background .2s;
+.field label {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
 }
-.btn-outline:hover { background: rgba(255,255,255,0.07); }
+.field-hint {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 5px;
+  line-height: 1.4;
+}
 
+/* SCORE SLIDER */
+.slider-wrap { display: flex; align-items: center; gap: 10px; }
+input[type=range] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 2px;
+  background: var(--border2);
+  border-radius: 2px;
+  outline: none;
+  border: none;
+  padding: 0;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.slider-val {
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 500;
+  min-width: 32px;
+  text-align: right;
+}
 
-/* ── NARRATIVE CLOSE ── */
-.narrative {
-  background: var(--pearl); padding: 72px 24px;
+/* SCORE BANDS — visual */
+.bands {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+  margin-top: 8px;
 }
-.narrative-inner {
-  max-width: 760px; margin: 0 auto; text-align: center;
-  opacity: 0; transform: translateY(20px);
-  transition: opacity .7s ease, transform .7s ease;
+.band {
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 0.5px solid var(--border);
 }
-.narrative-inner.show {
-  opacity: 1; transform: translateY(0);
+.band-name { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+.band-range { font-family: 'Playfair Display', serif; font-size: 18px; }
+.band-desc { font-size: 10px; color: var(--sub); margin-top: 2px; }
+
+/* CHIPS */
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 11px;
+  color: var(--sub);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
 }
-.narrative-quote {
+.chip input { display: none; }
+.chip.on { background: var(--accent2); border-color: var(--accent); color: var(--accent); }
+
+/* RUN BUTTON */
+.run-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 20px 40px;
+  border-top: 0.5px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+.btn-run {
+  background: var(--accent);
+  border: none;
+  border-radius: 10px;
+  color: white;
   font-family: 'Playfair Display', serif;
-  font-size: clamp(22px, 3.5vw, 38px);
-  font-weight: 700; font-style: italic;
-  line-height: 1.3; letter-spacing: -0.5px;
-  color: var(--text-dark);
-  margin: 24px 0 28px;
-  border: none; padding: 0;
-  position: relative;
+  font-size: 15px;
+  padding: 12px 32px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: -0.2px;
 }
-.narrative-quote::before {
-  content: '"';
-  position: absolute; top: -20px; left: -10px;
-  font-size: 80px; line-height: 1;
-  background: var(--grad);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+.btn-run:hover { background: #6b5ae0; transform: translateY(-1px); }
+.btn-run:active { transform: translateY(0); }
+.btn-run:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.status-msg {
+  font-size: 12px;
+  color: var(--sub);
+  flex: 1;
+  display: none;
+}
+.status-msg.show { display: block; }
+.status-msg.ok  { color: var(--green); }
+.status-msg.err { color: var(--red); }
+.status-msg.wait { color: var(--amber); }
+
+/* LEADS LIST */
+.leads-filters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.filter-btn {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  color: var(--sub);
+  padding: 5px 14px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover { border-color: var(--border2); color: var(--text); }
+.filter-btn.active { background: var(--accent2); border-color: var(--accent); color: var(--accent); }
+
+.leads-list { display: flex; flex-direction: column; gap: 8px; }
+
+.lead-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: start;
+  transition: border-color 0.15s;
+  cursor: pointer;
+  animation: fadeIn 0.2s ease;
+}
+.lead-card:hover { border-color: var(--border2); }
+.lead-card.priority { border-left: 3px solid var(--green); }
+.lead-card.good     { border-left: 3px solid var(--amber); }
+.lead-card.low      { border-left: 3px solid var(--muted); opacity: 0.7; }
+
+.lead-name {
   font-family: 'Playfair Display', serif;
-  opacity: 0.3;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 3px;
+  letter-spacing: -0.2px;
 }
-.narrative-sub {
-  font-size: 16px; color: var(--text-mid);
-  line-height: 1.7; font-weight: 300;
+.lead-meta { font-size: 11px; color: var(--sub); margin-bottom: 8px; display: flex; gap: 12px; flex-wrap: wrap; }
+.lead-message {
+  font-size: 12px;
+  color: var(--sub);
+  background: var(--surface2);
+  border-left: 2px solid var(--accent);
+  padding: 8px 12px;
+  border-radius: 0 6px 6px 0;
+  line-height: 1.5;
+  font-style: italic;
+  margin-bottom: 8px;
 }
-.narrative-sub em {
-  font-style: italic; color: var(--text-dark); font-weight: 500;
+.lead-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.04em;
+}
+.tag-green  { background: var(--green2);  color: var(--green); }
+.tag-amber  { background: var(--amber2);  color: var(--amber); }
+.tag-accent { background: var(--accent2); color: var(--accent); }
+.tag-muted  { background: var(--surface2); color: var(--muted); border: 0.5px solid var(--border); }
+
+.lead-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.score-circle {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 500;
+  border: 1.5px solid;
+}
+.score-circle.priority { color: var(--green); border-color: var(--green); background: var(--green2); }
+.score-circle.good     { color: var(--amber); border-color: var(--amber); background: var(--amber2); }
+.score-circle.low      { color: var(--muted); border-color: var(--muted); background: transparent; }
+
+.estado-select {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  color: var(--sub);
+  padding: 4px 8px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+  outline: none;
+  width: auto;
 }
 
-/* ── FOOTER ── */
-footer {
-  background: var(--dark-2); padding: 24px 48px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 14px;
-  border-top: 1px solid rgba(255,255,255,0.05);
+/* EMPTY STATE */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
 }
-.ft-logo img { height: 28px; width: auto; }
-.ft-logo-svg { display: none; }
-.ft-copy { font-size: 11px; color: rgba(255,255,255,0.2); font-family: 'JetBrains Mono', monospace; }
-.ft-url { font-size: 11px; color: rgba(255,255,255,0.18); font-family: 'JetBrains Mono', monospace; }
+.empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
+.empty-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--sub); margin-bottom: 6px; }
+.empty-sub { font-size: 12px; line-height: 1.6; }
 
-/* ── RESPONSIVE ── */
+/* HISTORIAL ROWS */
+.hist-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 12px;
+  gap: 12px;
+}
+.hist-row:last-child { border-bottom: none; }
+.hist-date { color: var(--muted); min-width: 120px; }
+.hist-info { color: var(--sub); flex: 1; }
+.hist-badges { display: flex; gap: 6px; }
+
+/* COPY BUTTON */
+.btn-copy {
+  background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  padding: 4px 10px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+.btn-copy.copied { color: var(--green); border-color: var(--green); }
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
-  nav { padding: 13px 20px; }
-  .nav-pill { display: none; }
-  .hero { padding: 88px 18px 56px; }
-  .terminal { max-width: 100%; }
-  .tl { font-size: 11.5px; }
-  .hero-split { grid-template-columns: 1fr 1px 1fr; }
-  .split-side { padding: 16px 14px; }
-  .split-row { font-size: 12px; }
-  .hero-ctas { flex-direction: column; align-items: center; }
-  .btn-primary,.btn-ghost,.btn-wa,.btn-outline { width: 100%; max-width: 310px; justify-content: center; }
-  .proof { padding: 44px 16px; }
-  .proof-grid { grid-template-columns: 1fr; gap: 20px; }
-  .chat-wrap { min-height: 380px; }
-  .chips { grid-template-columns: 1fr; }
-  .how { padding: 48px 16px; }
-  .results { padding: 48px 16px; }
-  .results-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-  .cta-sec { padding: 56px 20px; }
-  .cta-btns { flex-direction: column; align-items: center; }
-  footer { padding: 20px 20px; flex-direction: column; align-items: center; text-align: center; }
-}
-@media (max-width: 480px) {
-  .results-grid { grid-template-columns: 1fr; }
-  .kpi-row { gap: 8px; }
-  .bars { height: 70px; }
-  .hero-split { grid-template-columns: 1fr; }
-  .split-bar { display: none; }
-  .split-side.left { text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 20px; }
+  .shell { grid-template-columns: 1fr; }
+  aside { display: none; }
+  .content { padding: 20px; }
+  .metric-grid { grid-template-columns: repeat(2,1fr); }
+  .config-grid { grid-template-columns: 1fr; }
+  .query-row { grid-template-columns: 1fr 1fr auto; }
+  .query-num { display: none; }
+  .run-bar { padding: 16px 20px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ═══ NAV ═══ -->
-<nav>
-  <div class="nav-logo">
-    <img
-      src="https://raw.githubusercontent.com/Juan-OM26/operamente-demo.html/main/public/Operamente.png"
-      alt="Operamente"
-      onerror="this.style.display='none'; document.querySelector('.nav-logo-svg').style.display='block'"
-    />
-    <svg class="nav-logo-svg" height="34" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5B2BD5"/><stop offset="100%" stop-color="#E8237A"/></linearGradient></defs>
-      <circle cx="20" cy="20" r="18" fill="url(#g1)"/>
-      <text x="20" y="26" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="white">om</text>
-      <text x="46" y="27" font-family="Georgia,serif" font-size="19" font-weight="700" fill="#12101A" letter-spacing="-0.5">operamente</text>
-    </svg>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<aside>
+  <div class="logo-wrap">
+    <div class="logo"><em>opera</em>mente</div>
+    <div class="logo-sub">inteligencia comercial</div>
   </div>
-  <div class="nav-pill"><div class="live-dot"></div>demo en vivo</div>
-  <a href="#cta" class="nav-cta">Empieza una conversación →</a>
-</nav>
-
-<!-- ═══ HERO ═══ -->
-<section class="hero">
-  <div class="hero-lines"></div>
-  <div class="hero-orb"></div>
-
-  <!-- Hero title -->
-  <div class="hero-heading" style="position:relative;z-index:1;text-align:center;margin-bottom:44px;animation:fadeUp .7s ease both;">
-    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:18px;">[ AI Concierge · Operamente ]</p>
-    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,5.5vw,72px);font-weight:900;line-height:1.05;letter-spacing:-2px;color:white;">
-      Un sistema que opera.<br><span style="font-style:italic;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Una empresa que crece.</span>
-    </h1>
-  </div>
-
-  <!-- Terminal -->
-  <div class="terminal">
-    <div class="term-bar">
-      <div class="td td-r"></div>
-      <div class="td td-y"></div>
-      <div class="td td-g"></div>
-      <span class="term-title">operamente · ai-concierge · session_active</span>
+  <nav class="nav">
+    <div class="nav-item active" onclick="goTo('busqueda')">
+      <span class="nav-icon">◎</span> Nueva búsqueda
     </div>
-    <div class="term-body" id="termBody"></div>
-  </div>
-
-  <!-- Before / After -->
-  <div class="hero-split">
-    <div class="split-side left">
-      <span class="split-lbl bad">Sin Operamente</span>
-      <span class="split-row bad">Lead escribe a las 9PM</span>
-      <span class="split-row bad">Nadie responde</span>
-      <span class="split-row bad">Lead se enfría</span>
-      <span class="split-row bad">Oportunidad perdida</span>
+    <div class="nav-item" onclick="goTo('leads')">
+      <span class="nav-icon">≡</span> Leads <span id="nav-count" style="margin-left:auto;font-size:10px;background:var(--accent2);color:var(--accent);padding:1px 7px;border-radius:10px;display:none;"></span>
     </div>
-    <div class="split-bar"></div>
-    <div class="split-side right">
-      <span class="split-lbl good">Con Operamente</span>
-      <span class="split-row good">Respuesta en 4 minutos</span>
-      <span class="split-row good">Lead calificado al instante</span>
-      <span class="split-row good">Cita confirmada</span>
-      <span class="split-row good">Pipeline activo</span>
+    <div class="nav-item" onclick="goTo('metricas')">
+      <span class="nav-icon">⌁</span> Métricas
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="status-pill">
+      <div class="dot"></div>
+      <span>Sistema activo</span>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:6px;" id="sidebar-date"></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main>
+  <div class="topbar">
+    <div class="page-title" id="page-title">
+      Nueva búsqueda <span id="page-sub">configura y lanza tu prospección</span>
+    </div>
+    <div class="topbar-right">
+      <div class="date-tag" id="topbar-date"></div>
     </div>
   </div>
 
-  <p class="hero-phrase">[ IA y automatización diseñadas con propósito ]</p>
+  <div class="content">
 
-  <div class="hero-ctas">
-    <a href="#proof" class="btn-primary">Ver el sistema en acción →</a>
-    <a href="#cta" class="btn-ghost">Empieza una conversación</a>
-  </div>
-</section>
+    <!-- PANEL: BÚSQUEDA -->
+    <div class="panel-grid active" id="panel-busqueda">
 
-<!-- ═══ DIVIDER ═══ -->
-<div class="div-wrap"><div class="div-line"></div></div>
+      <!-- Qué buscar -->
+      <div>
+        <div class="sec-label">qué buscar</div>
+        <div class="card">
+          <div class="search-builder" id="queries-list"></div>
+          <button class="btn-add-query" onclick="addQuery()">+ añadir búsqueda</button>
+        </div>
+      </div>
 
-<!-- ═══ PROOF ═══ -->
-<section class="proof" id="proof">
-  <div class="proof-inner">
-    <div class="eyebrow">Así se ve por dentro</div>
-    <h2 class="sec-title">El sistema en vivo</h2>
-    <p class="sec-bracket">[ Esta es una conversación real con nuestro AI Concierge ]</p>
+      <!-- Dónde y cómo -->
+      <div>
+        <div class="sec-label">dónde y cómo</div>
+        <div class="card">
+          <div class="config-grid">
+            <div class="field">
+              <label>País</label>
+              <input type="text" id="pais" value="España" placeholder="España, México, Colombia...">
+              <div class="field-hint">Define el mercado objetivo</div>
+            </div>
+            <div class="field">
+              <label>Ciudad principal</label>
+              <input type="text" id="ciudad" value="Madrid" placeholder="Madrid, CDMX, Bogotá...">
+              <div class="field-hint">Se añade a cada búsqueda</div>
+            </div>
+            <div class="field">
+              <label>Idioma</label>
+              <select id="idioma">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="pt">Português</option>
+                <option value="fr">Français</option>
+              </select>
+              <div class="field-hint">Idioma de los resultados</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <div class="proof-grid">
-
-      <!-- Chat -->
-      <div class="chat-wrap">
-        <div class="chat-head">
-          <div class="chat-av">🤖</div>
+      <!-- Qué tipo de empresa -->
+      <div>
+        <div class="sec-label">qué tipo de empresa buscas</div>
+        <div class="card">
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px;color:var(--sub);margin-bottom:10px;">Prioridad de contacto — basada en su nivel de automatización actual</div>
+            <div class="bands">
+              <div class="band" style="background:var(--green2);border-color:rgba(95,232,160,0.2);">
+                <div class="band-name" style="color:var(--green);">Prioritario</div>
+                <div class="band-range" style="color:var(--green);">80–100</div>
+                <div class="band-desc">Sin automatización, contactar hoy</div>
+              </div>
+              <div class="band" style="background:var(--amber2);border-color:rgba(247,194,107,0.2);">
+                <div class="band-name" style="color:var(--amber);">Interesante</div>
+                <div class="band-range" style="color:var(--amber);">60–79</div>
+                <div class="band-desc">Automatización básica, nutrir</div>
+              </div>
+              <div class="band">
+                <div class="band-name" style="color:var(--muted);">Descartar</div>
+                <div class="band-range" style="color:var(--muted);">0–59</div>
+                <div class="band-desc">Ya automatizado o no encaja</div>
+              </div>
+            </div>
+          </div>
           <div>
-            <div class="chat-nm">Operamente AI</div>
-            <div class="chat-on">Activo ahora</div>
+            <div style="font-size:11px;color:var(--sub);margin-bottom:10px;">Excluir automáticamente</div>
+            <div class="chips">
+              <label class="chip on"><input type="checkbox" checked value="franquicia" onchange="this.parentElement.classList.toggle('on',this.checked)"> Franquicias</label>
+              <label class="chip on"><input type="checkbox" checked value="cadena" onchange="this.parentElement.classList.toggle('on',this.checked)"> Cadenas nacionales</label>
+              <label class="chip on"><input type="checkbox" checked value="micro" onchange="this.parentElement.classList.toggle('on',this.checked)"> Microempresas</label>
+              <label class="chip"><input type="checkbox" value="corp" onchange="this.parentElement.classList.toggle('on',this.checked)"> Corporaciones</label>
+              <label class="chip"><input type="checkbox" value="pub" onchange="this.parentElement.classList.toggle('on',this.checked)"> Sector público</label>
+            </div>
           </div>
-          <div class="chat-badge">AI Concierge</div>
-        </div>
-        <div class="chat-body" id="chatEl"></div>
-      </div>
-
-      <!-- Dashboard -->
-      <div class="dash-wrap">
-        <div class="dash-head">
-          <div class="dash-title">AI Concierge Analytics</div>
-          <div class="dash-period">Mar 2026</div>
-        </div>
-
-        <div class="kpi-row">
-          <div class="kpi-card">
-            <div class="kpi-val vc count-up" data-target="67">0</div>
-            <div class="kpi-lbl">Citas conf.</div>
-            <div class="kpi-delta">+34% ↑</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-val gd">73%</div>
-            <div class="kpi-lbl">Agendamiento</div>
-            <div class="kpi-delta" style="color:#D97706">+18% ↑</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-val gn count-up" data-target="4" data-suffix="m">0m</div>
-            <div class="kpi-lbl">Resp. prom.</div>
-            <div class="kpi-delta">-68% ↓</div>
-          </div>
-        </div>
-
-        <div>
-          <div class="chart-lbl">Citas por día</div>
-          <div class="bars" id="barsEl"></div>
-        </div>
-
-        <div class="chips">
-          <div class="chip"><div class="chip-l">Hora pico</div><div class="chip-v">2PM — mayor tasa</div></div>
-          <div class="chip"><div class="chip-l">Mejor día</div><div class="chip-v">Martes · 12 citas</div></div>
-          <div class="chip"><div class="chip-l">Pipeline</div><div class="chip-v">$53,200 USD</div></div>
         </div>
       </div>
 
     </div>
-  </div>
-</section>
 
-<!-- ═══ DIVIDER ═══ -->
-<div class="div-wrap"><div class="div-line"></div></div>
-
-<!-- ═══ HOW IT WORKS ═══ -->
-<section class="how" id="como-funciona">
-  <div class="how-bg"></div>
-  <div class="how-inner">
-    <div class="how-head">
-      <div class="eyebrow light centered">El flujo</div>
-      <div class="how-title">Cuatro momentos. Cero intervención.</div>
-      <div class="how-bracket">[ Operación ordenada › Ejecución impecable › Crecimiento sostenido ]</div>
-    </div>
-    <div class="steps" id="stepsEl">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <div class="step-title">El lead escribe por WhatsApp</div>
-          <div class="step-desc">El AI Concierge responde en menos de 4 minutos, cualquier hora del día. Califica al prospecto con preguntas naturales — sin que se sienta un cuestionario.</div>
-          <span class="step-tag">Respuesta inmediata 24/7</span>
+    <!-- PANEL: LEADS -->
+    <div class="panel-grid" id="panel-leads">
+      <div>
+        <div class="leads-filters">
+          <button class="filter-btn active" onclick="filterLeads('all',this)">Todos <span id="cnt-all"></span></button>
+          <button class="filter-btn" onclick="filterLeads('Priority',this)">Prioritarios <span id="cnt-priority"></span></button>
+          <button class="filter-btn" onclick="filterLeads('Good',this)">Interesantes <span id="cnt-good"></span></button>
+          <button class="filter-btn" onclick="filterLeads('Low',this)">Descartar <span id="cnt-low"></span></button>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <div class="step-title">El agente califica y guía</div>
-          <div class="step-desc">Detecta intención real y ofrece el slot de cita ideal. Sin pasos manuales, sin fricción. Tu equipo solo habla con quien realmente quiere agendar.</div>
-          <span class="step-tag">IA conversacional</span>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <div class="step-title">La cita se agenda sola</div>
-          <div class="step-desc">Confirmación automática, recordatorios, y el prospecto llega al calendario de tu equipo listo para cerrar. Cero gestión manual.</div>
-          <span class="step-tag">Automatización total</span>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <div class="step-title">Tú ves todo en tiempo real</div>
-          <div class="step-desc">Dashboard con métricas accionables: tasa de agendamiento, horas pico, pipeline activo. Datos para optimizar cada semana sin conjeturas.</div>
-          <span class="step-tag">Dashboard personalizado</span>
+        <div class="leads-list" id="leads-container">
+          <div class="empty">
+            <div class="empty-icon">◎</div>
+            <div class="empty-title">Sin leads todavía</div>
+            <div class="empty-sub">Lanza tu primera búsqueda desde<br>la sección <em>Nueva búsqueda</em></div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ═══ DIVIDER ═══ -->
-<div class="div-wrap"><div class="div-line"></div></div>
-
-<!-- ═══ NARRATIVE CLOSE ═══ -->
-<section class="narrative">
-  <div class="narrative-inner">
-    <div class="eyebrow">Lo que viste es real</div>
-    <blockquote class="narrative-quote">
-      "67 citas agendadas este mes.<br>
-      Ninguna requirió que alguien estuviera despierto<br>
-      a las 9PM esperando un mensaje."
-    </blockquote>
-    <p class="narrative-sub">Eso es lo que significa un sistema diseñado con propósito.<br>No automatización genérica — <em>inteligencia operativa a medida.</em></p>
-  </div>
-</section>
-
-<!-- ═══ DIVIDER ═══ -->
-<div class="div-wrap"><div class="div-line"></div></div>
-
-<!-- ═══ CTA ═══ -->
-<section class="cta-sec" id="cta">
-  <div class="cta-bg"></div>
-  <div class="cta-inner">
-    <div class="eyebrow light centered" style="margin-bottom:20px">Siguiente paso</div>
-    <h2 class="cta-title">¿Tu empresa también<br>puede <span class="accent">hacer esto</span>?</h2>
-    <p class="cta-bracket">[ 30 minutos · Sin compromiso · Diagnóstico real ]</p>
-    <div class="cta-btns">
-      <a href="https://wa.me/1234567890?text=Hola%2C%20vi%20el%20demo%20de%20Operamente%20y%20quiero%20saber%20m%C3%A1s" class="btn-wa" target="_blank">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.1 1.508 5.832L0 24l6.335-1.482A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.935 0-3.74-.52-5.29-1.427l-.38-.225-3.925.918.936-3.82-.247-.393A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-        Escríbenos por WhatsApp
-      </a>
-      <a href="/cdn-cgi/l/email-protection#84ecebe8e5c4ebf4e1f6e5e9e1eaf0e1aae7ebe9" class="btn-outline">Agenda una llamada →</a>
+    <!-- PANEL: MÉTRICAS -->
+    <div class="panel-grid" id="panel-metricas">
+      <div>
+        <div class="sec-label">rendimiento acumulado</div>
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="metric-val" id="m-runs" style="color:var(--accent);">0</div>
+            <div class="metric-label">Búsquedas</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val" id="m-total">0</div>
+            <div class="metric-label">Leads analizados</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val" id="m-priority" style="color:var(--green);">0</div>
+            <div class="metric-label">Prioritarios</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val" id="m-ratio" style="color:var(--amber);">—</div>
+            <div class="metric-label">Tasa de éxito</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-label">historial de búsquedas</div>
+        <div class="card">
+          <div id="historial-list">
+            <div style="text-align:center;padding:32px;color:var(--muted);font-size:12px;">Sin historial todavía</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-label">estados de leads</div>
+        <div class="card">
+          <div id="estados-chart" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
     </div>
+
   </div>
-</section>
 
-<!-- ═══ FOOTER ═══ -->
-<footer>
-  <div class="ft-logo">
-    <img
-      src="https://raw.githubusercontent.com/Juan-OM26/operamente-demo.html/main/public/Operamente.png"
-      alt="Operamente"
-      onerror="this.style.display='none'; document.querySelector('.ft-logo-svg').style.display='block'"
-    />
-    <svg class="ft-logo-svg" height="26" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5B2BD5"/><stop offset="100%" stop-color="#E8237A"/></linearGradient></defs>
-      <circle cx="20" cy="20" r="18" fill="url(#g2)"/>
-      <text x="20" y="26" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="white">om</text>
-      <text x="46" y="27" font-family="Georgia,serif" font-size="19" font-weight="700" fill="white" opacity="0.55" letter-spacing="-0.5">operamente</text>
-    </svg>
+  <!-- RUN BAR -->
+  <div class="run-bar" id="run-bar">
+    <button class="btn-run" id="btn-run" onclick="ejecutar()">Iniciar prospección</button>
+    <div class="status-msg" id="status-msg"></div>
   </div>
-  <div class="ft-copy">© 2026 Operamente · Sistemas de IA para operaciones y ventas</div>
-  <div class="ft-url">www.operamente.com</div>
-</footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ══════════════════════════════════
-// OPERAMENTE DEMO — MAIN SCRIPT
-// ══════════════════════════════════
+</main>
+</div>
 
-// ── 1. TERMINAL ──
-const termLines = [
-  { key: 'Sistema',            val: 'Inicializando AI Concierge...',  color: 'white',   delay: 500  },
-  { key: 'Lead detectado',     val: 'Andrea Restrepo · WhatsApp',      color: 'violet',  delay: 1200 },
-  { key: 'Tiempo respuesta',   val: '3 min 42 seg',                   color: 'green',   delay: 2000 },
-  { key: 'Intención',          val: 'Alta — quiere agendar cita',     color: 'magenta', delay: 2900 },
-  { key: 'Slot ofrecido',      val: 'Martes 14:00 PM',                color: 'violet',  delay: 3800 },
-  { key: 'Estado',             val: 'CITA CONFIRMADA ✓',              color: 'green',   delay: 4700 },
-  { key: 'Pipeline',           val: '+$2,400 USD',                    color: 'gold',    delay: 5600 },
-  { key: 'Intervención humana',val: 'ninguna',                        color: 'green',   delay: 6500 },
+<script>
+// ── ESTADO ──────────────────────────────────────────────────────────
+const WEBHOOK = ''; // Se configura internamente — no visible para el usuario
+
+let queries = [
+  { sector: 'clínica dental',       zona: 'Salamanca' },
+  { sector: 'agencia inmobiliaria', zona: 'Salamanca' },
+  { sector: 'academia de idiomas',  zona: 'Chamberí'  }
 ];
 
-function runTerminal() {
-  const el = document.getElementById('termBody');
-  if (!el) return;
-  termLines.forEach((line, i) => {
-    setTimeout(() => {
-      el.querySelectorAll('.t-cursor').forEach(c => c.remove());
-      const row = document.createElement('div');
-      row.className = 'tl';
-      row.innerHTML = '<span class="tl-prompt">›</span>'
-        + '<span class="tl-key">' + line.key + '</span>'
-        + '<span class="tl-sep">·</span>'
-        + '<span class="tl-val ' + line.color + '">' + line.val + '</span>';
-      el.appendChild(row);
-      el.scrollTop = el.scrollHeight;
-      setTimeout(() => row.classList.add('show'), 30);
-      if (i === termLines.length - 1) {
-        setTimeout(() => {
-          const c = document.createElement('span');
-          c.className = 't-cursor';
-          row.appendChild(c);
-        }, 200);
-      }
-    }, line.delay);
-  });
-}
-setTimeout(runTerminal, 700);
+let state = JSON.parse(localStorage.getItem('om_leads_state') || JSON.stringify({
+  runs: 0, total: 0, priority: 0,
+  historial: [],
+  leads: []
+}));
 
-// ── 2. CHART BARS ──
-const barData = [8,12,9,11,10,5,3,9,13,10,12,11];
-const dayLabels = ['L','M','X','J','V','S','D','L','M','X','J','V'];
-const maxBar = Math.max.apply(null, barData);
-const barsEl = document.getElementById('barsEl');
-if (barsEl) {
-  barData.forEach(function(v, i) {
-    const h = (v / maxBar) * 80;
-    barsEl.innerHTML += '<div class="bg"><div class="b" data-h="' + h + '" style="transition-delay:' + (i * 0.055) + 's"></div><div class="bd">' + dayLabels[i] + '</div></div>';
-  });
-}
-function animateBars() {
-  document.querySelectorAll('.b[data-h]').forEach(function(b) {
-    if (!b.dataset.done) { b.dataset.done = '1'; b.style.height = b.dataset.h + 'px'; }
-  });
+// ── INIT ─────────────────────────────────────────────────────────────
+const now = new Date();
+const dateStr = now.toLocaleDateString('es-ES', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+document.getElementById('topbar-date').textContent  = dateStr;
+document.getElementById('sidebar-date').textContent = dateStr;
+
+renderQueries();
+renderLeads('all');
+renderMetricas();
+updateNavCount();
+
+// ── NAVEGACIÓN ───────────────────────────────────────────────────────
+const titles = {
+  busqueda: ['Nueva búsqueda', 'configura y lanza tu prospección'],
+  leads:    ['Leads encontrados', 'gestiona y haz seguimiento'],
+  metricas: ['Métricas', 'rendimiento del sistema']
+};
+
+function goTo(panel) {
+  document.querySelectorAll('.panel-grid').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + panel).classList.add('active');
+  document.querySelectorAll('.nav-item')[['busqueda','leads','metricas'].indexOf(panel)].classList.add('active');
+  document.getElementById('page-title').childNodes[0].textContent = titles[panel][0] + ' ';
+  document.getElementById('page-sub').textContent = titles[panel][1];
+
+  const runBar = document.getElementById('run-bar');
+  runBar.style.display = panel === 'busqueda' ? 'flex' : 'none';
 }
 
-// ── 3. COUNTERS ──
-function animateCounters() {
-  document.querySelectorAll('.count-up[data-target]').forEach(function(el) {
-    if (el.dataset.done) return;
-    el.dataset.done = '1';
-    var target = parseInt(el.dataset.target);
-    var suffix = el.dataset.suffix || '';
-    var cur = 0, step = target / 55;
-    var t = setInterval(function() {
-      cur += step;
-      if (cur >= target) { cur = target; clearInterval(t); }
-      el.textContent = Math.floor(cur) + suffix;
-    }, 18);
-  });
+// ── QUERIES ──────────────────────────────────────────────────────────
+function renderQueries() {
+  const list = document.getElementById('queries-list');
+  list.innerHTML = queries.map((q, i) => `
+    <div class="query-row">
+      <div class="query-num">${String(i+1).padStart(2,'0')}</div>
+      <input type="text" value="${q.sector}" placeholder="sector (ej: clínica dental)"
+        oninput="queries[${i}].sector=this.value">
+      <input type="text" value="${q.zona}" placeholder="zona (ej: Chamberí)"
+        oninput="queries[${i}].zona=this.value">
+      <button class="btn-del" onclick="removeQuery(${i})" title="Eliminar">✕</button>
+    </div>
+  `).join('');
 }
 
-// ── 4. PROOF CARDS REVEAL ──
-function animateProofCards() {
-  document.querySelectorAll('.kpi-card, .chip').forEach(function(el, i) {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(12px)';
-    el.style.transition = 'opacity .4s ease ' + (0.1 + i * 0.06) + 's, transform .4s ease ' + (0.1 + i * 0.06) + 's';
-    setTimeout(function() {
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    }, 80 + i * 60);
-  });
+function addQuery() {
+  const ciudad = document.getElementById('ciudad')?.value || 'Madrid';
+  queries.push({ sector: '', zona: ciudad });
+  renderQueries();
+  setTimeout(() => {
+    const inputs = document.querySelectorAll('.query-row input');
+    if (inputs.length) inputs[inputs.length - 2].focus();
+  }, 50);
 }
 
-// ── 5. CHAT ──
-var chatMsgs = [
-  { t: 'bot',  text: '¡Hola! Soy el AI Concierge de Operamente. ¿En qué área quisieras explorar cómo la IA puede ayudarte?', d: 0 },
-  { t: 'user', text: 'Quiero que mi equipo deje de perder tiempo con leads que nunca agendan', d: 2200 },
-  { t: 'bot',  text: 'Entiendo perfectamente. ¿Tu equipo actualmente atiende esos leads por WhatsApp?', d: 4500 },
-  { t: 'user', text: 'Sí, y es caótico — nunca sabemos quién va a confirmar', d: 6400 },
-  { t: 'bot',  text: '🎯 Exactamente lo que resolvemos. Automatizamos calificación y agendamiento directo desde WhatsApp. Tu equipo solo habla con quien ya quiere agendar.', d: 8800 },
-  { t: 'user', text: 'Claro, cuéntame más', d: 10700 },
-  { t: 'bot',  text: '✅ Este mes: 67 citas agendadas · 73% tasa de agendamiento · $53K en pipeline listo para tu equipo de ventas. ¿Cuándo tienes 30 min para una llamada?', d: 13200 },
-];
-var msgIdx = 0, chatStarted = false;
+function removeQuery(i) {
+  if (queries.length <= 1) return;
+  queries.splice(i, 1);
+  renderQueries();
+}
 
-function nextMsg() {
-  if (msgIdx >= chatMsgs.length) return;
-  var m = chatMsgs[msgIdx];
-  var el = document.getElementById('chatEl');
-  if (!el) return;
-  if (m.t === 'bot') {
-    var ty = document.createElement('div');
-    ty.className = 'typing';
-    ty.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-    el.appendChild(ty);
-    el.scrollTop = el.scrollHeight;
-    setTimeout(function() { ty.classList.add('show'); }, 40);
-    setTimeout(function() {
-      ty.remove();
-      addMsg(m, el);
-      msgIdx++;
-      if (msgIdx < chatMsgs.length) setTimeout(nextMsg, chatMsgs[msgIdx].d - m.d);
-    }, 1100);
+// ── EJECUTAR ─────────────────────────────────────────────────────────
+function buildPayload() {
+  const ciudad = document.getElementById('ciudad').value || 'Madrid';
+  const pais   = document.getElementById('pais').value   || 'España';
+  const idioma = document.getElementById('idioma').value || 'es';
+  const excluir = Array.from(document.querySelectorAll('.chip input:checked')).map(c => c.value);
+
+  const qs = queries
+    .filter(q => q.sector.trim())
+    .map(q => ({
+      sector: q.sector.trim(),
+      zona:   (q.zona.trim() || ciudad)
+    }));
+
+  return { job_id: `om_${Date.now()}`, timestamp: new Date().toISOString(),
+    icp: { pais, ciudad, idioma, excluir }, queries: qs };
+}
+
+async function ejecutar() {
+  const payload = buildPayload();
+  if (!payload.queries.length) { showStatus('Añade al menos una búsqueda con sector', 'err'); return; }
+
+  const btn = document.getElementById('btn-run');
+  btn.disabled = true;
+  btn.textContent = 'Iniciando...';
+  showStatus('Enviando parámetros al sistema...', 'wait');
+
+  // Simula leads de demo si no hay webhook
+  if (!WEBHOOK) {
+    await new Promise(r => setTimeout(r, 1200));
+    const demo = generarLeadsDemo(payload);
+    guardarEjecucion(payload, demo);
+    showStatus(`${demo.length} leads analizados — ve a la sección Leads`, 'ok');
+    updateNavCount();
+    goTo('leads');
   } else {
-    addMsg(m, el);
-    msgIdx++;
-    if (msgIdx < chatMsgs.length) setTimeout(nextMsg, chatMsgs[msgIdx].d - m.d);
-  }
-}
-
-function addMsg(m, el) {
-  var d = document.createElement('div');
-  d.className = 'msg msg-' + m.t;
-  d.textContent = m.text;
-  el.appendChild(d);
-  el.scrollTop = el.scrollHeight;
-  setTimeout(function() { d.classList.add('show'); }, 40);
-}
-
-// ── 6. INTERSECTION OBSERVERS ──
-var io = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    if (!e.isIntersecting) return;
-    var t = e.target;
-
-    // Divider lines
-    if (t.classList.contains('div-line')) {
-      t.classList.add('show');
-      io.unobserve(t);
-      return;
-    }
-    // Proof section
-    if (t.id === 'proof') {
-      animateCounters();
-      animateBars();
-      animateProofCards();
-      if (!chatStarted) { chatStarted = true; setTimeout(nextMsg, 600); }
-      io.unobserve(t);
-      return;
-    }
-    // How it works steps
-    if (t.id === 'stepsEl') {
-      t.querySelectorAll('.step').forEach(function(s, i) {
-        setTimeout(function() { s.classList.add('show'); }, i * 190);
+    try {
+      const res = await fetch(WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
-      io.unobserve(t);
-      return;
-    }
-    // Narrative close
-    if (t.classList.contains('narrative-inner')) {
-      t.classList.add('show');
-      io.unobserve(t);
-      return;
-    }
-  });
-}, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
-
-document.querySelectorAll('.div-line, #proof, #stepsEl, .narrative-inner').forEach(function(el) {
-  io.observe(el);
-});
-
-// Fallback: if proof already visible on page load
-setTimeout(function() {
-  var p = document.getElementById('proof');
-  if (p && p.getBoundingClientRect().top < window.innerHeight && !chatStarted) {
-    chatStarted = true;
-    animateCounters();
-    animateBars();
-    animateProofCards();
-    setTimeout(nextMsg, 400);
-  }
-}, 400);
-</script><script>
-// ══ TERMINAL ══
-const termLines = [
-  { key: 'Sistema',            val: 'Inicializando AI Concierge...',   color: 'white',   delay: 500  },
-  { key: 'Lead detectado',     val: 'Andrea Morales · WhatsApp',       color: 'violet',  delay: 1200 },
-  { key: 'Tiempo respuesta',   val: '3 min 42 seg',                    color: 'green',   delay: 2000 },
-  { key: 'Intención',          val: 'Alta — quiere agendar cita',      color: 'magenta', delay: 2900 },
-  { key: 'Slot ofrecido',      val: 'Martes 14:00 PM',                 color: 'violet',  delay: 3800 },
-  { key: 'Estado',             val: 'CITA CONFIRMADA ✓',               color: 'green',   delay: 4700 },
-  { key: 'Pipeline',           val: '+$2,400 USD',                     color: 'gold',    delay: 5600 },
-  { key: 'Intervención human', val: 'ninguna',                         color: 'green',   delay: 6500 },
-];
-
-function runTerminal() {
-  const el = document.getElementById('termBody');
-  if (!el) return;
-  termLines.forEach((line, i) => {
-    setTimeout(() => {
-      el.querySelectorAll('.t-cursor').forEach(c => c.remove());
-      const row = document.createElement('div');
-      row.className = 'tl';
-      row.innerHTML = `<span class="tl-prompt">›</span><span class="tl-key">${line.key}</span><span class="tl-sep">·</span><span class="tl-val ${line.color}">${line.val}</span>`;
-      el.appendChild(row);
-      el.scrollTop = el.scrollHeight;
-      setTimeout(() => row.classList.add('show'), 30);
-      if (i === termLines.length - 1) {
-        setTimeout(() => { const c = document.createElement('span'); c.className = 't-cursor'; row.appendChild(c); }, 200);
+      if (res.ok) {
+        guardarEjecucion(payload, []);
+        showStatus('Workflow iniciado — recibirás el reporte por correo', 'ok');
+      } else {
+        showStatus('Error al conectar con el sistema', 'err');
       }
-    }, line.delay);
-  });
-}
-setTimeout(runTerminal, 700);
-
-// ══ CHART BARS ══
-const barData = [8,12,9,11,10,5,3,9,13,10,12,11];
-const dayLabels = ['L','M','X','J','V','S','D','L','M','X','J','V'];
-const maxBar = Math.max(...barData);
-const barsEl = document.getElementById('barsEl');
-if (barsEl) {
-  barData.forEach((v, i) => {
-    const h = (v / maxBar) * 80;
-    barsEl.innerHTML += `<div class="bg"><div class="b" data-h="${h}" style="transition-delay:${i * 0.055}s"></div><div class="bd">${dayLabels[i]}</div></div>`;
-  });
-}
-function animateBars() {
-  document.querySelectorAll('.b[data-h]').forEach(b => {
-    if (!b.dataset.done) { b.dataset.done = '1'; b.style.height = b.dataset.h + 'px'; }
-  });
-}
-
-// ══ COUNTERS ══
-function animateProofCards() {
-  document.querySelectorAll('.kpi-card, .chip').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(14px)';
-    el.style.transition = `opacity .45s ease ${0.1 + i * 0.07}s, transform .45s ease ${0.1 + i * 0.07}s`;
-    setTimeout(() => {
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    }, 100 + i * 70);
-  });
-}
-
-function animateCounters() {
-  document.querySelectorAll('.count-up[data-target]').forEach(el => {
-    if (el.dataset.done) return;
-    el.dataset.done = '1';
-    const target = parseInt(el.dataset.target);
-    const suffix = el.dataset.suffix || '';
-    let cur = 0;
-    const step = target / 55;
-    const t = setInterval(() => {
-      cur += step;
-      if (cur >= target) { cur = target; clearInterval(t); }
-      el.textContent = Math.floor(cur) + suffix;
-    }, 18);
-  });
-}
-
-// ══ CHAT ══
-const chatMsgs = [
-  { t: 'bot',  text: '¡Hola! Soy el AI Concierge de Operamente. ¿En qué área quisieras explorar cómo la IA puede ayudarte?', d: 0 },
-  { t: 'user', text: 'Quiero que mi equipo deje de perder tiempo con leads que nunca agendan', d: 2200 },
-  { t: 'bot',  text: 'Entiendo perfectamente. ¿Tu equipo actualmente atiende esos leads por WhatsApp?', d: 4500 },
-  { t: 'user', text: 'Sí, y es caótico — nunca sabemos quién va a confirmar', d: 6400 },
-  { t: 'bot',  text: '🎯 Exactamente lo que resolvemos. Automatizamos calificación y agendamiento directo desde WhatsApp. Tu equipo solo habla con quien ya quiere agendar. ¿Te gustaría ver los números?', d: 8800 },
-  { t: 'user', text: 'Claro, adelante', d: 10700 },
-  { t: 'bot',  text: '✅ Este mes: 67 citas agendadas · 73% tasa de agendamiento · $53K en pipeline listo para tu equipo de ventas. ¿Cuándo tienes 30 min para una llamada?', d: 13200 },
-];
-let msgIdx = 0, chatStarted = false;
-
-function nextMsg() {
-  if (msgIdx >= chatMsgs.length) return;
-  const m = chatMsgs[msgIdx];
-  const el = document.getElementById('chatEl');
-  if (!el) return;
-  if (m.t === 'bot') {
-    const ty = document.createElement('div');
-    ty.className = 'typing';
-    ty.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-    el.appendChild(ty); el.scrollTop = el.scrollHeight;
-    setTimeout(() => ty.classList.add('show'), 40);
-    setTimeout(() => {
-      ty.remove(); addMsg(m, el); msgIdx++;
-      if (msgIdx < chatMsgs.length) setTimeout(nextMsg, chatMsgs[msgIdx].d - m.d);
-    }, 1100);
-  } else {
-    addMsg(m, el); msgIdx++;
-    if (msgIdx < chatMsgs.length) setTimeout(nextMsg, chatMsgs[msgIdx].d - m.d);
+    } catch(e) {
+      showStatus('No se pudo conectar. Verifica la configuración', 'err');
+    }
   }
-}
-function addMsg(m, el) {
-  const d = document.createElement('div');
-  d.className = `msg msg-${m.t}`; d.textContent = m.text;
-  el.appendChild(d); el.scrollTop = el.scrollHeight;
-  setTimeout(() => d.classList.add('show'), 40);
+
+  btn.disabled = false;
+  btn.textContent = 'Iniciar prospección';
 }
 
-// ══ INTERSECTION OBSERVERS ══
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    const t = e.target;
-    if (t.classList.contains('div-line')) {
-      t.classList.add('show'); io.unobserve(t); return;
-    }
-    if (t.id === 'proof') {
-      animateCounters(); animateBars(); animateProofCards();
-      if (!chatStarted) { chatStarted = true; setTimeout(nextMsg, 600); }
-      io.unobserve(t); return;
-    }
-    if (t.id === 'stepsEl') {
-      t.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 180));
-      io.unobserve(t); return;
-    }
-    if (t.classList.contains('narrative-inner')) {
-      t.classList.add('show'); io.unobserve(t); return;
-    }
+// ── DEMO DATA ─────────────────────────────────────────────────────────
+function generarLeadsDemo(payload) {
+  const ejemplos = [
+    { empresa:'Clínica EME Estética Dental', sector:'clínica dental', zona:'Chamberí', telefono:'+34 914 00 11 22', email:'info@clinicaeme.com', web:'clinicaeme.com', total_score:84, banda:'Priority', producto_recomendado:'Impulso', razon_cuenta:'Clínica con flujo constante de pacientes que gestiona citas por teléfono. Sin sistema de reservas ni chatbot.', primer_mensaje:'Hola, he visto que en Clínica EME gestionáis las citas por teléfono — tenemos un sistema que automatiza eso en WhatsApp sin cambiar cómo trabajáis hoy.', estado:'Nuevo' },
+    { empresa:'Academia Tandem Madrid', sector:'academia de idiomas', zona:'Chamberí', telefono:'+34 915 32 27 15', email:'info@tandemmadrid.com', web:'tandemmadrid.com', total_score:78, banda:'Good', producto_recomendado:'Flow', razon_cuenta:'Academia con múltiples niveles y profesores. Gestión de matrículas y reservas de clases todavía manual.', primer_mensaje:'He visto que Tandem gestiona matrículas por formulario — podemos automatizar todo el proceso de inscripción y seguimiento.', estado:'Nuevo' },
+    { empresa:'Inmobiliaria Ferran Madrid', sector:'agencia inmobiliaria', zona:'Salamanca', telefono:'+34 914 31 60 33', email:'info@ferran.es', web:'ferran.es', total_score:82, banda:'Priority', producto_recomendado:'Flow', razon_cuenta:'Agencia boutique con alto volumen de consultas. Sin chatbot ni sistema de cualificación automática de leads.', primer_mensaje:'En Ferran Madrid recibís muchas consultas de compradores — podemos ayudaros a cualificar y responder automáticamente en WhatsApp.', estado:'Nuevo' },
+    { empresa:'Centro Dental Velázquez', sector:'clínica dental', zona:'Salamanca', telefono:'+34 915 62 43 04', email:'', web:'clinicadentalvelazquez.com', total_score:76, banda:'Good', producto_recomendado:'Impulso', razon_cuenta:'Clínica con presencia web básica y contacto solo por teléfono. Alta oportunidad de automatización de citas.', primer_mensaje:'He visto que en Clínica Velázquez pedís cita por teléfono — hay una forma más cómoda para vuestros pacientes y más eficiente para vosotros.', estado:'Nuevo' },
+    { empresa:'Ortofamily Chamberí', sector:'clínica dental', zona:'Chamberí', telefono:'+34 618 94 32 11', email:'', web:'ortofamily.com', total_score:80, banda:'Priority', producto_recomendado:'Impulso', razon_cuenta:'Clínica de ortodoncia sin sistema de reservas online. Todo el flujo de citas es manual por llamada o WhatsApp.', primer_mensaje:'En Ortofamily gestionáis las citas de forma manual — podemos implementar un sistema que las automatice en menos de una semana.', estado:'Nuevo' },
+    { empresa:'Linguaschools Madrid', sector:'academia de idiomas', zona:'Chamberí', telefono:'+34 931 76 15 36', email:'info@linguaschools.com', web:'linguaschools.com', total_score:54, banda:'Low', producto_recomendado:'Descartar', razon_cuenta:'Escuela con sistema de reservas online ya integrado y chatbot activo. Madurez digital alta.', primer_mensaje:'', estado:'Descartado' },
+  ];
+  return ejemplos.filter(() => Math.random() > 0.1);
+}
+
+// ── GUARDAR ───────────────────────────────────────────────────────────
+function guardarEjecucion(payload, leads) {
+  state.runs++;
+  const priority = leads.filter(l => l.banda === 'Priority').length;
+  const good     = leads.filter(l => l.banda === 'Good').length;
+  state.total    += leads.length;
+  state.priority += priority;
+
+  state.historial.unshift({
+    fecha:   new Date().toLocaleString('es-ES', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }),
+    ciudad:  payload.icp.ciudad,
+    queries: payload.queries.length,
+    total:   leads.length,
+    priority, good
   });
-}, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+  if (state.historial.length > 20) state.historial = state.historial.slice(0,20);
 
-document.querySelectorAll('.div-line, #proof, #stepsEl, .narrative-inner').forEach(el => io.observe(el));
+  // Merge leads — evita duplicados por web
+  const webs = new Set(state.leads.map(l => l.web));
+  leads.forEach(l => { if (!webs.has(l.web)) { state.leads.push(l); webs.add(l.web); } });
 
-// Fallback if proof already visible
-setTimeout(() => {
-  const p = document.getElementById('proof');
-  if (p && p.getBoundingClientRect().top < window.inne
+  localStorage.setItem('om_leads_state', JSON.stringify(state));
+  renderLeads('all');
+  renderMetricas();
+}
+
+// ── LEADS ─────────────────────────────────────────────────────────────
+let currentFilter = 'all';
+
+function filterLeads(banda, btn) {
+  currentFilter = banda;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLeads(banda);
+}
+
+function renderLeads(filter) {
+  const leads = filter === 'all' ? state.leads : state.leads.filter(l => l.banda === filter);
+  const container = document.getElementById('leads-container');
+
+  // Update counts
+  const all  = state.leads.length;
+  const pri  = state.leads.filter(l => l.banda === 'Priority').length;
+  const good = state.leads.filter(l => l.banda === 'Good').length;
+  const low  = state.leads.filter(l => l.banda === 'Low' || l.banda === 'Descartar').length;
+  document.getElementById('cnt-all').textContent     = all  ? `(${all})`  : '';
+  document.getElementById('cnt-priority').textContent = pri  ? `(${pri})`  : '';
+  document.getElementById('cnt-good').textContent    = good ? `(${good})` : '';
+  document.getElementById('cnt-low').textContent     = low  ? `(${low})`  : '';
+
+  if (!leads.length) {
+    container.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">◎</div>
+        <div class="empty-title">${filter === 'all' ? 'Sin leads todavía' : 'Sin leads en esta categoría'}</div>
+        <div class="empty-sub">${filter === 'all' ? 'Lanza tu primera búsqueda desde<br><em>Nueva búsqueda</em>' : 'Prueba otro filtro o lanza más búsquedas'}</div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = leads.map((l, i) => {
+    const bandaClass = l.banda === 'Priority' ? 'priority' : l.banda === 'Good' ? 'good' : 'low';
+    const bandaTag   = l.banda === 'Priority' ? 'tag-green' : l.banda === 'Good' ? 'tag-amber' : 'tag-muted';
+    const realIdx    = state.leads.indexOf(l);
+
+    return `
+    <div class="lead-card ${bandaClass}">
+      <div>
+        <div class="lead-name">${l.empresa}</div>
+        <div class="lead-meta">
+          <span>📍 ${l.zona || '—'}</span>
+          ${l.telefono ? `<span>📞 ${l.telefono}</span>` : ''}
+          ${l.email    ? `<span>✉ ${l.email}</span>`    : ''}
+        </div>
+        ${l.primer_mensaje ? `
+        <div class="lead-message">
+          ${l.primer_mensaje}
+          <button class="btn-copy" onclick="copiar(event, '${l.primer_mensaje.replace(/'/g,"\\'")}', this)">copiar</button>
+        </div>` : ''}
+        <div class="lead-tags">
+          <span class="tag ${bandaTag}">${l.banda}</span>
+          ${l.producto_recomendado && l.producto_recomendado !== 'Descartar' ? `<span class="tag tag-accent">${l.producto_recomendado}</span>` : ''}
+          ${l.sector ? `<span class="tag tag-muted">${l.sector}</span>` : ''}
+          ${l.web    ? `<a href="https://${l.web}" target="_blank" class="tag tag-muted" style="text-decoration:none;">↗ web</a>` : ''}
+        </div>
+      </div>
+      <div class="lead-right">
+        <div class="score-circle ${bandaClass}">${l.total_score}</div>
+        <select class="estado-select" onchange="cambiarEstado(${realIdx}, this.value)">
+          <option ${l.estado==='Nuevo'?'selected':''}>Nuevo</option>
+          <option ${l.estado==='Contactado'?'selected':''}>Contactado</option>
+          <option ${l.estado==='En conversación'?'selected':''}>En conversación</option>
+          <option ${l.estado==='Reunión agendada'?'selected':''}>Reunión agendada</option>
+          <option ${l.estado==='Cerrado'?'selected':''}>Cerrado</option>
+          <option ${l.estado==='Descartado'?'selected':''}>Descartado</option>
+        </select>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function cambiarEstado(idx, estado) {
+  state.leads[idx].estado = estado;
+  localStorage.setItem('om_leads_state', JSON.stringify(state));
+  renderMetricas();
+}
+
+function copiar(e, texto, btn) {
+  e.stopPropagation();
+  navigator.clipboard.writeText(texto).then(() => {
+    btn.textContent = '✓ copiado';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'copiar'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── MÉTRICAS ──────────────────────────────────────────────────────────
+function renderMetricas() {
+  document.getElementById('m-runs').textContent     = state.runs;
+  document.getElementById('m-total').textContent    = state.total;
+  document.getElementById('m-priority').textContent = state.priority;
+  document.getElementById('m-ratio').textContent    = state.total > 0
+    ? Math.round(state.priority / state.total * 100) + '%' : '—';
+
+  const hl = document.getElementById('historial-list');
+  hl.innerHTML = state.historial.length ? state.historial.map(h => `
+    <div class="hist-row">
+      <span class="hist-date">${h.fecha}</span>
+      <span class="hist-info">${h.ciudad} · ${h.queries} búsquedas</span>
+      <div class="hist-badges">
+        <span class="tag tag-muted">${h.total} leads</span>
+        <span class="tag tag-green">${h.priority} priority</span>
+        ${h.good ? `<span class="tag tag-amber">${h.good} good</span>` : ''}
+      </div>
+    </div>
+  `).join('') : '<div style="text-align:center;padding:32px;color:var(--muted);font-size:12px;">Sin historial</div>';
+
+  // Estados
+  const estados = {};
+  state.leads.forEach(l => { estados[l.estado] = (estados[l.estado]||0) + 1; });
+  const ec = document.getElementById('estados-chart');
+  const total = state.leads.length || 1;
+  const colores = { 'Nuevo':'var(--sub)', 'Contactado':'var(--accent)', 'En conversación':'var(--amber)', 'Reunión agendada':'var(--green)', 'Cerrado':'var(--green)', 'Descartado':'var(--muted)' };
+  ec.innerHTML = Object.entries(estados).length ? Object.entries(estados).map(([est, cnt]) => `
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="font-size:11px;color:var(--sub);width:130px;">${est}</div>
+      <div style="flex:1;background:var(--surface2);border-radius:3px;height:6px;">
+        <div style="background:${colores[est]||'var(--sub)'};height:6px;border-radius:3px;width:${Math.round(cnt/total*100)}%;transition:width 0.5s;"></div>
+      </div>
+      <div style="font-size:11px;color:var(--sub);width:20px;text-align:right;">${cnt}</div>
+    </div>
+  `).join('') : '<div style="color:var(--muted);font-size:12px;">Sin datos</div>';
+}
+
+function updateNavCount() {
+  const cnt = state.leads.length;
+  const el  = document.getElementById('nav-count');
+  if (cnt > 0) { el.textContent = cnt; el.style.display = 'inline'; }
+}
+
+function showStatus(msg, type) {
+  const el = document.getElementById('status-msg');
+  el.textContent = msg;
+  el.className = 'status-msg show ' + type;
+}
+
+// Oculta run-bar en leads y métricas al inicio
+document.querySelectorAll('.nav-item').forEach((item, i) => {
+  item.addEventListener('click', () => {
+    const panels = ['busqueda','leads','metricas'];
+    document.getElementById('run-bar').style.display = i === 0 ? 'flex' : 'none';
+  });
+});
+</script>
+</body>
+</html>
