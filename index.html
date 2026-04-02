@@ -3,611 +3,236 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>operamente · inteligencia comercial</title>
+<title>Operamente · Inteligencia Comercial</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:       #08080d;
-  --surface:  #0f0f17;
-  --surface2: #14141e;
-  --border:   rgba(255,255,255,0.06);
-  --border2:  rgba(255,255,255,0.12);
-  --text:     #eeedf8;
-  --sub:      #9997b0;
-  --muted:    #4a4862;
-  --accent:   #7c6af7;
-  --accent2:  rgba(124,106,247,0.15);
-  --accent3:  rgba(124,106,247,0.06);
-  --green:    #5fe8a0;
-  --green2:   rgba(95,232,160,0.1);
-  --amber:    #f7c26b;
-  --amber2:   rgba(247,194,107,0.1);
-  --red:      #f07070;
-  --red2:     rgba(240,112,112,0.1);
+  --bg:      #08080d;
+  --s1:      #0f0f17;
+  --s2:      #14141e;
+  --s3:      #1a1a28;
+  --b1:      rgba(255,255,255,0.06);
+  --b2:      rgba(255,255,255,0.12);
+  --b3:      rgba(255,255,255,0.20);
+  --tx:      #eeedf8;
+  --sub:     #9997b0;
+  --mut:     #4a4862;
+  --acc:     #7c6af7;
+  --acc2:    rgba(124,106,247,0.15);
+  --acc3:    rgba(124,106,247,0.06);
+  --grn:     #5fe8a0;
+  --grn2:    rgba(95,232,160,0.10);
+  --amb:     #f7c26b;
+  --amb2:    rgba(247,194,107,0.10);
+  --red:     #f07070;
+  --red2:    rgba(240,112,112,0.10);
 }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--tx);font-family:'JetBrains Mono',monospace;font-size:13px;min-height:100vh;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:0.35;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 99px,rgba(255,255,255,0.012) 99px,rgba(255,255,255,0.012) 100px);pointer-events:none;z-index:0;}
 
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* Grain overlay */
-body::after {
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:1000;
-  opacity:0.4;
-}
-
-/* Vertical lines */
-body::before {
-  content:'';
-  position:fixed;
-  inset:0;
-  background: repeating-linear-gradient(90deg, transparent, transparent 99px, rgba(255,255,255,0.015) 99px, rgba(255,255,255,0.015) 100px);
-  pointer-events:none;
-  z-index:0;
-}
-
-/* LAYOUT */
-.shell {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  min-height: 100vh;
-  position: relative;
-  z-index: 1;
-}
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh;position:relative;z-index:1;}
 
 /* SIDEBAR */
-aside {
-  background: var(--surface);
-  border-right: 0.5px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  padding: 32px 0;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
-}
-
-.logo-wrap {
-  padding: 0 24px 32px;
-  border-bottom: 0.5px solid var(--border);
-}
-.logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  font-weight: 400;
-  letter-spacing: -0.5px;
-  color: var(--text);
-}
-.logo em { color: var(--accent); font-style: normal; }
-.logo-sub {
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
-
-.nav {
-  padding: 24px 0;
-  flex: 1;
-}
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 24px;
-  cursor: pointer;
-  color: var(--sub);
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  transition: all 0.15s;
-  border-left: 2px solid transparent;
-}
-.nav-item:hover { color: var(--text); background: var(--accent3); }
-.nav-item.active { color: var(--text); border-left-color: var(--accent); background: var(--accent3); }
-.nav-icon { font-size: 14px; width: 16px; text-align: center; opacity: 0.7; }
-
-.sidebar-footer {
-  padding: 24px;
-  border-top: 0.5px solid var(--border);
-}
-.status-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  color: var(--sub);
-}
-.dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  animation: pulse 2.5s ease-in-out infinite;
-  flex-shrink: 0;
-}
-@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+aside{background:var(--s1);border-right:0.5px solid var(--b1);display:flex;flex-direction:column;padding:28px 0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.logo-wrap{padding:0 22px 28px;border-bottom:0.5px solid var(--b1);}
+.logo-img{height:28px;opacity:0.9;}
+.logo-sub{font-size:10px;color:var(--mut);letter-spacing:0.12em;text-transform:uppercase;margin-top:6px;}
+.nav{padding:20px 0;flex:1;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 22px;cursor:pointer;color:var(--sub);font-size:12px;letter-spacing:0.02em;transition:all 0.15s;border-left:2px solid transparent;user-select:none;}
+.nav-item:hover{color:var(--tx);background:var(--acc3);}
+.nav-item.active{color:var(--tx);border-left-color:var(--acc);background:var(--acc3);}
+.nav-icon{font-size:13px;width:16px;text-align:center;opacity:0.7;}
+.nav-badge{margin-left:auto;font-size:10px;background:var(--acc2);color:var(--acc);padding:1px 7px;border-radius:10px;display:none;}
+.sidebar-footer{padding:20px 22px;border-top:0.5px solid var(--b1);}
+.status-pill{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--sub);}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--grn);animation:pulse 2.5s ease-in-out infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 
 /* MAIN */
-main {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+main{display:flex;flex-direction:column;min-height:100vh;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 36px;border-bottom:0.5px solid var(--b1);background:var(--s1);position:sticky;top:0;z-index:10;}
+.page-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;letter-spacing:-0.3px;}
+.page-sub{font-size:11px;color:var(--mut);font-family:'JetBrains Mono',monospace;margin-left:12px;font-weight:300;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.date-tag{font-size:11px;color:var(--mut);background:var(--s2);border:0.5px solid var(--b1);border-radius:20px;padding:4px 12px;}
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 40px;
-  border-bottom: 0.5px solid var(--border);
-  background: var(--surface);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-.page-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: -0.3px;
-}
-.page-title span { color: var(--sub); font-size: 13px; font-family: 'JetBrains Mono', monospace; margin-left: 12px; font-weight: 300; }
+.content{padding:32px 36px;flex:1;}
+.panel-grid{display:none;flex-direction:column;gap:22px;animation:fadeIn 0.18s ease;}
+.panel-grid.active{display:flex;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
 
-.topbar-right { display: flex; align-items: center; gap: 12px; }
-.date-tag {
-  font-size: 11px;
-  color: var(--muted);
-  background: var(--surface2);
-  border: 0.5px solid var(--border);
-  border-radius: 20px;
-  padding: 4px 12px;
-}
+.sec-label{font-size:10px;color:var(--mut);letter-spacing:0.15em;text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.sec-label::after{content:'';flex:1;height:0.5px;background:var(--b1);}
 
-/* CONTENT */
-.content { padding: 36px 40px; flex: 1; }
+.card{background:var(--s1);border:0.5px solid var(--b1);border-radius:12px;padding:22px;}
 
-/* PANELS */
-.panel-grid {
-  display: none;
-  flex-direction: column;
-  gap: 24px;
-  animation: fadeIn 0.2s ease;
-}
-.panel-grid.active { display: flex; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(4px);} to{opacity:1;transform:none;} }
+/* INPUTS */
+input[type=text],select{background:var(--s2);border:0.5px solid var(--b1);border-radius:8px;color:var(--tx);padding:9px 12px;font-size:13px;font-family:'JetBrains Mono',monospace;outline:none;transition:border-color 0.15s,background 0.15s;width:100%;}
+input[type=text]:focus,select:focus{border-color:var(--acc);background:rgba(124,106,247,0.04);}
+input[type=text]::placeholder{color:var(--mut);}
+select option{background:#1a1a2e;color:var(--tx);}
 
-/* SECTION LABEL */
-.sec-label {
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-.sec-label::after { content:''; flex:1; height:0.5px; background:var(--border); }
-
-/* CARD */
-.card {
-  background: var(--surface);
-  border: 0.5px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-}
-.card-sm { padding: 16px 20px; }
-
-/* METRIC GRID */
-.metric-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-.metric {
-  background: var(--surface2);
-  border: 0.5px solid var(--border);
-  border-radius: 10px;
-  padding: 18px;
-  text-align: center;
-  transition: border-color 0.15s;
-}
-.metric:hover { border-color: var(--border2); }
-.metric-val {
-  font-family: 'Playfair Display', serif;
-  font-size: 32px;
-  font-weight: 500;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.metric-label {
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.metric-sub { font-size: 10px; color: var(--sub); margin-top: 2px; }
-
-/* BÚSQUEDA FORM */
-.search-builder { display: flex; flex-direction: column; gap: 10px; }
-
-.query-row {
-  display: grid;
-  grid-template-columns: 40px 1fr 1fr auto;
-  gap: 8px;
-  align-items: center;
-  animation: fadeIn 0.15s ease;
-}
-.query-num {
-  font-size: 10px;
-  color: var(--muted);
-  text-align: center;
-  font-weight: 300;
-}
-
-input[type=text], select {
-  background: var(--surface2);
-  border: 0.5px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  padding: 10px 14px;
-  font-size: 13px;
-  font-family: 'JetBrains Mono', monospace;
-  outline: none;
-  transition: border-color 0.15s, background 0.15s;
-  width: 100%;
-}
-input[type=text]:focus, select:focus {
-  border-color: var(--accent);
-  background: rgba(124,106,247,0.04);
-}
-input[type=text]::placeholder { color: var(--muted); }
-select option { background: #1a1a2e; color: var(--text); }
-
-.btn-del {
-  background: none;
-  border: 0.5px solid var(--border);
-  border-radius: 8px;
-  color: var(--muted);
-  cursor: pointer;
-  width: 38px; height: 38px;
-  font-size: 14px;
-  transition: all 0.15s;
-  display: flex; align-items: center; justify-content: center;
-}
-.btn-del:hover { border-color: var(--red); color: var(--red); background: var(--red2); }
-
-.btn-add-query {
-  background: none;
-  border: 0.5px dashed var(--border2);
-  border-radius: 8px;
-  color: var(--sub);
-  cursor: pointer;
-  padding: 10px;
-  font-size: 12px;
-  font-family: 'JetBrains Mono', monospace;
-  text-align: center;
-  transition: all 0.15s;
-  margin-top: 4px;
-}
-.btn-add-query:hover { border-color: var(--accent); color: var(--accent); background: var(--accent3); }
+/* QUERY BUILDER */
+.query-row{display:grid;grid-template-columns:32px 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;animation:fadeIn 0.15s ease;}
+.query-num{font-size:10px;color:var(--mut);text-align:center;font-weight:300;}
+.btn-del{background:none;border:0.5px solid var(--b1);border-radius:8px;color:var(--mut);cursor:pointer;width:36px;height:36px;font-size:13px;transition:all 0.15s;display:flex;align-items:center;justify-content:center;}
+.btn-del:hover{border-color:var(--red);color:var(--red);background:var(--red2);}
+.btn-add-query{background:none;border:0.5px dashed var(--b2);border-radius:8px;color:var(--sub);cursor:pointer;padding:9px;font-size:12px;font-family:'JetBrains Mono',monospace;text-align:center;transition:all 0.15s;margin-top:4px;width:100%;}
+.btn-add-query:hover{border-color:var(--acc);color:var(--acc);background:var(--acc3);}
 
 /* CONFIG */
-.config-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-}
-.field label {
-  display: block;
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-.field-hint {
-  font-size: 10px;
-  color: var(--muted);
-  margin-top: 5px;
-  line-height: 1.4;
-}
+.config-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.field label{display:block;font-size:10px;color:var(--mut);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;}
+.field-hint{font-size:10px;color:var(--mut);margin-top:4px;line-height:1.5;}
 
-/* SCORE SLIDER */
-.slider-wrap { display: flex; align-items: center; gap: 10px; }
-input[type=range] {
-  flex: 1;
-  -webkit-appearance: none;
-  height: 2px;
-  background: var(--border2);
-  border-radius: 2px;
-  outline: none;
-  border: none;
-  padding: 0;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  background: var(--accent);
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-.slider-val {
-  font-size: 14px;
-  color: var(--accent);
-  font-weight: 500;
-  min-width: 32px;
-  text-align: right;
-}
+/* RANGE */
+.slider-wrap{display:flex;align-items:center;gap:10px;}
+input[type=range]{flex:1;-webkit-appearance:none;height:2px;background:var(--b2);border-radius:2px;outline:none;border:none;padding:0;width:auto;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--acc);cursor:pointer;transition:transform 0.15s;}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25);}
+.slider-val{font-size:13px;color:var(--acc);font-weight:500;min-width:28px;text-align:right;}
 
-/* SCORE BANDS — visual */
-.bands {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 8px;
-  margin-top: 8px;
-}
-.band {
-  border-radius: 8px;
-  padding: 10px 12px;
-  border: 0.5px solid var(--border);
-}
-.band-name { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
-.band-range { font-family: 'Playfair Display', serif; font-size: 18px; }
-.band-desc { font-size: 10px; color: var(--sub); margin-top: 2px; }
+/* BANDS */
+.bands{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+.band{border-radius:8px;padding:10px 12px;border:0.5px solid var(--b1);}
+.band-name{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px;}
+.band-range{font-family:'Playfair Display',serif;font-size:18px;}
+.band-desc{font-size:10px;color:var(--sub);margin-top:2px;}
 
 /* CHIPS */
-.chips { display: flex; gap: 6px; flex-wrap: wrap; }
-.chip {
-  display: flex; align-items: center; gap: 5px;
-  background: var(--surface2);
-  border: 0.5px solid var(--border);
-  border-radius: 20px;
-  padding: 6px 12px;
-  font-size: 11px;
-  color: var(--sub);
-  cursor: pointer;
-  transition: all 0.15s;
-  user-select: none;
-}
-.chip input { display: none; }
-.chip.on { background: var(--accent2); border-color: var(--accent); color: var(--accent); }
+.chips{display:flex;gap:6px;flex-wrap:wrap;}
+.chip{display:flex;align-items:center;gap:5px;background:var(--s2);border:0.5px solid var(--b1);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--sub);cursor:pointer;transition:all 0.15s;user-select:none;}
+.chip input{display:none;}
+.chip.on{background:var(--acc2);border-color:var(--acc);color:var(--acc);}
 
-/* RUN BUTTON */
-.run-bar {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 20px 40px;
-  border-top: 0.5px solid var(--border);
-  background: var(--surface);
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-}
-.btn-run {
-  background: var(--accent);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  padding: 12px 32px;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: -0.2px;
-}
-.btn-run:hover { background: #6b5ae0; transform: translateY(-1px); }
-.btn-run:active { transform: translateY(0); }
-.btn-run:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+/* METRICS */
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.metric{background:var(--s2);border:0.5px solid var(--b1);border-radius:10px;padding:16px;text-align:center;transition:border-color 0.15s;}
+.metric:hover{border-color:var(--b2);}
+.metric-val{font-family:'Playfair Display',serif;font-size:30px;font-weight:500;line-height:1;margin-bottom:5px;}
+.metric-label{font-size:10px;color:var(--mut);letter-spacing:0.1em;text-transform:uppercase;}
 
-.status-msg {
-  font-size: 12px;
-  color: var(--sub);
-  flex: 1;
-  display: none;
-}
-.status-msg.show { display: block; }
-.status-msg.ok  { color: var(--green); }
-.status-msg.err { color: var(--red); }
-.status-msg.wait { color: var(--amber); }
+/* LEADS */
+.leads-filters{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
+.filter-btn{background:var(--s2);border:0.5px solid var(--b1);border-radius:20px;color:var(--sub);padding:5px 14px;font-size:11px;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all 0.15s;}
+.filter-btn:hover{border-color:var(--b2);color:var(--tx);}
+.filter-btn.active{background:var(--acc2);border-color:var(--acc);color:var(--acc);}
+.search-input-wrap{margin-left:auto;}
+.search-input-wrap input{width:180px;padding:5px 12px;font-size:12px;}
 
-/* LEADS LIST */
-.leads-filters {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 16px;
-}
-.filter-btn {
-  background: var(--surface2);
-  border: 0.5px solid var(--border);
-  border-radius: 20px;
-  color: var(--sub);
-  padding: 5px 14px;
-  font-size: 11px;
-  font-family: 'JetBrains Mono', monospace;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.filter-btn:hover { border-color: var(--border2); color: var(--text); }
-.filter-btn.active { background: var(--accent2); border-color: var(--accent); color: var(--accent); }
+.leads-list{display:flex;flex-direction:column;gap:8px;}
+.lead-card{background:var(--s1);border:0.5px solid var(--b1);border-radius:10px;padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;transition:border-color 0.15s;animation:fadeIn 0.2s ease;}
+.lead-card:hover{border-color:var(--b2);}
+.lead-card.priority{border-left:3px solid var(--grn);}
+.lead-card.good{border-left:3px solid var(--amb);}
+.lead-card.low{border-left:3px solid var(--mut);opacity:0.65;}
+.lead-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:500;margin-bottom:3px;letter-spacing:-0.2px;}
+.lead-meta{font-size:11px;color:var(--sub);margin-bottom:8px;display:flex;gap:10px;flex-wrap:wrap;}
+.lead-message{font-size:12px;color:var(--sub);background:var(--s2);border-left:2px solid var(--acc);padding:8px 12px;border-radius:0 6px 6px 0;line-height:1.5;font-style:italic;margin-bottom:8px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.lead-tags{display:flex;gap:5px;flex-wrap:wrap;}
+.tag{font-size:10px;padding:2px 8px;border-radius:10px;letter-spacing:0.03em;}
+.tag-grn{background:var(--grn2);color:var(--grn);}
+.tag-amb{background:var(--amb2);color:var(--amb);}
+.tag-acc{background:var(--acc2);color:var(--acc);}
+.tag-mut{background:var(--s2);color:var(--mut);border:0.5px solid var(--b1);}
 
-.leads-list { display: flex; flex-direction: column; gap: 8px; }
+.lead-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+.score-circle{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:17px;font-weight:500;border:1.5px solid;}
+.score-circle.priority{color:var(--grn);border-color:var(--grn);background:var(--grn2);}
+.score-circle.good{color:var(--amb);border-color:var(--amb);background:var(--amb2);}
+.score-circle.low{color:var(--mut);border-color:var(--mut);background:transparent;}
 
-.lead-card {
-  background: var(--surface);
-  border: 0.5px solid var(--border);
-  border-radius: 10px;
-  padding: 16px 20px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-  align-items: start;
-  transition: border-color 0.15s;
-  cursor: pointer;
-  animation: fadeIn 0.2s ease;
-}
-.lead-card:hover { border-color: var(--border2); }
-.lead-card.priority { border-left: 3px solid var(--green); }
-.lead-card.good     { border-left: 3px solid var(--amber); }
-.lead-card.low      { border-left: 3px solid var(--muted); opacity: 0.7; }
+.estado-select{background:var(--s2);border:0.5px solid var(--b1);border-radius:6px;color:var(--sub);padding:4px 8px;font-size:11px;font-family:'JetBrains Mono',monospace;cursor:pointer;outline:none;width:auto;transition:border-color 0.15s;}
+.estado-select:focus{border-color:var(--acc);}
 
-.lead-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  font-weight: 500;
-  margin-bottom: 3px;
-  letter-spacing: -0.2px;
-}
-.lead-meta { font-size: 11px; color: var(--sub); margin-bottom: 8px; display: flex; gap: 12px; flex-wrap: wrap; }
-.lead-message {
-  font-size: 12px;
-  color: var(--sub);
-  background: var(--surface2);
-  border-left: 2px solid var(--accent);
-  padding: 8px 12px;
-  border-radius: 0 6px 6px 0;
-  line-height: 1.5;
-  font-style: italic;
-  margin-bottom: 8px;
-}
-.lead-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.tag {
-  font-size: 10px;
-  padding: 2px 8px;
-  border-radius: 10px;
-  letter-spacing: 0.04em;
-}
-.tag-green  { background: var(--green2);  color: var(--green); }
-.tag-amber  { background: var(--amber2);  color: var(--amber); }
-.tag-accent { background: var(--accent2); color: var(--accent); }
-.tag-muted  { background: var(--surface2); color: var(--muted); border: 0.5px solid var(--border); }
+/* BUTTONS */
+.btn-copy{background:none;border:0.5px solid var(--b1);border-radius:6px;color:var(--mut);padding:3px 9px;font-size:10px;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all 0.15s;white-space:nowrap;flex-shrink:0;}
+.btn-copy:hover{border-color:var(--acc);color:var(--acc);}
+.btn-copy.copied{color:var(--grn);border-color:var(--grn);}
 
-.lead-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-.score-circle {
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column;
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  font-weight: 500;
-  border: 1.5px solid;
-}
-.score-circle.priority { color: var(--green); border-color: var(--green); background: var(--green2); }
-.score-circle.good     { color: var(--amber); border-color: var(--amber); background: var(--amber2); }
-.score-circle.low      { color: var(--muted); border-color: var(--muted); background: transparent; }
+.btn-export{background:none;border:0.5px solid var(--b2);border-radius:8px;color:var(--sub);font-family:'JetBrains Mono',monospace;font-size:12px;padding:8px 16px;cursor:pointer;transition:all 0.15s;}
+.btn-export:hover{border-color:var(--acc);color:var(--acc);background:var(--acc3);}
 
-.estado-select {
-  background: var(--surface2);
-  border: 0.5px solid var(--border);
-  border-radius: 6px;
-  color: var(--sub);
-  padding: 4px 8px;
-  font-size: 11px;
-  font-family: 'JetBrains Mono', monospace;
-  cursor: pointer;
-  outline: none;
-  width: auto;
-}
+/* RUN BAR */
+.run-bar{display:flex;gap:10px;align-items:center;padding:18px 36px;border-top:0.5px solid var(--b1);background:var(--s1);position:sticky;bottom:0;z-index:10;}
+.btn-run{background:var(--acc);border:none;border-radius:10px;color:white;font-family:'Playfair Display',serif;font-size:15px;padding:11px 28px;cursor:pointer;transition:all 0.2s;letter-spacing:-0.2px;}
+.btn-run:hover{background:#6b5ae0;transform:translateY(-1px);}
+.btn-run:active{transform:translateY(0);}
+.btn-run:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.status-msg{font-size:12px;color:var(--sub);flex:1;display:none;}
+.status-msg.show{display:block;}
+.status-msg.ok{color:var(--grn);}
+.status-msg.err{color:var(--red);}
+.status-msg.wait{color:var(--amb);}
 
-/* EMPTY STATE */
-.empty {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--muted);
-}
-.empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
-.empty-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--sub); margin-bottom: 6px; }
-.empty-sub { font-size: 12px; line-height: 1.6; }
+/* EMPTY */
+.empty{text-align:center;padding:56px 20px;color:var(--mut);}
+.empty-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--sub);margin-bottom:6px;}
+.empty-sub{font-size:12px;line-height:1.7;}
 
-/* HISTORIAL ROWS */
-.hist-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 0.5px solid var(--border);
-  font-size: 12px;
-  gap: 12px;
-}
-.hist-row:last-child { border-bottom: none; }
-.hist-date { color: var(--muted); min-width: 120px; }
-.hist-info { color: var(--sub); flex: 1; }
-.hist-badges { display: flex; gap: 6px; }
+/* HISTORIAL */
+.hist-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--b1);font-size:12px;gap:10px;}
+.hist-row:last-child{border-bottom:none;}
+.hist-date{color:var(--mut);min-width:110px;}
+.hist-info{color:var(--sub);flex:1;}
+.hist-badges{display:flex;gap:5px;}
 
-/* COPY BUTTON */
-.btn-copy {
-  background: none;
-  border: 0.5px solid var(--border);
-  border-radius: 6px;
-  color: var(--muted);
-  padding: 4px 10px;
-  font-size: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.btn-copy:hover { border-color: var(--accent); color: var(--accent); }
-.btn-copy.copied { color: var(--green); border-color: var(--green); }
+/* LOADING */
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(8,8,13,0.8);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+.loading-overlay.show{display:flex;}
+.spinner{width:32px;height:32px;border:2px solid var(--b2);border-top-color:var(--acc);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:var(--sub);}
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .shell { grid-template-columns: 1fr; }
-  aside { display: none; }
-  .content { padding: 20px; }
-  .metric-grid { grid-template-columns: repeat(2,1fr); }
-  .config-grid { grid-template-columns: 1fr; }
-  .query-row { grid-template-columns: 1fr 1fr auto; }
-  .query-num { display: none; }
-  .run-bar { padding: 16px 20px; }
+@media(max-width:768px){
+  .shell{grid-template-columns:1fr;}
+  aside{display:none;}
+  .content{padding:20px;}
+  .metric-grid{grid-template-columns:repeat(2,1fr);}
+  .config-grid{grid-template-columns:1fr;}
+  .query-row{grid-template-columns:1fr 1fr auto;}
+  .query-num{display:none;}
+  .run-bar{padding:14px 20px;}
 }
 </style>
 </head>
 <body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loading-text">Cargando leads...</div>
+</div>
 
 <div class="shell">
 
 <!-- SIDEBAR -->
 <aside>
   <div class="logo-wrap">
-    <div class="logo"><em>opera</em>mente</div>
+    <img src="https://operamente-github.jdray1.easypanel.host/logo/Operamente.png" alt="Operamente" class="logo-img">
     <div class="logo-sub">inteligencia comercial</div>
   </div>
   <nav class="nav">
-    <div class="nav-item active" onclick="goTo('busqueda')">
+    <div class="nav-item active" onclick="goTo('busqueda')" id="nav-busqueda">
       <span class="nav-icon">◎</span> Nueva búsqueda
     </div>
-    <div class="nav-item" onclick="goTo('leads')">
-      <span class="nav-icon">≡</span> Leads <span id="nav-count" style="margin-left:auto;font-size:10px;background:var(--accent2);color:var(--accent);padding:1px 7px;border-radius:10px;display:none;"></span>
+    <div class="nav-item" onclick="goTo('leads')" id="nav-leads">
+      <span class="nav-icon">≡</span> Leads
+      <span class="nav-badge" id="nav-badge"></span>
     </div>
-    <div class="nav-item" onclick="goTo('metricas')">
+    <div class="nav-item" onclick="goTo('metricas')" id="nav-metricas">
       <span class="nav-icon">⌁</span> Métricas
     </div>
   </nav>
   <div class="sidebar-footer">
     <div class="status-pill">
       <div class="dot"></div>
-      <span>Sistema activo</span>
+      <span id="conn-status">Conectando...</span>
     </div>
-    <div style="font-size:10px;color:var(--muted);margin-top:6px;" id="sidebar-date"></div>
+    <div style="font-size:10px;color:var(--mut);margin-top:5px;" id="sidebar-date"></div>
   </div>
 </aside>
 
@@ -615,7 +240,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 <main>
   <div class="topbar">
     <div class="page-title" id="page-title">
-      Nueva búsqueda <span id="page-sub">configura y lanza tu prospección</span>
+      Nueva búsqueda <span class="page-sub" id="page-sub">configura y lanza tu prospección</span>
     </div>
     <div class="topbar-right">
       <div class="date-tag" id="topbar-date"></div>
@@ -624,19 +249,17 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 
   <div class="content">
 
-    <!-- PANEL: BÚSQUEDA -->
+    <!-- PANEL BÚSQUEDA -->
     <div class="panel-grid active" id="panel-busqueda">
 
-      <!-- Qué buscar -->
       <div>
         <div class="sec-label">qué buscar</div>
         <div class="card">
-          <div class="search-builder" id="queries-list"></div>
+          <div id="queries-list"></div>
           <button class="btn-add-query" onclick="addQuery()">+ añadir búsqueda</button>
         </div>
       </div>
 
-      <!-- Dónde y cómo -->
       <div>
         <div class="sec-label">dónde y cómo</div>
         <div class="card">
@@ -649,7 +272,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
             <div class="field">
               <label>Ciudad principal</label>
               <input type="text" id="ciudad" value="Madrid" placeholder="Madrid, CDMX, Bogotá...">
-              <div class="field-hint">Se añade a cada búsqueda</div>
+              <div class="field-hint">Se añade a cada búsqueda automáticamente</div>
             </div>
             <div class="field">
               <label>Idioma</label>
@@ -665,26 +288,25 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
         </div>
       </div>
 
-      <!-- Qué tipo de empresa -->
       <div>
         <div class="sec-label">qué tipo de empresa buscas</div>
         <div class="card">
           <div style="margin-bottom:16px;">
-            <div style="font-size:11px;color:var(--sub);margin-bottom:10px;">Prioridad de contacto — basada en su nivel de automatización actual</div>
+            <div style="font-size:11px;color:var(--sub);margin-bottom:10px;">Prioridad de contacto — basada en el nivel de automatización actual de la empresa</div>
             <div class="bands">
-              <div class="band" style="background:var(--green2);border-color:rgba(95,232,160,0.2);">
-                <div class="band-name" style="color:var(--green);">Prioritario</div>
-                <div class="band-range" style="color:var(--green);">80–100</div>
-                <div class="band-desc">Sin automatización, contactar hoy</div>
+              <div class="band" style="background:var(--grn2);border-color:rgba(95,232,160,0.2);">
+                <div class="band-name" style="color:var(--grn);">Prioritario</div>
+                <div class="band-range" style="color:var(--grn);">80–100</div>
+                <div class="band-desc">Sin automatización — contactar hoy</div>
               </div>
-              <div class="band" style="background:var(--amber2);border-color:rgba(247,194,107,0.2);">
-                <div class="band-name" style="color:var(--amber);">Interesante</div>
-                <div class="band-range" style="color:var(--amber);">60–79</div>
-                <div class="band-desc">Automatización básica, nutrir</div>
+              <div class="band" style="background:var(--amb2);border-color:rgba(247,194,107,0.2);">
+                <div class="band-name" style="color:var(--amb);">Interesante</div>
+                <div class="band-range" style="color:var(--amb);">60–79</div>
+                <div class="band-desc">Automatización básica — nutrir</div>
               </div>
               <div class="band">
-                <div class="band-name" style="color:var(--muted);">Descartar</div>
-                <div class="band-range" style="color:var(--muted);">0–59</div>
+                <div class="band-name" style="color:var(--mut);">Descartar</div>
+                <div class="band-range" style="color:var(--mut);">0–59</div>
                 <div class="band-desc">Ya automatizado o no encaja</div>
               </div>
             </div>
@@ -704,61 +326,66 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 
     </div>
 
-    <!-- PANEL: LEADS -->
+    <!-- PANEL LEADS -->
     <div class="panel-grid" id="panel-leads">
       <div>
-        <div class="leads-filters">
-          <button class="filter-btn active" onclick="filterLeads('all',this)">Todos <span id="cnt-all"></span></button>
-          <button class="filter-btn" onclick="filterLeads('Priority',this)">Prioritarios <span id="cnt-priority"></span></button>
-          <button class="filter-btn" onclick="filterLeads('Good',this)">Interesantes <span id="cnt-good"></span></button>
-          <button class="filter-btn" onclick="filterLeads('Low',this)">Descartar <span id="cnt-low"></span></button>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;">
+          <div class="leads-filters" style="margin-bottom:0;">
+            <button class="filter-btn active" onclick="filterLeads('all',this)">Todos <span id="cnt-all"></span></button>
+            <button class="filter-btn" onclick="filterLeads('Priority',this)">Prioritarios <span id="cnt-priority"></span></button>
+            <button class="filter-btn" onclick="filterLeads('Good',this)">Interesantes <span id="cnt-good"></span></button>
+            <button class="filter-btn" onclick="filterLeads('Low',this)">Descartar <span id="cnt-low"></span></button>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="search-input" placeholder="buscar empresa..." style="width:180px;padding:5px 12px;font-size:12px;" oninput="renderLeads()">
+            <button class="btn-export" onclick="exportarExcel()">↓ exportar Excel</button>
+          </div>
         </div>
         <div class="leads-list" id="leads-container">
           <div class="empty">
-            <div class="empty-icon">◎</div>
-            <div class="empty-title">Sin leads todavía</div>
-            <div class="empty-sub">Lanza tu primera búsqueda desde<br>la sección <em>Nueva búsqueda</em></div>
+            <div class="empty-title">Cargando leads...</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- PANEL: MÉTRICAS -->
+    <!-- PANEL MÉTRICAS -->
     <div class="panel-grid" id="panel-metricas">
       <div>
         <div class="sec-label">rendimiento acumulado</div>
         <div class="metric-grid">
           <div class="metric">
-            <div class="metric-val" id="m-runs" style="color:var(--accent);">0</div>
-            <div class="metric-label">Búsquedas</div>
+            <div class="metric-val" id="m-total">—</div>
+            <div class="metric-label">Leads totales</div>
           </div>
           <div class="metric">
-            <div class="metric-val" id="m-total">0</div>
-            <div class="metric-label">Leads analizados</div>
-          </div>
-          <div class="metric">
-            <div class="metric-val" id="m-priority" style="color:var(--green);">0</div>
+            <div class="metric-val" id="m-priority" style="color:var(--grn);">—</div>
             <div class="metric-label">Prioritarios</div>
           </div>
           <div class="metric">
-            <div class="metric-val" id="m-ratio" style="color:var(--amber);">—</div>
-            <div class="metric-label">Tasa de éxito</div>
+            <div class="metric-val" id="m-good" style="color:var(--amb);">—</div>
+            <div class="metric-label">Interesantes</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val" id="m-ratio" style="color:var(--acc);">—</div>
+            <div class="metric-label">Tasa priority</div>
           </div>
         </div>
       </div>
       <div>
-        <div class="sec-label">historial de búsquedas</div>
+        <div class="sec-label">distribución por estado</div>
         <div class="card">
-          <div id="historial-list">
-            <div style="text-align:center;padding:32px;color:var(--muted);font-size:12px;">Sin historial todavía</div>
-          </div>
+          <div id="estados-chart" style="display:flex;flex-direction:column;gap:10px;"></div>
         </div>
       </div>
       <div>
-        <div class="sec-label">estados de leads</div>
+        <div class="sec-label">distribución por producto recomendado</div>
         <div class="card">
-          <div id="estados-chart" style="display:flex;flex-direction:column;gap:8px;"></div>
+          <div id="productos-chart" style="display:flex;flex-direction:column;gap:10px;"></div>
         </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="btn-export" onclick="exportarExcel()">↓ exportar todos los leads</button>
       </div>
     </div>
 
@@ -774,8 +401,12 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 </div>
 
 <script>
-// ── ESTADO ──────────────────────────────────────────────────────────
-const WEBHOOK = ''; // Se configura internamente — no visible para el usuario
+const SUPABASE_URL = 'https://qlttzanvtjnougnkhuuk.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsdHR6YW52dGpub3VnbmtodXVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjk3NjIsImV4cCI6MjA5MDY0NTc2Mn0.eVkLGYANWJoGFq3VWhFMocM6SeYZ41CrVQ_FYXMPleA';
+const WEBHOOK     = ''; // Pega aquí tu webhook de N8N cuando esté listo
+
+let allLeads      = [];
+let currentFilter = 'all';
 
 let queries = [
   { sector: 'clínica dental',       zona: 'Salamanca' },
@@ -783,316 +414,335 @@ let queries = [
   { sector: 'academia de idiomas',  zona: 'Chamberí'  }
 ];
 
-let state = JSON.parse(localStorage.getItem('om_leads_state') || JSON.stringify({
-  runs: 0, total: 0, priority: 0,
-  historial: [],
-  leads: []
-}));
-
-// ── INIT ─────────────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────────────
 const now = new Date();
-const dateStr = now.toLocaleDateString('es-ES', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
-document.getElementById('topbar-date').textContent  = dateStr;
-document.getElementById('sidebar-date').textContent = dateStr;
+document.getElementById('topbar-date').textContent  = now.toLocaleDateString('es-ES',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+document.getElementById('sidebar-date').textContent = now.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
 
 renderQueries();
-renderLeads('all');
-renderMetricas();
-updateNavCount();
+cargarLeads();
 
-// ── NAVEGACIÓN ───────────────────────────────────────────────────────
-const titles = {
-  busqueda: ['Nueva búsqueda', 'configura y lanza tu prospección'],
+// ── SUPABASE HELPERS ──────────────────────────────────────────────────
+async function sbFetch(path, opts={}) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: {
+      'apikey':        SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type':  'application/json',
+      'Prefer':        'return=representation',
+      ...opts.headers
+    },
+    ...opts
+  });
+  if (!res.ok) throw new Error(await res.text());
+  const text = await res.text();
+  return text ? JSON.parse(text) : [];
+}
+
+async function cargarLeads() {
+  try {
+    showLoading('Cargando leads...');
+    allLeads = await sbFetch('leads?order=created_at.desc&limit=500');
+    document.getElementById('conn-status').textContent = 'Conectado · Supabase';
+    updateNavBadge();
+    renderLeads();
+    renderMetricas();
+    hideLoading();
+  } catch(e) {
+    hideLoading();
+    document.getElementById('conn-status').textContent = 'Sin conexión';
+    console.error('Error cargando leads:', e);
+  }
+}
+
+async function actualizarEstado(id, estado) {
+  try {
+    await sbFetch(`leads?id=eq.${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ estado })
+    });
+    const lead = allLeads.find(l => l.id === id);
+    if (lead) lead.estado = estado;
+    renderMetricas();
+  } catch(e) {
+    console.error('Error actualizando estado:', e);
+  }
+}
+
+// ── NAVEGACIÓN ────────────────────────────────────────────────────────
+const pageTitles = {
+  busqueda: ['Nueva búsqueda',    'configura y lanza tu prospección'],
   leads:    ['Leads encontrados', 'gestiona y haz seguimiento'],
-  metricas: ['Métricas', 'rendimiento del sistema']
+  metricas: ['Métricas',          'rendimiento del sistema']
 };
 
 function goTo(panel) {
   document.querySelectorAll('.panel-grid').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('panel-' + panel).classList.add('active');
-  document.querySelectorAll('.nav-item')[['busqueda','leads','metricas'].indexOf(panel)].classList.add('active');
-  document.getElementById('page-title').childNodes[0].textContent = titles[panel][0] + ' ';
-  document.getElementById('page-sub').textContent = titles[panel][1];
-
-  const runBar = document.getElementById('run-bar');
-  runBar.style.display = panel === 'busqueda' ? 'flex' : 'none';
+  ['busqueda','leads','metricas'].forEach(p => document.getElementById('nav-'+p).classList.remove('active'));
+  document.getElementById('panel-'+panel).classList.add('active');
+  document.getElementById('nav-'+panel).classList.add('active');
+  const [title, sub] = pageTitles[panel];
+  document.getElementById('page-title').childNodes[0].textContent = title + ' ';
+  document.getElementById('page-sub').textContent = sub;
+  document.getElementById('run-bar').style.display = panel === 'busqueda' ? 'flex' : 'none';
+  if (panel === 'leads') renderLeads();
+  if (panel === 'metricas') renderMetricas();
 }
 
-// ── QUERIES ──────────────────────────────────────────────────────────
+// ── QUERIES ───────────────────────────────────────────────────────────
 function renderQueries() {
-  const list = document.getElementById('queries-list');
-  list.innerHTML = queries.map((q, i) => `
+  document.getElementById('queries-list').innerHTML = queries.map((q,i) => `
     <div class="query-row">
       <div class="query-num">${String(i+1).padStart(2,'0')}</div>
       <input type="text" value="${q.sector}" placeholder="sector (ej: clínica dental)"
         oninput="queries[${i}].sector=this.value">
       <input type="text" value="${q.zona}" placeholder="zona (ej: Chamberí)"
         oninput="queries[${i}].zona=this.value">
-      <button class="btn-del" onclick="removeQuery(${i})" title="Eliminar">✕</button>
+      <button class="btn-del" onclick="removeQuery(${i})">✕</button>
     </div>
   `).join('');
 }
 
 function addQuery() {
-  const ciudad = document.getElementById('ciudad')?.value || 'Madrid';
-  queries.push({ sector: '', zona: ciudad });
+  queries.push({ sector:'', zona: document.getElementById('ciudad').value || 'Madrid' });
   renderQueries();
   setTimeout(() => {
     const inputs = document.querySelectorAll('.query-row input');
-    if (inputs.length) inputs[inputs.length - 2].focus();
+    if (inputs.length) inputs[inputs.length-2].focus();
   }, 50);
 }
 
 function removeQuery(i) {
   if (queries.length <= 1) return;
-  queries.splice(i, 1);
+  queries.splice(i,1);
   renderQueries();
 }
 
-// ── EJECUTAR ─────────────────────────────────────────────────────────
-function buildPayload() {
-  const ciudad = document.getElementById('ciudad').value || 'Madrid';
-  const pais   = document.getElementById('pais').value   || 'España';
-  const idioma = document.getElementById('idioma').value || 'es';
-  const excluir = Array.from(document.querySelectorAll('.chip input:checked')).map(c => c.value);
-
-  const qs = queries
-    .filter(q => q.sector.trim())
-    .map(q => ({
-      sector: q.sector.trim(),
-      zona:   (q.zona.trim() || ciudad)
-    }));
-
-  return { job_id: `om_${Date.now()}`, timestamp: new Date().toISOString(),
-    icp: { pais, ciudad, idioma, excluir }, queries: qs };
-}
-
+// ── EJECUTAR ──────────────────────────────────────────────────────────
 async function ejecutar() {
-  const payload = buildPayload();
-  if (!payload.queries.length) { showStatus('Añade al menos una búsqueda con sector', 'err'); return; }
+  const qs = queries.filter(q => q.sector.trim());
+  if (!qs.length) { showStatus('Añade al menos una búsqueda con sector','err'); return; }
+
+  const ciudad  = document.getElementById('ciudad').value  || 'Madrid';
+  const pais    = document.getElementById('pais').value    || 'España';
+  const idioma  = document.getElementById('idioma').value  || 'es';
+  const excluir = Array.from(document.querySelectorAll('.chip input:checked')).map(c=>c.value);
+
+  const payload = {
+    job_id:    `om_${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    icp:       { pais, ciudad, idioma, excluir },
+    queries:   qs.map(q => ({ sector:q.sector.trim(), zona:(q.zona.trim()||ciudad) }))
+  };
 
   const btn = document.getElementById('btn-run');
   btn.disabled = true;
   btn.textContent = 'Iniciando...';
-  showStatus('Enviando parámetros al sistema...', 'wait');
 
-  // Simula leads de demo si no hay webhook
-  if (!WEBHOOK) {
-    await new Promise(r => setTimeout(r, 1200));
-    const demo = generarLeadsDemo(payload);
-    guardarEjecucion(payload, demo);
-    showStatus(`${demo.length} leads analizados — ve a la sección Leads`, 'ok');
-    updateNavCount();
-    goTo('leads');
-  } else {
+  if (WEBHOOK) {
+    showStatus('Enviando al sistema de prospección...','wait');
     try {
       const res = await fetch(WEBHOOK, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify(payload)
       });
       if (res.ok) {
-        guardarEjecucion(payload, []);
-        showStatus('Workflow iniciado — recibirás el reporte por correo', 'ok');
+        showStatus(`Búsqueda iniciada — ${qs.length} queries en proceso. Los leads aparecerán en minutos.`,'ok');
+        setTimeout(cargarLeads, 60000);
       } else {
-        showStatus('Error al conectar con el sistema', 'err');
+        showStatus('Error al conectar con el sistema','err');
       }
     } catch(e) {
-      showStatus('No se pudo conectar. Verifica la configuración', 'err');
+      showStatus('No se pudo conectar. Verifica la configuración.','err');
     }
+  } else {
+    // Demo mode — inserta leads de ejemplo en Supabase
+    showStatus('Modo demo — insertando leads de ejemplo...','wait');
+    await insertarLeadsDemo(qs, ciudad);
+    showStatus('Leads cargados en Supabase — ve a la sección Leads','ok');
+    await cargarLeads();
+    setTimeout(() => goTo('leads'), 1500);
   }
 
   btn.disabled = false;
   btn.textContent = 'Iniciar prospección';
 }
 
-// ── DEMO DATA ─────────────────────────────────────────────────────────
-function generarLeadsDemo(payload) {
-  const ejemplos = [
-    { empresa:'Clínica EME Estética Dental', sector:'clínica dental', zona:'Chamberí', telefono:'+34 914 00 11 22', email:'info@clinicaeme.com', web:'clinicaeme.com', total_score:84, banda:'Priority', producto_recomendado:'Impulso', razon_cuenta:'Clínica con flujo constante de pacientes que gestiona citas por teléfono. Sin sistema de reservas ni chatbot.', primer_mensaje:'Hola, he visto que en Clínica EME gestionáis las citas por teléfono — tenemos un sistema que automatiza eso en WhatsApp sin cambiar cómo trabajáis hoy.', estado:'Nuevo' },
-    { empresa:'Academia Tandem Madrid', sector:'academia de idiomas', zona:'Chamberí', telefono:'+34 915 32 27 15', email:'info@tandemmadrid.com', web:'tandemmadrid.com', total_score:78, banda:'Good', producto_recomendado:'Flow', razon_cuenta:'Academia con múltiples niveles y profesores. Gestión de matrículas y reservas de clases todavía manual.', primer_mensaje:'He visto que Tandem gestiona matrículas por formulario — podemos automatizar todo el proceso de inscripción y seguimiento.', estado:'Nuevo' },
-    { empresa:'Inmobiliaria Ferran Madrid', sector:'agencia inmobiliaria', zona:'Salamanca', telefono:'+34 914 31 60 33', email:'info@ferran.es', web:'ferran.es', total_score:82, banda:'Priority', producto_recomendado:'Flow', razon_cuenta:'Agencia boutique con alto volumen de consultas. Sin chatbot ni sistema de cualificación automática de leads.', primer_mensaje:'En Ferran Madrid recibís muchas consultas de compradores — podemos ayudaros a cualificar y responder automáticamente en WhatsApp.', estado:'Nuevo' },
-    { empresa:'Centro Dental Velázquez', sector:'clínica dental', zona:'Salamanca', telefono:'+34 915 62 43 04', email:'', web:'clinicadentalvelazquez.com', total_score:76, banda:'Good', producto_recomendado:'Impulso', razon_cuenta:'Clínica con presencia web básica y contacto solo por teléfono. Alta oportunidad de automatización de citas.', primer_mensaje:'He visto que en Clínica Velázquez pedís cita por teléfono — hay una forma más cómoda para vuestros pacientes y más eficiente para vosotros.', estado:'Nuevo' },
-    { empresa:'Ortofamily Chamberí', sector:'clínica dental', zona:'Chamberí', telefono:'+34 618 94 32 11', email:'', web:'ortofamily.com', total_score:80, banda:'Priority', producto_recomendado:'Impulso', razon_cuenta:'Clínica de ortodoncia sin sistema de reservas online. Todo el flujo de citas es manual por llamada o WhatsApp.', primer_mensaje:'En Ortofamily gestionáis las citas de forma manual — podemos implementar un sistema que las automatice en menos de una semana.', estado:'Nuevo' },
-    { empresa:'Linguaschools Madrid', sector:'academia de idiomas', zona:'Chamberí', telefono:'+34 931 76 15 36', email:'info@linguaschools.com', web:'linguaschools.com', total_score:54, banda:'Low', producto_recomendado:'Descartar', razon_cuenta:'Escuela con sistema de reservas online ya integrado y chatbot activo. Madurez digital alta.', primer_mensaje:'', estado:'Descartado' },
+async function insertarLeadsDemo(qs, ciudad) {
+  const demos = [
+    {empresa:'Clínica EME Estética Dental',sector:'clínica dental',zona:'Chamberí',telefono:'+34 914 00 11 22',email:'info@clinicaeme.com',web:'clinicaeme.com',fit_score:52,opportunity_score:32,total_score:84,banda:'Priority',automation_maturity:'low',tiene_chatbot:'No',tiene_reservas:'No',tiene_crm:'No',cta_manual:'Sí',es_franquicia:'No',producto_recomendado:'Impulso',razon_cuenta:'Clínica con flujo constante de pacientes. Gestiona citas por teléfono sin automatización.',primer_mensaje:'Hola, he visto que en Clínica EME gestionáis las citas por teléfono — tenemos un sistema que automatiza eso en WhatsApp sin cambiar cómo trabajáis hoy.',senales_friccion:'Sin reservas online | Sin chatbot | CTA manual',fuente:'SerpAPI',fecha:new Date().toISOString().split('T')[0],estado:'Nuevo'},
+    {empresa:'Inmobiliaria Ferran Madrid',sector:'agencia inmobiliaria',zona:'Salamanca',telefono:'+34 914 31 60 33',email:'info@ferran.es',web:'ferran.es',fit_score:50,opportunity_score:32,total_score:82,banda:'Priority',automation_maturity:'low',tiene_chatbot:'No',tiene_reservas:'No',tiene_crm:'No',cta_manual:'Sí',es_franquicia:'No',producto_recomendado:'Flow',razon_cuenta:'Agencia boutique con alto volumen de consultas. Sin cualificación automática de leads.',primer_mensaje:'En Ferran recibís muchas consultas — podemos cualificarlas y responder automáticamente en WhatsApp antes de que las atienda el equipo.',senales_friccion:'Sin chatbot | CTA manual | Sin reservas',fuente:'Azure Maps',fecha:new Date().toISOString().split('T')[0],estado:'Nuevo'},
+    {empresa:'Academia Tándem Madrid',sector:'academia de idiomas',zona:'Chamberí',telefono:'+34 915 32 27 15',email:'info@tandem.es',web:'tandem.es',fit_score:45,opportunity_score:33,total_score:78,banda:'Good',automation_maturity:'low',tiene_chatbot:'No',tiene_reservas:'No',tiene_crm:'No',cta_manual:'Sí',es_franquicia:'No',producto_recomendado:'Flow',razon_cuenta:'Academia con múltiples niveles. Matrículas y reservas de clases gestionadas manualmente.',primer_mensaje:'He visto que Tándem gestiona matrículas por formulario — podemos automatizar todo el proceso de inscripción y seguimiento de alumnos.',senales_friccion:'Formulario genérico | Sin chatbot | CTA manual',fuente:'SerpAPI',fecha:new Date().toISOString().split('T')[0],estado:'Nuevo'},
+    {empresa:'Centro Dental Velázquez',sector:'clínica dental',zona:'Salamanca',telefono:'+34 915 62 43 04',email:'',web:'clinicadentalvelazquez.com',fit_score:42,opportunity_score:34,total_score:76,banda:'Good',automation_maturity:'low',tiene_chatbot:'No',tiene_reservas:'No',tiene_crm:'No',cta_manual:'Sí',es_franquicia:'No',producto_recomendado:'Impulso',razon_cuenta:'Clínica de barrio con web básica. Todo el flujo de citas es manual.',primer_mensaje:'En Clínica Velázquez pedís cita por teléfono — hay una forma más cómoda para vuestros pacientes y más eficiente para vosotros.',senales_friccion:'Sin reservas | Sin chatbot | CTA manual',fuente:'Azure Maps',fecha:new Date().toISOString().split('T')[0],estado:'Nuevo'},
+    {empresa:'Linguaschools Madrid',sector:'academia de idiomas',zona:'Chamberí',telefono:'+34 931 76 15 36',email:'info@linguaschools.com',web:'linguaschools.com',fit_score:30,opportunity_score:20,total_score:50,banda:'Low',automation_maturity:'high',tiene_chatbot:'Sí',tiene_reservas:'Sí',tiene_crm:'Sí',cta_manual:'No',es_franquicia:'Sí',producto_recomendado:'Descartar',razon_cuenta:'Cadena internacional con sistema de reservas online y chatbot activo. Madurez digital alta.',primer_mensaje:'',senales_friccion:'Chatbot detectado | Reservas online | CRM activo',fuente:'SerpAPI',fecha:new Date().toISOString().split('T')[0],estado:'Descartado'}
   ];
-  return ejemplos.filter(() => Math.random() > 0.1);
+
+  try {
+    await sbFetch('leads', {
+      method: 'POST',
+      body: JSON.stringify(demos)
+    });
+  } catch(e) {
+    console.error('Error insertando demos:', e);
+  }
 }
 
-// ── GUARDAR ───────────────────────────────────────────────────────────
-function guardarEjecucion(payload, leads) {
-  state.runs++;
-  const priority = leads.filter(l => l.banda === 'Priority').length;
-  const good     = leads.filter(l => l.banda === 'Good').length;
-  state.total    += leads.length;
-  state.priority += priority;
+// ── RENDERS ───────────────────────────────────────────────────────────
+function renderLeads() {
+  const busqueda = (document.getElementById('search-input')?.value || '').toLowerCase();
+  let leads = allLeads;
+  if (currentFilter !== 'all') leads = leads.filter(l => l.banda === currentFilter);
+  if (busqueda) leads = leads.filter(l => (l.empresa||'').toLowerCase().includes(busqueda) || (l.sector||'').toLowerCase().includes(busqueda));
 
-  state.historial.unshift({
-    fecha:   new Date().toLocaleString('es-ES', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }),
-    ciudad:  payload.icp.ciudad,
-    queries: payload.queries.length,
-    total:   leads.length,
-    priority, good
-  });
-  if (state.historial.length > 20) state.historial = state.historial.slice(0,20);
+  const total = allLeads.length;
+  const pri   = allLeads.filter(l=>l.banda==='Priority').length;
+  const good  = allLeads.filter(l=>l.banda==='Good').length;
+  const low   = allLeads.filter(l=>l.banda==='Low'||l.banda==='Descartar').length;
+  document.getElementById('cnt-all').textContent      = total ? `(${total})` : '';
+  document.getElementById('cnt-priority').textContent = pri   ? `(${pri})`   : '';
+  document.getElementById('cnt-good').textContent     = good  ? `(${good})`  : '';
+  document.getElementById('cnt-low').textContent      = low   ? `(${low})`   : '';
 
-  // Merge leads — evita duplicados por web
-  const webs = new Set(state.leads.map(l => l.web));
-  leads.forEach(l => { if (!webs.has(l.web)) { state.leads.push(l); webs.add(l.web); } });
-
-  localStorage.setItem('om_leads_state', JSON.stringify(state));
-  renderLeads('all');
-  renderMetricas();
-}
-
-// ── LEADS ─────────────────────────────────────────────────────────────
-let currentFilter = 'all';
-
-function filterLeads(banda, btn) {
-  currentFilter = banda;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderLeads(banda);
-}
-
-function renderLeads(filter) {
-  const leads = filter === 'all' ? state.leads : state.leads.filter(l => l.banda === filter);
   const container = document.getElementById('leads-container');
-
-  // Update counts
-  const all  = state.leads.length;
-  const pri  = state.leads.filter(l => l.banda === 'Priority').length;
-  const good = state.leads.filter(l => l.banda === 'Good').length;
-  const low  = state.leads.filter(l => l.banda === 'Low' || l.banda === 'Descartar').length;
-  document.getElementById('cnt-all').textContent     = all  ? `(${all})`  : '';
-  document.getElementById('cnt-priority').textContent = pri  ? `(${pri})`  : '';
-  document.getElementById('cnt-good').textContent    = good ? `(${good})` : '';
-  document.getElementById('cnt-low').textContent     = low  ? `(${low})`  : '';
-
   if (!leads.length) {
-    container.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">◎</div>
-        <div class="empty-title">${filter === 'all' ? 'Sin leads todavía' : 'Sin leads en esta categoría'}</div>
-        <div class="empty-sub">${filter === 'all' ? 'Lanza tu primera búsqueda desde<br><em>Nueva búsqueda</em>' : 'Prueba otro filtro o lanza más búsquedas'}</div>
-      </div>`;
+    container.innerHTML = `<div class="empty"><div class="empty-title">${currentFilter==='all'?'Sin leads todavía':'Sin leads en esta categoría'}</div><div class="empty-sub">${currentFilter==='all'?'Lanza tu primera búsqueda<br>desde <em>Nueva búsqueda</em>':'Prueba otro filtro'}</div></div>`;
     return;
   }
 
-  container.innerHTML = leads.map((l, i) => {
-    const bandaClass = l.banda === 'Priority' ? 'priority' : l.banda === 'Good' ? 'good' : 'low';
-    const bandaTag   = l.banda === 'Priority' ? 'tag-green' : l.banda === 'Good' ? 'tag-amber' : 'tag-muted';
-    const realIdx    = state.leads.indexOf(l);
-
+  container.innerHTML = leads.map(l => {
+    const bc = l.banda==='Priority'?'priority':l.banda==='Good'?'good':'low';
+    const bt = l.banda==='Priority'?'tag-grn':l.banda==='Good'?'tag-amb':'tag-mut';
     return `
-    <div class="lead-card ${bandaClass}">
+    <div class="lead-card ${bc}">
       <div>
-        <div class="lead-name">${l.empresa}</div>
+        <div class="lead-name">${l.empresa||'—'}</div>
         <div class="lead-meta">
-          <span>📍 ${l.zona || '—'}</span>
-          ${l.telefono ? `<span>📞 ${l.telefono}</span>` : ''}
-          ${l.email    ? `<span>✉ ${l.email}</span>`    : ''}
+          ${l.zona     ? `<span>◎ ${l.zona}</span>`     : ''}
+          ${l.telefono ? `<span>↯ ${l.telefono}</span>` : ''}
+          ${l.email    ? `<span>@ ${l.email}</span>`    : ''}
+          ${l.web      ? `<a href="https://${l.web}" target="_blank" style="color:var(--acc);text-decoration:none;">↗ ${l.web}</a>` : ''}
         </div>
+        ${l.razon_cuenta ? `<div style="font-size:11px;color:var(--sub);background:var(--s2);padding:6px 10px;border-radius:6px;margin-bottom:8px;line-height:1.5;">${l.razon_cuenta}</div>` : ''}
         ${l.primer_mensaje ? `
         <div class="lead-message">
-          ${l.primer_mensaje}
-          <button class="btn-copy" onclick="copiar(event, '${l.primer_mensaje.replace(/'/g,"\\'")}', this)">copiar</button>
+          <span style="flex:1;">${l.primer_mensaje}</span>
+          <button class="btn-copy" onclick="copiar(event,'${(l.primer_mensaje||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')}',this)">copiar</button>
         </div>` : ''}
         <div class="lead-tags">
-          <span class="tag ${bandaTag}">${l.banda}</span>
-          ${l.producto_recomendado && l.producto_recomendado !== 'Descartar' ? `<span class="tag tag-accent">${l.producto_recomendado}</span>` : ''}
-          ${l.sector ? `<span class="tag tag-muted">${l.sector}</span>` : ''}
-          ${l.web    ? `<a href="https://${l.web}" target="_blank" class="tag tag-muted" style="text-decoration:none;">↗ web</a>` : ''}
+          <span class="tag ${bt}">${l.banda}</span>
+          ${l.producto_recomendado&&l.producto_recomendado!=='Descartar'?`<span class="tag tag-acc">${l.producto_recomendado}</span>`:''}
+          ${l.sector?`<span class="tag tag-mut">${l.sector}</span>`:''}
+          ${l.automation_maturity?`<span class="tag tag-mut">madurez: ${l.automation_maturity}</span>`:''}
         </div>
       </div>
       <div class="lead-right">
-        <div class="score-circle ${bandaClass}">${l.total_score}</div>
-        <select class="estado-select" onchange="cambiarEstado(${realIdx}, this.value)">
-          <option ${l.estado==='Nuevo'?'selected':''}>Nuevo</option>
-          <option ${l.estado==='Contactado'?'selected':''}>Contactado</option>
-          <option ${l.estado==='En conversación'?'selected':''}>En conversación</option>
-          <option ${l.estado==='Reunión agendada'?'selected':''}>Reunión agendada</option>
-          <option ${l.estado==='Cerrado'?'selected':''}>Cerrado</option>
-          <option ${l.estado==='Descartado'?'selected':''}>Descartado</option>
+        <div class="score-circle ${bc}">${l.total_score||0}</div>
+        <select class="estado-select" onchange="actualizarEstado('${l.id}',this.value)">
+          ${['Nuevo','Contactado','En conversación','Reunión agendada','Cerrado','Descartado'].map(e=>`<option ${l.estado===e?'selected':''}>${e}</option>`).join('')}
         </select>
       </div>
     </div>`;
   }).join('');
 }
 
-function cambiarEstado(idx, estado) {
-  state.leads[idx].estado = estado;
-  localStorage.setItem('om_leads_state', JSON.stringify(state));
-  renderMetricas();
+function filterLeads(banda, btn) {
+  currentFilter = banda;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLeads();
 }
 
+function renderMetricas() {
+  const total = allLeads.length;
+  const pri   = allLeads.filter(l=>l.banda==='Priority').length;
+  const good  = allLeads.filter(l=>l.banda==='Good').length;
+  document.getElementById('m-total').textContent    = total;
+  document.getElementById('m-priority').textContent = pri;
+  document.getElementById('m-good').textContent     = good;
+  document.getElementById('m-ratio').textContent    = total>0 ? Math.round(pri/total*100)+'%' : '—';
+
+  const estados = {};
+  allLeads.forEach(l => { estados[l.estado||'Nuevo'] = (estados[l.estado||'Nuevo']||0)+1; });
+  const colores = {'Nuevo':'var(--sub)','Contactado':'var(--acc)','En conversación':'var(--amb)','Reunión agendada':'var(--grn)','Cerrado':'var(--grn)','Descartado':'var(--mut)'};
+  const ec = document.getElementById('estados-chart');
+  ec.innerHTML = Object.entries(estados).length ? Object.entries(estados).map(([est,cnt])=>`
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="font-size:11px;color:var(--sub);width:140px;flex-shrink:0;">${est}</div>
+      <div style="flex:1;background:var(--s2);border-radius:3px;height:5px;">
+        <div style="background:${colores[est]||'var(--sub)'};height:5px;border-radius:3px;width:${Math.round(cnt/total*100)}%;transition:width 0.5s;"></div>
+      </div>
+      <div style="font-size:11px;color:var(--mut);width:20px;text-align:right;">${cnt}</div>
+    </div>
+  `).join('') : '<div style="color:var(--mut);font-size:12px;">Sin datos todavía</div>';
+
+  const productos = {};
+  allLeads.filter(l=>l.producto_recomendado&&l.producto_recomendado!=='Descartar').forEach(l=>{productos[l.producto_recomendado]=(productos[l.producto_recomendado]||0)+1;});
+  const pc = document.getElementById('productos-chart');
+  const ptotal = Object.values(productos).reduce((a,b)=>a+b,0)||1;
+  const pcolores = {'Impulso':'var(--acc)','Flow':'var(--amb)','Sinergia':'var(--grn)'};
+  pc.innerHTML = Object.entries(productos).length ? Object.entries(productos).map(([prod,cnt])=>`
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="font-size:11px;color:var(--sub);width:80px;flex-shrink:0;">${prod}</div>
+      <div style="flex:1;background:var(--s2);border-radius:3px;height:5px;">
+        <div style="background:${pcolores[prod]||'var(--sub)'};height:5px;border-radius:3px;width:${Math.round(cnt/ptotal*100)}%;transition:width 0.5s;"></div>
+      </div>
+      <div style="font-size:11px;color:var(--mut);width:20px;text-align:right;">${cnt}</div>
+    </div>
+  `).join('') : '<div style="color:var(--mut);font-size:12px;">Sin datos todavía</div>';
+}
+
+// ── EXPORTAR EXCEL ────────────────────────────────────────────────────
+function exportarExcel() {
+  const leads = currentFilter === 'all' ? allLeads : allLeads.filter(l=>l.banda===currentFilter);
+  if (!leads.length) { showStatus('No hay leads para exportar','err'); return; }
+
+  const cols = ['empresa','sector','zona','telefono','email','web','total_score','banda','producto_recomendado','razon_cuenta','primer_mensaje','estado','automation_maturity','tiene_chatbot','tiene_reservas','cta_manual','es_franquicia','fuente','fecha'];
+  const header = cols.join(',');
+  const rows = leads.map(l => cols.map(c => {
+    const v = (l[c]||'').toString().replace(/"/g,'""');
+    return `"${v}"`;
+  }).join(','));
+
+  const csv = '\uFEFF' + [header,...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `operamente-leads-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────
 function copiar(e, texto, btn) {
   e.stopPropagation();
-  navigator.clipboard.writeText(texto).then(() => {
-    btn.textContent = '✓ copiado';
+  navigator.clipboard.writeText(texto).then(()=>{
+    btn.textContent='✓ copiado';
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'copiar'; btn.classList.remove('copied'); }, 2000);
+    setTimeout(()=>{btn.textContent='copiar';btn.classList.remove('copied');},2000);
   });
 }
 
-// ── MÉTRICAS ──────────────────────────────────────────────────────────
-function renderMetricas() {
-  document.getElementById('m-runs').textContent     = state.runs;
-  document.getElementById('m-total').textContent    = state.total;
-  document.getElementById('m-priority').textContent = state.priority;
-  document.getElementById('m-ratio').textContent    = state.total > 0
-    ? Math.round(state.priority / state.total * 100) + '%' : '—';
-
-  const hl = document.getElementById('historial-list');
-  hl.innerHTML = state.historial.length ? state.historial.map(h => `
-    <div class="hist-row">
-      <span class="hist-date">${h.fecha}</span>
-      <span class="hist-info">${h.ciudad} · ${h.queries} búsquedas</span>
-      <div class="hist-badges">
-        <span class="tag tag-muted">${h.total} leads</span>
-        <span class="tag tag-green">${h.priority} priority</span>
-        ${h.good ? `<span class="tag tag-amber">${h.good} good</span>` : ''}
-      </div>
-    </div>
-  `).join('') : '<div style="text-align:center;padding:32px;color:var(--muted);font-size:12px;">Sin historial</div>';
-
-  // Estados
-  const estados = {};
-  state.leads.forEach(l => { estados[l.estado] = (estados[l.estado]||0) + 1; });
-  const ec = document.getElementById('estados-chart');
-  const total = state.leads.length || 1;
-  const colores = { 'Nuevo':'var(--sub)', 'Contactado':'var(--accent)', 'En conversación':'var(--amber)', 'Reunión agendada':'var(--green)', 'Cerrado':'var(--green)', 'Descartado':'var(--muted)' };
-  ec.innerHTML = Object.entries(estados).length ? Object.entries(estados).map(([est, cnt]) => `
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div style="font-size:11px;color:var(--sub);width:130px;">${est}</div>
-      <div style="flex:1;background:var(--surface2);border-radius:3px;height:6px;">
-        <div style="background:${colores[est]||'var(--sub)'};height:6px;border-radius:3px;width:${Math.round(cnt/total*100)}%;transition:width 0.5s;"></div>
-      </div>
-      <div style="font-size:11px;color:var(--sub);width:20px;text-align:right;">${cnt}</div>
-    </div>
-  `).join('') : '<div style="color:var(--muted);font-size:12px;">Sin datos</div>';
-}
-
-function updateNavCount() {
-  const cnt = state.leads.length;
-  const el  = document.getElementById('nav-count');
+function updateNavBadge() {
+  const cnt = allLeads.length;
+  const el  = document.getElementById('nav-badge');
   if (cnt > 0) { el.textContent = cnt; el.style.display = 'inline'; }
 }
 
 function showStatus(msg, type) {
   const el = document.getElementById('status-msg');
   el.textContent = msg;
-  el.className = 'status-msg show ' + type;
+  el.className   = 'status-msg show ' + (type||'');
 }
 
-// Oculta run-bar en leads y métricas al inicio
-document.querySelectorAll('.nav-item').forEach((item, i) => {
-  item.addEventListener('click', () => {
-    const panels = ['busqueda','leads','metricas'];
-    document.getElementById('run-bar').style.display = i === 0 ? 'flex' : 'none';
-  });
-});
+function showLoading(txt) {
+  document.getElementById('loading-text').textContent = txt||'Cargando...';
+  document.getElementById('loading').classList.add('show');
+}
+
+function hideLoading() {
+  document.getElementById('loading').classList.remove('show');
+}
 </script>
 </body>
 </html>
