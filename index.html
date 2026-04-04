@@ -25,8 +25,6 @@
   --am2: rgba(245,190,90,0.12);
   --red: #ee6c6c;
   --rd2: rgba(238,108,108,0.12);
-  --blu: #60a5fa;
-  --bl2: rgba(96,165,250,0.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{font-size:14px;}
@@ -71,12 +69,10 @@ input[type=text]:focus,select:focus{border-color:var(--acc);background:rgba(124,
 input[type=text]::placeholder{color:var(--mut);}
 select option{background:#1a1a2e;color:var(--tx);}
 
-/* SEARCH BAR */
 .search-bar-wrap{position:relative;margin-bottom:8px;}
 .search-bar-wrap input{padding:12px 44px 12px 16px;font-size:14px;border-radius:10px;border:0.5px solid var(--b2);}
 .search-bar-wrap input:focus{border-color:var(--acc);}
 .search-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--mut);font-size:14px;pointer-events:none;}
-.search-hint{font-size:11px;color:var(--mut);margin-top:6px;line-height:1.5;}
 
 .query-item{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;margin-bottom:8px;animation:fi 0.15s ease;}
 .q-num{font-size:10px;color:var(--mut);text-align:center;}
@@ -85,39 +81,33 @@ select option{background:#1a1a2e;color:var(--tx);}
 .btn-add{background:none;border:0.5px dashed var(--b2);border-radius:8px;color:var(--sub);cursor:pointer;padding:9px;font-size:12px;font-family:'JetBrains Mono',monospace;text-align:center;transition:all 0.15s;margin-top:4px;width:100%;}
 .btn-add:hover{border-color:var(--acc);color:var(--acc);background:var(--ac3);}
 
-/* RESULTS COUNT */
 .results-row{display:flex;align-items:center;gap:12px;margin-top:14px;padding-top:14px;border-top:0.5px solid var(--b1);}
 .results-label{font-size:12px;color:var(--sub);white-space:nowrap;}
 .results-select{width:auto;padding:7px 12px;font-size:12px;flex-shrink:0;}
 .results-hint{font-size:11px;color:var(--mut);line-height:1.5;}
 
-/* CONFIG */
 .cfg2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .cfg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 .field label{display:block;font-size:10px;color:var(--mut);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;}
 .field-hint{font-size:11px;color:var(--mut);margin-top:4px;line-height:1.5;}
 .optional-tag{font-size:9px;color:var(--mut);background:var(--s2);border:0.5px solid var(--b1);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:middle;letter-spacing:0.05em;}
 
-/* IDIOMAS */
 .lang-grid{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
 .lang-chip{display:flex;align-items:center;gap:5px;background:var(--s2);border:0.5px solid var(--b2);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--sub);cursor:pointer;transition:all 0.15s;user-select:none;}
 .lang-chip input{display:none;}
 .lang-chip.on{background:var(--ac2);border-color:var(--acc);color:var(--acc);}
 
-/* BANDS */
 .bands{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .band{border-radius:8px;padding:10px 14px;border:0.5px solid var(--b1);}
 .band-name{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px;}
 .band-range{font-family:'Playfair Display',serif;font-size:20px;}
 .band-desc{font-size:11px;color:var(--sub);margin-top:3px;}
 
-/* METRICS */
 .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 .metric{background:var(--s2);border:0.5px solid var(--b1);border-radius:10px;padding:16px;text-align:center;}
 .metric-val{font-family:'Playfair Display',serif;font-size:32px;font-weight:500;line-height:1;margin-bottom:5px;}
 .metric-label{font-size:10px;color:var(--mut);letter-spacing:0.1em;text-transform:uppercase;}
 
-/* LEADS */
 .leads-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
 .filter-btn{background:var(--s2);border:0.5px solid var(--b1);border-radius:20px;color:var(--sub);padding:5px 14px;font-size:11px;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all 0.15s;}
 .filter-btn:hover{border-color:var(--b2);color:var(--tx);}
@@ -139,7 +129,6 @@ select option{background:#1a1a2e;color:var(--tx);}
 .tag-amb{background:var(--am2);color:var(--amb);}
 .tag-acc{background:var(--ac2);color:var(--acc);}
 .tag-mut{background:var(--s2);color:var(--mut);border:0.5px solid var(--b1);}
-
 .lead-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
 .score-c{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:500;border:1.5px solid;}
 .score-c.priority{color:var(--grn);border-color:var(--grn);background:var(--gn2);}
@@ -148,7 +137,6 @@ select option{background:#1a1a2e;color:var(--tx);}
 .estado-sel{background:var(--s2);border:0.5px solid var(--b1);border-radius:6px;color:var(--sub);padding:4px 8px;font-size:11px;font-family:'JetBrains Mono',monospace;cursor:pointer;outline:none;transition:border-color 0.15s;}
 .estado-sel:focus{border-color:var(--acc);}
 
-/* KANBAN */
 .kanban{display:grid;gap:12px;overflow-x:auto;padding-bottom:8px;}
 .k-col{background:var(--s2);border:0.5px solid var(--b1);border-radius:12px;min-width:210px;display:flex;flex-direction:column;}
 .k-header{padding:13px 15px 10px;border-bottom:0.5px solid var(--b1);display:flex;align-items:center;justify-content:space-between;}
@@ -164,26 +152,41 @@ select option{background:#1a1a2e;color:var(--tx);}
 .k-score{font-family:'Playfair Display',serif;font-size:13px;font-weight:500;}
 .k-empty{padding:24px 14px;text-align:center;color:var(--mut);font-size:11px;}
 
-/* BUTTONS */
 .btn-copy{background:none;border:0.5px solid var(--b1);border-radius:6px;color:var(--mut);padding:3px 9px;font-size:10px;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all 0.15s;white-space:nowrap;flex-shrink:0;}
 .btn-copy:hover{border-color:var(--acc);color:var(--acc);}
 .btn-copy.copied{color:var(--grn);border-color:var(--grn);}
 .btn-export{background:none;border:0.5px solid var(--b2);border-radius:8px;color:var(--sub);font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 14px;cursor:pointer;transition:all 0.15s;}
 .btn-export:hover{border-color:var(--acc);color:var(--acc);background:var(--ac3);}
 
-/* RUN BAR */
-.run-bar{display:flex;gap:10px;align-items:center;padding:16px 32px;border-top:0.5px solid var(--b1);background:var(--s1);position:sticky;bottom:0;z-index:10;}
-.btn-run{background:var(--acc);border:none;border-radius:10px;color:white;font-family:'Playfair Display',serif;font-size:15px;padding:11px 28px;cursor:pointer;transition:all 0.2s;letter-spacing:-0.2px;}
+.run-bar{display:flex;gap:12px;align-items:flex-start;padding:16px 32px;border-top:0.5px solid var(--b1);background:var(--s1);position:sticky;bottom:0;z-index:10;}
+.btn-run{background:var(--acc);border:none;border-radius:10px;color:white;font-family:'Playfair Display',serif;font-size:15px;padding:11px 28px;cursor:pointer;transition:all 0.2s;letter-spacing:-0.2px;flex-shrink:0;}
 .btn-run:hover{background:#6b5ae0;transform:translateY(-1px);}
 .btn-run:active{transform:none;}
 .btn-run:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
-.status-msg{font-size:12px;color:var(--sub);flex:1;display:none;}
+
+.run-right{flex:1;display:flex;flex-direction:column;gap:8px;}
+.status-msg{font-size:12px;color:var(--sub);display:none;}
 .status-msg.show{display:block;}
 .status-msg.ok{color:var(--grn);}
 .status-msg.err{color:var(--red);}
 .status-msg.wait{color:var(--amb);}
 
-/* LOADING */
+/* TIMER */
+.timer-bar{display:none;flex-direction:column;gap:8px;padding:12px 16px;background:var(--s2);border:0.5px solid var(--b1);border-radius:10px;}
+.timer-bar.show{display:flex;}
+.timer-top{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.timer-left{display:flex;align-items:baseline;gap:10px;}
+.timer-clock{font-family:'Playfair Display',serif;font-size:24px;color:var(--acc);letter-spacing:0.05em;transition:color 0.5s;}
+.timer-clock.done{color:var(--grn);}
+.timer-fase{font-size:11px;color:var(--sub);line-height:1.4;}
+.timer-nota{font-size:10px;color:var(--mut);text-align:right;flex-shrink:0;}
+.timer-track{width:100%;height:3px;background:var(--b1);border-radius:2px;overflow:hidden;}
+.timer-fill{height:3px;background:var(--acc);border-radius:2px;width:0%;transition:width 1s linear,background 0.5s;}
+.timer-fill.done{background:var(--grn);}
+@keyframes timerPulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.timer-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--acc);margin-right:8px;vertical-align:middle;animation:timerPulse 1.4s ease-in-out infinite;transition:background 0.5s;}
+.timer-dot.done{background:var(--grn);animation:none;}
+
 .loading-overlay{display:none;position:fixed;inset:0;background:rgba(8,8,13,0.85);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
 .loading-overlay.show{display:flex;}
 .spinner{width:28px;height:28px;border:2px solid var(--b2);border-top-color:var(--acc);border-radius:50%;animation:spin 0.8s linear infinite;}
@@ -206,7 +209,7 @@ select option{background:#1a1a2e;color:var(--tx);}
   .content{padding:16px;}
   .metric-grid{grid-template-columns:repeat(2,1fr);}
   .cfg2,.cfg3{grid-template-columns:1fr;}
-  .run-bar{padding:14px 16px;}
+  .run-bar{padding:14px 16px;flex-direction:column;}
 }
 </style>
 </head>
@@ -260,7 +263,6 @@ select option{background:#1a1a2e;color:var(--tx);}
 
     <!-- BÚSQUEDA -->
     <div class="panel active" id="panel-busqueda">
-
       <div>
         <div class="sec-label">qué buscar</div>
         <div class="card">
@@ -347,7 +349,6 @@ select option{background:#1a1a2e;color:var(--tx);}
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- LEADS NUEVOS -->
@@ -418,9 +419,25 @@ select option{background:#1a1a2e;color:var(--tx);}
 
   </div>
 
+  <!-- RUN BAR CON TIMER -->
   <div class="run-bar" id="run-bar">
     <button class="btn-run" id="btn-run" onclick="ejecutar()">Iniciar prospección</button>
-    <div class="status-msg" id="status-msg"></div>
+    <div class="run-right">
+      <div class="status-msg" id="status-msg"></div>
+      <div class="timer-bar" id="timer-bar">
+        <div class="timer-top">
+          <div class="timer-left">
+            <span class="timer-dot" id="timer-dot"></span>
+            <span class="timer-clock" id="timer-clock">00:00</span>
+            <span class="timer-fase" id="timer-fase">Iniciando búsqueda...</span>
+          </div>
+          <div class="timer-nota" id="timer-nota"></div>
+        </div>
+        <div class="timer-track">
+          <div class="timer-fill" id="timer-fill"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </main>
 </div>
@@ -441,9 +458,22 @@ const ESTADO_COLORS    = {
   'Descartado':       'var(--mut)'
 };
 
-let allLeads     = [];
-let filtroNuevos = 'all';
-let queries      = [{ term: '' }];
+const FASES = [
+  { hasta: 15,  texto: 'Buscando empresas en Maps y SerpAPI...' },
+  { hasta: 45,  texto: 'Accediendo a webs y detectando señales...' },
+  { hasta: 90,  texto: 'Analizando nivel de automatización...' },
+  { hasta: 150, texto: 'Puntuando oportunidades con IA...' },
+  { hasta: 240, texto: 'Guardando leads en base de datos...' },
+  { hasta: 999, texto: 'Finalizando y sincronizando...' }
+];
+
+let allLeads      = [];
+let filtroNuevos  = 'all';
+let queries       = [{ term: '' }];
+let timerInterval  = null;
+let pollingInterval = null;
+let timerSeg       = 0;
+let leadsAntesDeBusqueda = 0;
 
 // INIT
 const now = new Date();
@@ -501,7 +531,94 @@ async function actualizarEstado(id, estado) {
   } catch(e) { console.error(e); }
 }
 
-// NAV
+// TIMER
+function formatTime(seg) {
+  const m = Math.floor(seg / 60).toString().padStart(2,'0');
+  const s = (seg % 60).toString().padStart(2,'0');
+  return `${m}:${s}`;
+}
+
+function getFase(seg) {
+  return FASES.find(f => seg < f.hasta)?.texto || 'Procesando...';
+}
+
+function iniciarTimer(numQueries, numResults) {
+  timerSeg = 0;
+  const estimado = Math.max(30, numQueries * numResults * 6);
+
+  document.getElementById('timer-bar').classList.add('show');
+  document.getElementById('timer-clock').classList.remove('done');
+  document.getElementById('timer-dot').classList.remove('done');
+  document.getElementById('timer-fill').classList.remove('done');
+  document.getElementById('timer-fill').style.width = '0%';
+  document.getElementById('timer-clock').textContent = '00:00';
+  document.getElementById('timer-fase').textContent  = getFase(0);
+  document.getElementById('timer-nota').textContent  =
+    `~${Math.ceil(estimado/60)} min estimado · ${numQueries} búsqueda${numQueries>1?'s':''} × ${numResults} resultados`;
+
+  timerInterval = setInterval(() => {
+    timerSeg++;
+    document.getElementById('timer-clock').textContent = formatTime(timerSeg);
+    document.getElementById('timer-fase').textContent  = getFase(timerSeg);
+    const pct = Math.min(Math.round(timerSeg / estimado * 100), 94);
+    document.getElementById('timer-fill').style.width = pct + '%';
+  }, 1000);
+}
+
+function detenerTimer(exito) {
+  clearInterval(timerInterval);
+  clearInterval(pollingInterval);
+  timerInterval   = null;
+  pollingInterval = null;
+
+  document.getElementById('timer-fill').style.width = '100%';
+
+  if (exito) {
+    document.getElementById('timer-clock').classList.add('done');
+    document.getElementById('timer-dot').classList.add('done');
+    document.getElementById('timer-fill').classList.add('done');
+    document.getElementById('timer-fase').textContent = 'Leads listos';
+    document.getElementById('timer-nota').textContent = `Completado en ${formatTime(timerSeg)}`;
+  } else {
+    document.getElementById('timer-fase').textContent = 'Búsqueda finalizada';
+    document.getElementById('timer-nota').textContent = `Tiempo: ${formatTime(timerSeg)}`;
+  }
+
+  setTimeout(() => {
+    document.getElementById('timer-bar').classList.remove('show');
+    document.getElementById('timer-clock').classList.remove('done');
+    document.getElementById('timer-dot').classList.remove('done');
+    document.getElementById('timer-fill').classList.remove('done');
+    timerSeg = 0;
+  }, 5000);
+}
+
+function iniciarPolling(numQueries, numResults) {
+  iniciarTimer(numQueries, numResults);
+  const inicio    = Date.now();
+  const maxEspera = 20 * 60 * 1000;
+
+  pollingInterval = setInterval(async () => {
+    if (Date.now() - inicio > maxEspera) {
+      clearInterval(pollingInterval);
+      detenerTimer(false);
+      showStatus('Tiempo de espera agotado — revisa N8N', 'err');
+      return;
+    }
+    try {
+      const recientes = await sbFetch('leads?order=created_at.desc&limit=1');
+      const totalActual = await sbFetch('leads?select=id');
+      if (totalActual.length > leadsAntesDeBusqueda) {
+        detenerTimer(true);
+        await cargarLeads();
+        showStatus(`Leads listos — ${totalActual.length - leadsAntesDeBusqueda} nuevos encontrados`, 'ok');
+        setTimeout(() => goTo('nuevos'), 1500);
+      }
+    } catch(e) { console.error(e); }
+  }, 30000);
+}
+
+// NAVEGACIÓN
 const titles = {
   busqueda: ['Nueva búsqueda',   'configura y lanza tu prospección'],
   nuevos:   ['Leads nuevos',     'sin interacción previa'],
@@ -557,12 +674,12 @@ function removeQuery(i) {
 
 // EJECUTAR
 async function ejecutar() {
-  const ciudad  = document.getElementById('ciudad').value.trim() || 'Madrid';
-  const pais    = document.getElementById('pais').value.trim()   || 'España';
-  const zona    = document.getElementById('zona').value.trim();
-  const num     = parseInt(document.getElementById('num-results').value) || 10;
-  const idiomas = Array.from(document.querySelectorAll('.lang-chip input:checked')).map(c=>c.value);
-  const qs      = queries.filter(q => q.term.trim()).map(q => ({
+  const ciudad   = document.getElementById('ciudad').value.trim() || 'Madrid';
+  const pais     = document.getElementById('pais').value.trim()   || 'España';
+  const zona     = document.getElementById('zona').value.trim();
+  const num      = parseInt(document.getElementById('num-results').value) || 10;
+  const idiomas  = Array.from(document.querySelectorAll('.lang-chip input:checked')).map(c=>c.value);
+  const qs       = queries.filter(q => q.term.trim()).map(q => ({
     sector: q.term.trim(),
     zona:   zona ? `${zona} ${ciudad}` : ciudad
   }));
@@ -570,16 +687,15 @@ async function ejecutar() {
   if (!qs.length) { showStatus('Añade al menos un término de búsqueda','err'); return; }
 
   const payload = {
-    job_id:      `om_${Date.now()}`,
-    timestamp:   new Date().toISOString(),
-    icp:         { pais, ciudad, zona, idiomas, num_results: num },
-    queries:     qs
+    job_id:    `om_${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    icp:       { pais, ciudad, zona, idiomas, num_results: num },
+    queries:   qs
   };
 
   const btn = document.getElementById('btn-run');
   btn.disabled    = true;
   btn.textContent = 'Iniciando...';
-  showStatus(`Enviando ${qs.length} búsqueda${qs.length>1?'s':''} — los leads aparecerán en minutos...`,'wait');
 
   try {
     const res = await fetch(WEBHOOK, {
@@ -587,14 +703,16 @@ async function ejecutar() {
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(payload)
     });
+
     if (res.ok) {
-      showStatus(`Prospección iniciada · ${qs.length} búsqueda${qs.length>1?'s':''} · ${num} resultados cada una`,'ok');
-      setTimeout(cargarLeads, 90000);
+      leadsAntesDeBusqueda = allLeads.length;
+      showStatus(`Prospección iniciada · ${qs.length} búsqueda${qs.length>1?'s':''} · ${num} resultados cada una`, 'wait');
+      iniciarPolling(qs.length, num);
     } else {
-      showStatus('Error al conectar con el sistema — verifica que N8N esté activo','err');
+      showStatus('Error al conectar con el sistema — verifica que N8N esté activo', 'err');
     }
   } catch(e) {
-    showStatus('No se pudo conectar con el sistema','err');
+    showStatus('No se pudo conectar con el sistema', 'err');
   }
 
   btn.disabled    = false;
@@ -765,7 +883,7 @@ function updateBadges() {
   bp.textContent  = pipeline; bp.style.display = pipeline > 0 ? 'inline' : 'none';
 }
 
-// EXPORTAR
+// EXPORTAR CSV
 function exportarCSV(tipo) {
   let leads = tipo === 'pipeline'
     ? allLeads.filter(l => ESTADOS_PIPELINE.includes(l.estado))
