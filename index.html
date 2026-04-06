@@ -596,7 +596,8 @@ function detenerTimer(exito) {
 function iniciarPolling(numQueries, numResults) {
   iniciarTimer(numQueries, numResults);
   const inicio    = Date.now();
-  const maxEspera = 20 * 60 * 1000;
+  const maxEspera = 15 * 60 * 1000;
+  leadsAntesDeBusqueda = allLeads.length;
 
   pollingInterval = setInterval(async () => {
     if (Date.now() - inicio > maxEspera) {
@@ -606,16 +607,17 @@ function iniciarPolling(numQueries, numResults) {
       return;
     }
     try {
-      const recientes = await sbFetch('leads?order=created_at.desc&limit=1');
-      const totalActual = await sbFetch('leads?select=id');
-      if (totalActual.length > leadsAntesDeBusqueda) {
+      const todos = await sbFetch('leads?select=id&order=created_at.desc');
+      if (todos.length > leadsAntesDeBusqueda) {
+        clearInterval(pollingInterval);
         detenerTimer(true);
         await cargarLeads();
-        showStatus(`Leads listos — ${totalActual.length - leadsAntesDeBusqueda} nuevos encontrados`, 'ok');
+        const nuevos = todos.length - leadsAntesDeBusqueda;
+        showStatus(`${nuevos} lead${nuevos > 1 ? 's' : ''} nuevo${nuevos > 1 ? 's' : ''} encontrado${nuevos > 1 ? 's' : ''}`, 'ok');
         setTimeout(() => goTo('nuevos'), 1500);
       }
     } catch(e) { console.error(e); }
-  }, 30000);
+  }, 15000);
 }
 
 // NAVEGACIÓN
