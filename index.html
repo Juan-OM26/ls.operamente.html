@@ -37,13 +37,13 @@
 }
 
 [data-theme="light"] {
-  --bg:   #f4f3ff;
+  --bg:   #eeedf6;
   --s1:   #ffffff;
-  --s2:   #f0effe;
-  --s3:   #e8e5fd;
-  --b1:   rgba(124,106,247,0.12);
-  --b2:   rgba(124,106,247,0.20);
-  --b3:   rgba(124,106,247,0.30);
+  --s2:   #f5f4fb;
+  --s3:   #ebe9f8;
+  --b1:   rgba(0,0,0,0.07);
+  --b2:   rgba(0,0,0,0.12);
+  --b3:   rgba(0,0,0,0.18);
   --tx:   #1a1830;
   --sub:  #4a4870;
   --mut:  #9896b8;
@@ -98,7 +98,20 @@ aside {
 }
 .logo-wrap { padding: 0 20px 24px; border-bottom: 0.5px solid var(--b1); }
 .logo-img { height: 26px; opacity: 0.92; }
-[data-theme="light"] .logo-img { filter: brightness(0.2); }
+/* Sombras suaves en modo claro como el concierge */
+[data-theme="light"] .card,
+[data-theme="light"] .lead-card,
+[data-theme="light"] .k-card,
+[data-theme="light"] .k-col,
+[data-theme="light"] .metric {
+  box-shadow: 0 1px 8px rgba(124,106,247,0.08), 0 0 0 0.5px rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,0.05);
+}
+[data-theme="light"] aside,
+[data-theme="light"] .topbar,
+[data-theme="light"] .run-bar {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
 .logo-sub { font-size:10px; color:var(--mut); letter-spacing:0.14em; text-transform:uppercase; margin-top:6px; }
 
 .nav { padding: 16px 0; flex: 1; }
@@ -700,7 +713,7 @@ select option { background: #1a1d2e; color: #f0effe; }
 <!-- SIDEBAR -->
 <aside>
   <div class="logo-wrap">
-    <img src="https://operamente-github.jdray1.easypanel.host/logo/Operamente.png" alt="Operamente" class="logo-img">
+    <img id="logo-img" src="https://operamente-github.jdray1.easypanel.host/logo/Operamente.png" alt="Operamente" class="logo-img">
     <div class="logo-sub">inteligencia comercial</div>
   </div>
   <nav class="nav">
@@ -977,8 +990,16 @@ function setTheme(t) {
   localStorage.setItem('om_theme', t);
   const icon  = document.getElementById('theme-icon');
   const label = document.getElementById('theme-label');
-  if (t === 'dark') { icon.textContent = '☀'; label.textContent = 'Claro'; }
-  else              { icon.textContent = '☾'; label.textContent = 'Oscuro'; }
+  const logo  = document.getElementById('logo-img');
+  if (t === 'dark') {
+    icon.textContent  = '☀';
+    label.textContent = 'Claro';
+    logo.src = 'https://operamente-github.jdray1.easypanel.host/logo/Operamente.png';
+  } else {
+    icon.textContent  = '☾';
+    label.textContent = 'Oscuro';
+    logo.src = 'https://operamente-github.jdray1.easypanel.host/logo/Operamente-dark.png';
+  }
 }
 
 function toggleTheme() {
