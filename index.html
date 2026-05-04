@@ -31,9 +31,9 @@
   --b1:   rgba(255,255,255,0.07);
   --b2:   rgba(255,255,255,0.13);
   --b3:   rgba(255,255,255,0.20);
-  --tx:   #f0effe;
-  --sub:  #a8a6c8;
-  --mut:  #5a5878;
+  --tx:   #ffffff;
+  --sub:  #d0cef0;
+  --mut:  #8886aa;
 }
 
 [data-theme="light"] {
@@ -342,30 +342,35 @@ select option { background: #1a1d2e; color: #f0effe; }
 .band-range { font-family:'Playfair Display',serif; font-size:22px; margin-bottom:4px; }
 .band-desc  { font-size:11px; color:var(--sub); margin-top:3px; line-height:1.5; }
 
-/* Tooltip ? — fixed positioning para evitar overflow:hidden */
+/* Tooltip ? — pure CSS hover, sin JS */
 .band-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:4px; }
+
+.tip-wrap { position:relative; display:inline-block; }
+
 .band-tip-btn {
   width: 18px; height: 18px;
   border-radius: 50%;
   border: 0.5px solid currentColor;
   background: transparent;
   font-size: 10px;
-  cursor: pointer;
+  cursor: default;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.5;
+  opacity: 0.55;
   transition: opacity 0.15s;
   flex-shrink: 0;
   font-family: 'JetBrains Mono', monospace;
   line-height: 1;
 }
-.band-tip-btn:hover { opacity: 1; }
+.tip-wrap:hover .band-tip-btn { opacity: 1; }
 
-/* Tooltip global — se posiciona con JS en fixed */
-#band-tooltip-global {
+.band-tip-box {
   display: none;
-  position: fixed;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  width: 260px;
   background: var(--s3);
   border: 0.5px solid var(--b2);
   border-radius: 10px;
@@ -374,14 +379,20 @@ select option { background: #1a1d2e; color: #f0effe; }
   color: var(--sub);
   line-height: 1.6;
   z-index: 9999;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  max-width: 280px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  pointer-events: none;
 }
-#band-tooltip-global.show { display:block; animation: fi 0.15s ease; }
-#band-tooltip-global ul { padding-left: 14px; margin-top: 6px; }
-#band-tooltip-global li { margin-bottom: 4px; }
-#band-tooltip-global strong { color: var(--tx); }
-#band-tooltip-global .tip-footer { margin-top:8px; padding-top:8px; border-top:0.5px solid var(--b1); color:var(--mut); font-size:10px; }
+.tip-wrap:hover .band-tip-box { display: block; animation: fi 0.15s ease; }
+.band-tip-box ul { padding-left: 14px; margin-top: 6px; }
+.band-tip-box li { margin-bottom: 4px; }
+.band-tip-box strong { color: var(--tx); }
+.band-tip-box .tip-footer {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 0.5px solid var(--b1);
+  color: var(--mut);
+  font-size: 10px;
+}
 
 /* ── METRICS ──────────────────────────────────────────────── */
 .metric-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
@@ -739,9 +750,6 @@ select option { background: #1a1d2e; color: #f0effe; }
 </head>
 <body>
 
-<!-- Tooltip global para bandas -->
-<div id="band-tooltip-global"></div>
-
 <div class="loading-overlay" id="loading">
   <div class="spinner"></div>
   <div class="loading-text" id="loading-text">Cargando leads...</div>
@@ -878,7 +886,20 @@ select option { background: #1a1d2e; color: #f0effe; }
                   <div class="band-name" style="color:var(--grn);">Prioritario</div>
                   <div class="band-range" style="color:var(--grn);">70–100</div>
                 </div>
-                <button class="band-tip-btn" style="color:var(--grn);" data-tip="priority">?</button>
+                <div class="tip-wrap">
+                  <button class="band-tip-btn" style="color:var(--grn);" data-tip="priority">?</button>
+                  <div class="band-tip-box">
+                    <strong>Criterios — Prioritario</strong>
+                    <ul>
+                      <li>Score total ≥ 70 puntos</li>
+                      <li>Encaje ≥ 25 pts — empresa con equipo y estructura visible</li>
+                      <li>Fricción ≥ 35 pts — proceso de contacto manual claro</li>
+                      <li>Sin CRM activo ni chatbot avanzado</li>
+                      <li>Madurez digital: low o medium</li>
+                    </ul>
+                    <div class="tip-footer">Producto sugerido: Flow o Sinergia</div>
+                  </div>
+                </div>
               </div>
               <div class="band-desc">Sin automatización — contactar hoy</div>
             </div>
@@ -890,7 +911,20 @@ select option { background: #1a1d2e; color: #f0effe; }
                   <div class="band-name" style="color:var(--amb);">Interesante</div>
                   <div class="band-range" style="color:var(--amb);">50–69</div>
                 </div>
-                <button class="band-tip-btn" style="color:var(--amb);" data-tip="good">?</button>
+                <div class="tip-wrap">
+                  <button class="band-tip-btn" style="color:var(--amb);" data-tip="good">?</button>
+                  <div class="band-tip-box">
+                    <strong>Criterios — Interesante</strong>
+                    <ul>
+                      <li>Score total entre 50 y 69 puntos</li>
+                      <li>Encaje ≥ 15 pts — presencia digital real</li>
+                      <li>Fricción parcial — algún proceso manual detectado</li>
+                      <li>Puede tener WhatsApp o formularios básicos</li>
+                      <li>Madurez digital: low</li>
+                    </ul>
+                    <div class="tip-footer">Producto sugerido: Impulso</div>
+                  </div>
+                </div>
               </div>
               <div class="band-desc">Fricción parcial — evaluar y nutrir</div>
             </div>
@@ -902,7 +936,19 @@ select option { background: #1a1d2e; color: #f0effe; }
                   <div class="band-name" style="color:var(--mut);">Descartar</div>
                   <div class="band-range" style="color:var(--mut);">0–49</div>
                 </div>
-                <button class="band-tip-btn" style="color:var(--mut);" data-tip="low">?</button>
+                <div class="tip-wrap">
+                  <button class="band-tip-btn" style="color:var(--mut);" data-tip="low">?</button>
+                  <div class="band-tip-box">
+                    <strong>Motivos de descarte</strong>
+                    <ul>
+                      <li>Madurez alta — CRM + chatbot + reservas activos</li>
+                      <li>Encaje muy bajo — sin estructura de equipo visible</li>
+                      <li>Score total por debajo de 50 puntos</li>
+                      <li>Autónomo sin operación compleja</li>
+                    </ul>
+                    <div class="tip-footer">No se guardan en la base de datos</div>
+                  </div>
+                </div>
               </div>
               <div class="band-desc">Ya automatizado o no encaja</div>
             </div>
@@ -1047,87 +1093,6 @@ setTheme(savedTheme);
 
 renderQueries();
 cargarLeads();
-
-// ── TOOLTIP BANDS — posicionamiento fixed ────────────────
-const TIPS = {
-  priority: {
-    title: 'Criterios — Prioritario',
-    items: [
-      'Score total ≥ 70 puntos',
-      'Encaje ≥ 25 pts — empresa con equipo y estructura visible',
-      'Fricción ≥ 35 pts — proceso de contacto manual claro',
-      'Sin CRM activo ni chatbot avanzado',
-      'Madurez digital: low o medium'
-    ],
-    footer: 'Producto sugerido: Flow o Sinergia'
-  },
-  good: {
-    title: 'Criterios — Interesante',
-    items: [
-      'Score total entre 50 y 69 puntos',
-      'Encaje ≥ 15 pts — presencia digital real',
-      'Tiene alguna fricción pero no completamente manual',
-      'Puede tener WhatsApp o formularios básicos',
-      'Madurez digital: low'
-    ],
-    footer: 'Producto sugerido: Impulso'
-  },
-  low: {
-    title: 'Motivos de descarte',
-    items: [
-      'Madurez alta — CRM + chatbot + reservas activos',
-      'Encaje muy bajo — sin estructura de equipo',
-      'Score total por debajo de 50 puntos',
-      'Autónomo sin operación compleja'
-    ],
-    footer: 'No se guardan en la base de datos'
-  }
-};
-
-function showTip(btn, tipo) {
-  const tip   = document.getElementById('band-tooltip-global');
-  const datos = TIPS[tipo];
-
-  // Construye contenido
-  tip.innerHTML = `
-    <strong>${datos.title}</strong>
-    <ul>${datos.items.map(i => `<li>${i}</li>`).join('')}</ul>
-    <div class="tip-footer">${datos.footer}</div>
-  `;
-
-  // Posiciona
-  const rect   = btn.getBoundingClientRect();
-  const tipW   = 280;
-  const margin = 8;
-
-  let left = rect.left + rect.width / 2 - tipW / 2;
-  left = Math.max(margin, Math.min(left, window.innerWidth - tipW - margin));
-
-  tip.style.left    = left + 'px';
-  tip.style.width   = tipW + 'px';
-  tip.style.top     = '';
-  tip.style.display = 'block';
-
-  const tipH = tip.offsetHeight;
-  const top  = rect.top - tipH - margin;
-  tip.style.top = (top < margin ? rect.bottom + margin : top) + 'px';
-
-  tip.classList.add('show');
-}
-
-function hideTip() {
-  const tip = document.getElementById('band-tooltip-global');
-  tip.classList.remove('show');
-}
-
-// Asigna eventos hover a los botones ? al cargar
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.band-tip-btn').forEach(btn => {
-    const tipo = btn.getAttribute('data-tip');
-    btn.addEventListener('mouseenter', () => showTip(btn, tipo));
-    btn.addEventListener('mouseleave', hideTip);
-  });
-});
 
 // ── TEMA ─────────────────────────────────────────────────
 function setTheme(t) {
