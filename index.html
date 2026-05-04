@@ -376,7 +376,6 @@ select option { background: #1a1d2e; color: #f0effe; }
   z-index: 9999;
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
   max-width: 280px;
-  pointer-events: none;
 }
 #band-tooltip-global.show { display:block; animation: fi 0.15s ease; }
 #band-tooltip-global ul { padding-left: 14px; margin-top: 6px; }
@@ -879,7 +878,7 @@ select option { background: #1a1d2e; color: #f0effe; }
                   <div class="band-name" style="color:var(--grn);">Prioritario</div>
                   <div class="band-range" style="color:var(--grn);">70–100</div>
                 </div>
-                <button class="band-tip-btn" style="color:var(--grn);" onclick="showTip(event,'priority')">?</button>
+                <button class="band-tip-btn" style="color:var(--grn);" data-tip="priority">?</button>
               </div>
               <div class="band-desc">Sin automatización — contactar hoy</div>
             </div>
@@ -891,7 +890,7 @@ select option { background: #1a1d2e; color: #f0effe; }
                   <div class="band-name" style="color:var(--amb);">Interesante</div>
                   <div class="band-range" style="color:var(--amb);">50–69</div>
                 </div>
-                <button class="band-tip-btn" style="color:var(--amb);" onclick="showTip(event,'good')">?</button>
+                <button class="band-tip-btn" style="color:var(--amb);" data-tip="good">?</button>
               </div>
               <div class="band-desc">Fricción parcial — evaluar y nutrir</div>
             </div>
@@ -903,7 +902,7 @@ select option { background: #1a1d2e; color: #f0effe; }
                   <div class="band-name" style="color:var(--mut);">Descartar</div>
                   <div class="band-range" style="color:var(--mut);">0–49</div>
                 </div>
-                <button class="band-tip-btn" style="color:var(--mut);" onclick="showTip(event,'low')">?</button>
+                <button class="band-tip-btn" style="color:var(--mut);" data-tip="low">?</button>
               </div>
               <div class="band-desc">Ya automatizado o no encaja</div>
             </div>
@@ -1085,19 +1084,9 @@ const TIPS = {
   }
 };
 
-let tipActivo = null;
-
-function showTip(e, tipo) {
-  e.stopPropagation();
+function showTip(btn, tipo) {
   const tip   = document.getElementById('band-tooltip-global');
   const datos = TIPS[tipo];
-
-  // Si ya está mostrando este mismo, ciérralo
-  if (tipActivo === tipo && tip.classList.contains('show')) {
-    tip.classList.remove('show');
-    tipActivo = null;
-    return;
-  }
 
   // Construye contenido
   tip.innerHTML = `
@@ -1106,46 +1095,38 @@ function showTip(e, tipo) {
     <div class="tip-footer">${datos.footer}</div>
   `;
 
-  // Posiciona encima del botón
-  const btn    = e.currentTarget;
+  // Posiciona
   const rect   = btn.getBoundingClientRect();
   const tipW   = 280;
   const margin = 8;
 
-  // Calcula left: centrado en el botón, sin salirse de la pantalla
   let left = rect.left + rect.width / 2 - tipW / 2;
   left = Math.max(margin, Math.min(left, window.innerWidth - tipW - margin));
 
-  // Muestra arriba del botón
-  tip.style.left   = left + 'px';
-  tip.style.width  = tipW + 'px';
-  tip.style.top    = ''; // reset
-  tip.style.bottom = ''; // reset
-
-  tip.classList.remove('show');
+  tip.style.left    = left + 'px';
+  tip.style.width   = tipW + 'px';
+  tip.style.top     = '';
   tip.style.display = 'block';
 
   const tipH = tip.offsetHeight;
   const top  = rect.top - tipH - margin;
-
-  if (top < margin) {
-    // No cabe arriba → muestra abajo
-    tip.style.top = (rect.bottom + margin) + 'px';
-  } else {
-    tip.style.top = top + 'px';
-  }
+  tip.style.top = (top < margin ? rect.bottom + margin : top) + 'px';
 
   tip.classList.add('show');
-  tipActivo = tipo;
 }
 
-// Cierra al hacer click fuera
-document.addEventListener('click', e => {
-  if (!e.target.classList.contains('band-tip-btn')) {
-    const tip = document.getElementById('band-tooltip-global');
-    tip.classList.remove('show');
-    tipActivo = null;
-  }
+function hideTip() {
+  const tip = document.getElementById('band-tooltip-global');
+  tip.classList.remove('show');
+}
+
+// Asigna eventos hover a los botones ? al cargar
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.band-tip-btn').forEach(btn => {
+    const tipo = btn.getAttribute('data-tip');
+    btn.addEventListener('mouseenter', () => showTip(btn, tipo));
+    btn.addEventListener('mouseleave', hideTip);
+  });
 });
 
 // ── TEMA ─────────────────────────────────────────────────
