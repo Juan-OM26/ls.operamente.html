@@ -331,7 +331,7 @@ select option { background: #1a1d2e; color: #f0effe; }
 .lang-chip input { display:none; }
 .lang-chip.on { background:var(--ac2); border-color:var(--acc); color:var(--acc); }
 
-/* ── BANDS — CAMBIO 3: nuevo scoring ──────────────────── */
+/* ── BANDS ──────────────────────────────────────────────── */
 .bands { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 .band { border-radius:10px; padding:14px 16px; border:0.5px solid var(--b1); position:relative; }
 .band::before { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; border-radius:0 0 10px 10px; }
@@ -341,12 +341,8 @@ select option { background: #1a1d2e; color: #f0effe; }
 .band-name  { font-size:10px; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:2px; }
 .band-range { font-family:'Playfair Display',serif; font-size:22px; margin-bottom:4px; }
 .band-desc  { font-size:11px; color:var(--sub); margin-top:3px; line-height:1.5; }
-
-/* Tooltip ? — pure CSS hover, sin JS */
 .band-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:4px; }
-
 .tip-wrap { position:relative; display:inline-block; }
-
 .band-tip-btn {
   width: 18px; height: 18px;
   border-radius: 50%;
@@ -364,7 +360,6 @@ select option { background: #1a1d2e; color: #f0effe; }
   line-height: 1;
 }
 .tip-wrap:hover .band-tip-btn { opacity: 1; }
-
 .band-tip-box {
   display: none;
   position: absolute;
@@ -573,14 +568,30 @@ select option { background: #1a1d2e; color: #f0effe; }
 .k-title  { font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; }
 .k-count  { font-size:11px; color:var(--mut); background:var(--s1); border:0.5px solid var(--b1); padding:1px 8px; border-radius:10px; }
 .k-body   { padding:10px; display:flex; flex-direction:column; gap:7px; flex:1; }
-.k-card   { background:var(--s1); border:0.5px solid var(--b1); border-radius:8px; padding:12px 13px; transition:border-color 0.15s; animation:fi 0.2s ease; }
-.k-card:hover { border-color: var(--b2); }
+.k-card   {
+  background: var(--s1);
+  border: 0.5px solid var(--b1);
+  border-radius: 8px;
+  padding: 12px 13px;
+  transition: border-color 0.15s, transform 0.15s;
+  animation: fi 0.2s ease;
+  cursor: pointer;
+}
+.k-card:hover { border-color: var(--acc); transform: translateY(-1px); }
 .k-name   { font-family:'Playfair Display',serif; font-size:13px; font-weight:500; margin-bottom:3px; color:var(--tx); line-height:1.3; }
 .k-meta   { font-size:10px; color:var(--sub); margin-bottom:6px; line-height:1.5; }
 .k-msg    { font-size:11px; color:var(--mut); font-style:italic; border-left:2px solid var(--b2); padding-left:8px; line-height:1.4; margin-bottom:7px; }
 .k-foot   { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:6px; }
 .k-score  { font-family:'Playfair Display',serif; font-size:13px; font-weight:500; }
 .k-empty  { padding:24px 14px; text-align:center; color:var(--mut); font-size:11px; }
+.k-notas-badge {
+  font-size: 9px;
+  color: var(--acc);
+  background: var(--ac2);
+  border-radius: 8px;
+  padding: 1px 6px;
+  margin-left: 4px;
+}
 
 /* ── BUTTONS ──────────────────────────────────────────────── */
 .btn-copy {
@@ -737,6 +748,189 @@ select option { background: #1a1d2e; color: #f0effe; }
 .empty-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--sub); margin-bottom:6px; }
 .empty-sub { font-size:12px; color:var(--mut); line-height:1.7; }
 
+/* ── MODAL ──────────────────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10,11,20,0.85);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+[data-theme="light"] .modal-overlay { background: rgba(200,198,230,0.75); }
+.modal-overlay.show { display: flex; animation: fi 0.18s ease; }
+
+.modal {
+  background: var(--s1);
+  border: 0.5px solid var(--b2);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 88vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+}
+
+.modal-header {
+  padding: 20px 22px 16px;
+  border-bottom: 0.5px solid var(--b1);
+  position: sticky;
+  top: 0;
+  background: var(--s1);
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--tx);
+  line-height: 1.3;
+}
+.modal-sub {
+  font-size: 11px;
+  color: var(--mut);
+  margin-top: 3px;
+}
+.modal-close {
+  background: none;
+  border: 0.5px solid var(--b1);
+  border-radius: 8px;
+  color: var(--mut);
+  cursor: pointer;
+  width: 30px; height: 30px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.modal-close:hover { border-color: var(--red); color: var(--red); }
+
+.modal-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 18px; }
+
+.modal-section-title {
+  font-size: 10px;
+  color: var(--mut);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.modal-section-title::after { content:''; flex:1; height:0.5px; background:var(--b1); }
+
+.modal-score-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.modal-score-box {
+  background: var(--s2);
+  border: 0.5px solid var(--b1);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: center;
+}
+.modal-score-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 500;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.modal-score-lbl { font-size: 10px; color: var(--mut); margin-top: 2px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.modal-signals { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.modal-contact-row { display: flex; flex-direction: column; gap: 6px; }
+.modal-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--sub);
+}
+.modal-contact-item a { color: var(--acc); text-decoration: none; }
+.modal-contact-item a:hover { text-decoration: underline; }
+
+/* Notas */
+.notas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.nota-item {
+  background: var(--s2);
+  border: 0.5px solid var(--b1);
+  border-radius: 8px;
+  padding: 10px 12px;
+  animation: fi 0.15s ease;
+}
+.nota-fecha {
+  font-size: 10px;
+  color: var(--mut);
+  margin-bottom: 4px;
+}
+.nota-texto {
+  font-size: 12px;
+  color: var(--sub);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.nota-input-wrap { display: flex; flex-direction: column; gap: 8px; }
+.nota-textarea {
+  background: var(--s2);
+  border: 0.5px solid var(--b2);
+  border-radius: 8px;
+  color: var(--tx);
+  padding: 10px 13px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  outline: none;
+  resize: vertical;
+  min-height: 72px;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.nota-textarea:focus { border-color: var(--acc); }
+.nota-textarea::placeholder { color: var(--mut); }
+.btn-nota {
+  background: var(--grad);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 9px 18px;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: opacity 0.15s;
+}
+.btn-nota:hover { opacity: 0.88; }
+.btn-nota:disabled { opacity: 0.4; cursor: not-allowed; }
+.notas-empty {
+  font-size: 12px;
+  color: var(--mut);
+  text-align: center;
+  padding: 16px 0;
+}
+
 /* ── RESPONSIVE ──────────────────────────────────────────── */
 @media(max-width:768px){
   .shell { grid-template-columns:1fr; }
@@ -749,6 +943,58 @@ select option { background: #1a1d2e; color: #f0effe; }
 </style>
 </head>
 <body>
+
+<!-- MODAL DETALLE LEAD -->
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-title">—</div>
+        <div class="modal-sub" id="modal-sub">—</div>
+      </div>
+      <button class="modal-close" onclick="cerrarModalBtn()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Contacto -->
+      <div id="modal-contacto-wrap">
+        <div class="modal-section-title">contacto</div>
+        <div class="modal-contact-row" id="modal-contacto"></div>
+      </div>
+
+      <!-- Scoring -->
+      <div>
+        <div class="modal-section-title">scoring</div>
+        <div class="modal-score-row">
+          <div class="modal-score-box">
+            <div class="modal-score-val" id="modal-fit">—</div>
+            <div class="modal-score-lbl">Encaje / 40</div>
+          </div>
+          <div class="modal-score-box">
+            <div class="modal-score-val" id="modal-opp">—</div>
+            <div class="modal-score-lbl">Fricción / 60</div>
+          </div>
+          <div class="modal-score-box">
+            <div class="modal-score-val" id="modal-total">—</div>
+            <div class="modal-score-lbl">Total / 100</div>
+          </div>
+        </div>
+        <div class="modal-signals" id="modal-signals" style="margin-top:10px;"></div>
+      </div>
+
+      <!-- Notas -->
+      <div>
+        <div class="modal-section-title">notas</div>
+        <div class="notas-list" id="notas-list"></div>
+        <div class="nota-input-wrap">
+          <textarea class="nota-textarea" id="nota-input" placeholder="Añade una nota..."></textarea>
+          <button class="btn-nota" id="btn-nota" onclick="guardarNota()">Guardar nota</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <div class="loading-overlay" id="loading">
   <div class="spinner"></div>
@@ -870,7 +1116,6 @@ select option { background: #1a1d2e; color: #f0effe; }
         </div>
       </div>
 
-      <!-- CAMBIO 3: Bandas actualizadas al nuevo scoring + tooltips con ? -->
       <div>
         <div class="sec-label">cómo clasificamos los resultados</div>
         <div class="card">
@@ -878,8 +1123,6 @@ select option { background: #1a1d2e; color: #f0effe; }
             Cada empresa recibe un score de 0 a 100 compuesto por dos dimensiones: <strong style="color:var(--tx);">encaje</strong> (quién es la empresa) y <strong style="color:var(--tx);">fricción</strong> (cuánta operación manual tiene). Más fricción sin automatizar = mayor oportunidad para Operamente.
           </div>
           <div class="bands">
-
-            <!-- PRIORITARIO -->
             <div class="band priority-band" style="background:var(--gn2);border-color:rgba(0,212,170,0.2);">
               <div class="band-header">
                 <div>
@@ -887,7 +1130,7 @@ select option { background: #1a1d2e; color: #f0effe; }
                   <div class="band-range" style="color:var(--grn);">70–100</div>
                 </div>
                 <div class="tip-wrap">
-                  <button class="band-tip-btn" style="color:var(--grn);" data-tip="priority">?</button>
+                  <button class="band-tip-btn" style="color:var(--grn);">?</button>
                   <div class="band-tip-box">
                     <strong>Criterios — Prioritario</strong>
                     <ul>
@@ -903,8 +1146,6 @@ select option { background: #1a1d2e; color: #f0effe; }
               </div>
               <div class="band-desc">Sin automatización — contactar hoy</div>
             </div>
-
-            <!-- INTERESANTE -->
             <div class="band good-band" style="background:var(--am2);border-color:rgba(245,190,90,0.2);">
               <div class="band-header">
                 <div>
@@ -912,7 +1153,7 @@ select option { background: #1a1d2e; color: #f0effe; }
                   <div class="band-range" style="color:var(--amb);">50–69</div>
                 </div>
                 <div class="tip-wrap">
-                  <button class="band-tip-btn" style="color:var(--amb);" data-tip="good">?</button>
+                  <button class="band-tip-btn" style="color:var(--amb);">?</button>
                   <div class="band-tip-box">
                     <strong>Criterios — Interesante</strong>
                     <ul>
@@ -928,8 +1169,6 @@ select option { background: #1a1d2e; color: #f0effe; }
               </div>
               <div class="band-desc">Fricción parcial — evaluar y nutrir</div>
             </div>
-
-            <!-- DESCARTAR -->
             <div class="band low-band">
               <div class="band-header">
                 <div>
@@ -937,7 +1176,7 @@ select option { background: #1a1d2e; color: #f0effe; }
                   <div class="band-range" style="color:var(--mut);">0–49</div>
                 </div>
                 <div class="tip-wrap">
-                  <button class="band-tip-btn" style="color:var(--mut);" data-tip="low">?</button>
+                  <button class="band-tip-btn" style="color:var(--mut);">?</button>
                   <div class="band-tip-box">
                     <strong>Motivos de descarte</strong>
                     <ul>
@@ -952,7 +1191,6 @@ select option { background: #1a1d2e; color: #f0effe; }
               </div>
               <div class="band-desc">Ya automatizado o no encaja</div>
             </div>
-
           </div>
         </div>
       </div>
@@ -979,7 +1217,7 @@ select option { background: #1a1d2e; color: #f0effe; }
     <div class="panel" id="panel-pipeline">
       <div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-          <div style="font-size:12px;color:var(--sub);">Leads en proceso — cambia el estado desde cada tarjeta</div>
+          <div style="font-size:12px;color:var(--sub);">Leads en proceso — haz clic en una tarjeta para ver el detalle y añadir notas</div>
           <button class="btn-export" onclick="exportarCSV('pipeline')">↓ exportar pipeline</button>
         </div>
         <div class="kanban" id="kanban-board"></div>
@@ -1065,7 +1303,6 @@ const ESTADO_COLORS    = {
   'Descartado':       'var(--mut)'
 };
 
-// CAMBIO 2: Fases del timer sin mencionar Azure ni Google
 const FASES = [
   { hasta:15,  texto:'Buscando empresas en la zona...' },
   { hasta:45,  texto:'Accediendo a webs y detectando señales...' },
@@ -1075,9 +1312,9 @@ const FASES = [
   { hasta:999, texto:'Finalizando y sincronizando...' }
 ];
 
-let allLeads     = [];
-let filtroNuevos = 'all';
-let queries      = [{ term: '' }];
+let allLeads        = [];
+let filtroNuevos    = 'all';
+let queries         = [{ term: '' }];
 let timerInterval   = null;
 let pollingInterval = null;
 let timerSeg        = 0;
@@ -1090,7 +1327,6 @@ document.getElementById('sidebar-date').textContent = now.toLocaleDateString('es
 
 const savedTheme = localStorage.getItem('om_theme') || 'dark';
 setTheme(savedTheme);
-
 renderQueries();
 cargarLeads();
 
@@ -1377,10 +1613,10 @@ function renderNuevos() {
       <div>
         <div class="lead-name">${l.empresa||'—'}</div>
         <div class="lead-meta">
-          ${l.zona     ?`<span>◎ ${l.zona}</span>`:''}
-          ${l.telefono ?`<span>↯ ${l.telefono}</span>`:''}
-          ${l.email    ?`<span>@ ${l.email}</span>`:''}
-          ${l.web      ?`<a href="${l.web.startsWith('http')?l.web:'https://'+l.web}" target="_blank" style="color:var(--acc);text-decoration:none;">↗ ${l.web}</a>`:''}
+          ${l.zona            ?`<span>◎ ${l.zona}</span>`:''}
+          ${l.telefono        ?`<span>↯ ${l.telefono}</span>`:''}
+          ${l.email           ?`<span>@ ${l.email}</span>`:''}
+          ${l.web             ?`<a href="${l.web.startsWith('http')?l.web:'https://'+l.web}" target="_blank" style="color:var(--acc);text-decoration:none;">↗ ${l.web}</a>`:''}
           ${l.contacto_nombre ?`<span style="color:var(--tx);border-left:1px solid var(--b2);padding-left:10px;margin-left:2px;">👤 ${l.contacto_nombre}</span>`:''}
           ${l.contacto_email  ?`<a href="mailto:${l.contacto_email}" style="color:var(--pink);text-decoration:none;">✉ ${l.contacto_email}</a>`:''}
         </div>
@@ -1420,25 +1656,32 @@ function renderKanban() {
       </div>
       <div class="k-body">
         ${cards.length ? cards.map(l => {
-          const bc  = l.banda==='Priority'?'tag-grn':l.banda==='Good'?'tag-amb':'tag-mut';
-          const sc  = l.banda==='Priority'?'var(--grn)':l.banda==='Good'?'var(--amb)':'var(--mut)';
-          const msg = (l.primer_mensaje||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+          const bc      = l.banda==='Priority'?'tag-grn':l.banda==='Good'?'tag-amb':'tag-mut';
+          const sc      = l.banda==='Priority'?'var(--grn)':l.banda==='Good'?'var(--amb)':'var(--mut)';
+          const notas   = Array.isArray(l.notas) ? l.notas : [];
+          const nCount  = notas.length;
           return `
-          <div class="k-card">
-            <div class="k-name">${l.empresa||'—'}</div>
-            <div class="k-meta">${l.zona?`◎ ${l.zona}`:''} ${l.sector?`· ${l.sector}`:''} ${l.telefono?`<br>↯ ${l.telefono}`:''}</div>
-            ${l.primer_mensaje&&estado!=='Descartado'?`<div class="k-msg">${l.primer_mensaje.substring(0,90)}${l.primer_mensaje.length>90?'...':''}</div>`:''}
+          <div class="k-card" onclick="abrirModal('${l.id}')">
+            <div class="k-name">
+              ${l.empresa||'—'}
+              ${nCount ? `<span class="k-notas-badge">✎ ${nCount}</span>` : ''}
+            </div>
+            <div class="k-meta">
+              ${l.zona   ? `◎ ${l.zona}` : ''}
+              ${l.sector ? ` · ${l.sector}` : ''}
+              ${l.telefono ? `<br>↯ ${l.telefono}` : ''}
+            </div>
+            ${l.primer_mensaje&&estado!=='Descartado'?`<div class="k-msg">${l.primer_mensaje.substring(0,80)}${l.primer_mensaje.length>80?'...':''}</div>`:''}
             <div class="k-foot">
               <div class="lead-tags">
                 <span class="tag ${bc}" style="font-size:9px;">${l.banda}</span>
                 ${l.producto_recomendado&&l.producto_recomendado!=='Descartar'?`<span class="tag tag-grad" style="font-size:9px;">${l.producto_recomendado}</span>`:''}
               </div>
-              <div style="display:flex;align-items:center;gap:6px;">
-                ${l.primer_mensaje&&estado!=='Descartado'?`<button class="btn-copy" style="font-size:9px;padding:2px 7px;" onclick="copiar(event,'${msg}',this)">copiar</button>`:''}
-                <span class="k-score" style="color:${sc};">${l.total_score||0}</span>
-              </div>
+              <span class="k-score" style="color:${sc};">${l.total_score||0}</span>
             </div>
-            <select class="estado-sel" style="width:100%;font-size:11px;margin-top:8px;" onchange="actualizarEstado('${l.id}',this.value)">
+            <select class="estado-sel" style="width:100%;font-size:11px;margin-top:8px;"
+              onclick="event.stopPropagation()"
+              onchange="event.stopPropagation();actualizarEstado('${l.id}',this.value)">
               ${['Nuevo','Contactado','En conversación','Reunión agendada','Cerrado','Descartado'].map(e=>`<option ${l.estado===e?'selected':''}>${e}</option>`).join('')}
             </select>
           </div>`;
@@ -1447,6 +1690,109 @@ function renderKanban() {
     </div>`;
   }).join('');
 }
+
+// ── MODAL ─────────────────────────────────────────────────
+let modalLeadId = null;
+
+function abrirModal(id) {
+  const l = allLeads.find(x => x.id === id);
+  if (!l) return;
+  modalLeadId = id;
+
+  // Header
+  document.getElementById('modal-title').textContent = l.empresa || '—';
+  document.getElementById('modal-sub').textContent =
+    [l.sector, l.zona, l.automation_maturity ? `madurez: ${l.automation_maturity}` : '']
+    .filter(Boolean).join(' · ');
+
+  // Contacto
+  const filas = [
+    l.telefono        ? `<div class="modal-contact-item"><span>↯</span><a href="tel:${l.telefono}">${l.telefono}</a></div>` : '',
+    l.contacto_nombre ? `<div class="modal-contact-item"><span>👤</span><span>${l.contacto_nombre}</span></div>` : '',
+    l.contacto_email  ? `<div class="modal-contact-item"><span>✉</span><a href="mailto:${l.contacto_email}">${l.contacto_email}</a></div>` : '',
+    l.web             ? `<div class="modal-contact-item"><span>↗</span><a href="${l.web.startsWith('http')?l.web:'https://'+l.web}" target="_blank">${l.web}</a></div>` : '',
+  ].filter(Boolean).join('');
+  document.getElementById('modal-contacto').innerHTML =
+    filas || '<div class="notas-empty">Sin datos de contacto</div>';
+
+  // Scoring
+  document.getElementById('modal-fit').textContent   = l.fit_score         ?? '—';
+  document.getElementById('modal-opp').textContent   = l.opportunity_score ?? '—';
+  document.getElementById('modal-total').textContent = l.total_score        ?? '—';
+
+  // Señales
+  const señales = [
+    ...(l.fit_detalle || '').split(', '),
+    ...(l.opp_detalle || '').split(', ')
+  ].filter(Boolean);
+  document.getElementById('modal-signals').innerHTML = señales.map(s =>
+    `<span class="tag tag-mut">${s.replace(/_/g,' ')}</span>`
+  ).join('');
+
+  // Notas
+  renderNotas(l.notas || []);
+  document.getElementById('nota-input').value = '';
+
+  document.getElementById('modal-overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalBtn() {
+  document.getElementById('modal-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+  modalLeadId = null;
+}
+
+function cerrarModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) cerrarModalBtn();
+}
+
+function renderNotas(notas) {
+  const el = document.getElementById('notas-list');
+  if (!notas || !notas.length) {
+    el.innerHTML = '<div class="notas-empty">Sin notas todavía</div>';
+    return;
+  }
+  el.innerHTML = [...notas].reverse().map(n => `
+    <div class="nota-item">
+      <div class="nota-fecha">${new Date(n.fecha).toLocaleString('es-ES',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+      <div class="nota-texto">${n.texto}</div>
+    </div>
+  `).join('');
+}
+
+async function guardarNota() {
+  const texto = document.getElementById('nota-input').value.trim();
+  if (!texto || !modalLeadId) return;
+
+  const btn = document.getElementById('btn-nota');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+
+  const l = allLeads.find(x => x.id === modalLeadId);
+  const notasActuales = Array.isArray(l.notas) ? l.notas : [];
+  const nuevaNota  = { fecha: new Date().toISOString(), texto };
+  const notasNuevas = [...notasActuales, nuevaNota];
+
+  try {
+    await sbFetch(`leads?id=eq.${modalLeadId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ notas: notasNuevas })
+    });
+    l.notas = notasNuevas;
+    renderNotas(notasNuevas);
+    renderKanban(); // actualiza badge de notas en la tarjeta
+    document.getElementById('nota-input').value = '';
+  } catch(e) {
+    console.error(e);
+  }
+
+  btn.disabled = false; btn.textContent = 'Guardar nota';
+}
+
+// Cerrar modal con Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && modalLeadId) cerrarModalBtn();
+});
 
 // ── MÉTRICAS ─────────────────────────────────────────────
 function renderMetricas() {
@@ -1500,7 +1846,7 @@ function updateBadges() {
 function exportarCSV(tipo) {
   let leads = tipo==='pipeline' ? allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado)) : allLeads;
   if (!leads.length) { showStatus('No hay leads para exportar','err'); return; }
-  const cols = ['empresa','sector','zona','telefono','email','web','total_score','banda','producto_recomendado','razon_cuenta','primer_mensaje','estado','automation_maturity','tiene_chatbot','tiene_reservas','cta_manual','es_franquicia','fuente','fecha'];
+  const cols = ['empresa','sector','zona','telefono','email','web','contacto_nombre','contacto_email','total_score','banda','producto_recomendado','razon_cuenta','primer_mensaje','estado','automation_maturity','tiene_chatbot','tiene_reservas','cta_manual','es_franquicia','fuente','fecha'];
   const rows = leads.map(l => cols.map(c=>`"${(l[c]||'').toString().replace(/"/g,'""')}"`).join(','));
   const csv  = '\uFEFF' + [cols.join(','),...rows].join('\n');
   const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
