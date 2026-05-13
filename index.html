@@ -305,13 +305,14 @@ select option { background:#1a1d2e; color:#f0effe; }
 }
 .score-why-wrap:hover .score-why-btn { opacity: 1; }
 
-/* Tooltip — posicionado desde el wrap, ancho fijo, centrado */
+/* Tooltip — posicionado a la derecha del ? */
 .score-why-box {
   display: none;
   position: absolute;
   top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
+  right: 0;
+  left: auto;
+  transform: none;
   width: 300px;
   background: var(--s3);
   border: 0.5px solid var(--b2);
