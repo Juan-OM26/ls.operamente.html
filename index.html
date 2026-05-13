@@ -267,7 +267,7 @@ select option { background:#1a1d2e; color:#f0effe; }
 .modal-close { background:none; border:0.5px solid var(--b1); border-radius:8px; color:var(--mut); cursor:pointer; width:30px; height:30px; font-size:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.15s; }
 .modal-close:hover { border-color:var(--red); color:var(--red); }
 .modal-body { padding:20px 22px; display:flex; flex-direction:column; gap:18px; }
-.modal-section-title { font-size:10px; color:var(--mut); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:10px; position:relative; overflow:visible; }
+.modal-section-title { font-size:10px; color:var(--mut); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
 .modal-section-title::after { content:''; flex:1; height:0.5px; background:var(--b1); }
 
 /* Scoring con tooltip ? — igual que band-tip-box */
@@ -277,37 +277,57 @@ select option { background:#1a1d2e; color:#f0effe; }
 .modal-score-val { font-family:'Playfair Display',serif; font-size:24px; font-weight:500; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .modal-score-lbl { font-size:10px; color:var(--mut); margin-top:2px; letter-spacing:0.08em; text-transform:uppercase; }
 
-/* Botón ? — va inline junto al título "scoring" */
-.score-why-wrap { position:relative; display:inline-flex; align-items:center; }
+/* Botón ? junto al título scoring */
+.score-why-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
 .score-why-btn {
-  width:16px; height:16px; border-radius:50%; border:0.5px solid var(--mut);
-  background:transparent; color:var(--mut); font-size:9px; cursor:default;
-  display:flex; align-items:center; justify-content:center;
-  opacity:0.6; transition:opacity 0.15s; font-family:'JetBrains Mono',monospace;
-  margin-left:6px; flex-shrink:0;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 0.5px solid var(--mut);
+  background: transparent;
+  color: var(--mut);
+  font-size: 9px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1;
+  /* Resetear herencia del section-title */
+  text-transform: none;
+  letter-spacing: 0;
 }
-.score-why-wrap:hover .score-why-btn { opacity:1; }
+.score-why-wrap:hover .score-why-btn { opacity: 1; }
 
-/* Tooltip — aparece debajo del título, centrado en el modal */
+/* Tooltip — posicionado desde el wrap, ancho fijo, centrado */
 .score-why-box {
-  display:none;
-  position:absolute;
-  top:calc(100% + 6px);
-  left:0;
-  right:0;
-  width:100%;
-  background:var(--s3);
-  border:0.5px solid var(--b2);
-  border-radius:10px;
-  padding:14px 16px;
-  font-size:11px;
-  color:var(--sub);
-  line-height:1.6;
-  z-index:9999;
-  box-shadow:0 8px 32px rgba(0,0,0,0.5);
-  pointer-events:none;
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  background: var(--s3);
+  border: 0.5px solid var(--b2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  z-index: 9999;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  pointer-events: none;
+  /* Resetear herencia del section-title */
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+  color: var(--sub);
+  line-height: 1.6;
 }
-.score-why-wrap:hover .score-why-box { display:block; animation:fi 0.15s ease; }
+.score-why-wrap:hover .score-why-box { display: block; animation: fi 0.15s ease; }
 
 .swo-section { margin-bottom:8px; }
 .swo-title { font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--mut); margin-bottom:5px; display:flex; align-items:center; justify-content:space-between; }
