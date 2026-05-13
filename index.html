@@ -270,24 +270,51 @@ select option { background:#1a1d2e; color:#f0effe; }
 .modal-section-title { font-size:10px; color:var(--mut); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
 .modal-section-title::after { content:''; flex:1; height:0.5px; background:var(--b1); }
 
-/* Scoring con overlay ? */
+/* Scoring con tooltip ? — igual que band-tip-box */
 .modal-score-wrap { position:relative; }
 .modal-score-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 .modal-score-box { background:var(--s2); border:0.5px solid var(--b1); border-radius:10px; padding:12px 14px; text-align:center; }
 .modal-score-val { font-family:'Playfair Display',serif; font-size:24px; font-weight:500; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .modal-score-lbl { font-size:10px; color:var(--mut); margin-top:2px; letter-spacing:0.08em; text-transform:uppercase; }
-.score-why-btn { position:absolute; top:0; right:0; width:18px; height:18px; border-radius:50%; border:0.5px solid var(--mut); background:transparent; color:var(--mut); font-size:10px; cursor:default; display:flex; align-items:center; justify-content:center; opacity:0.6; transition:opacity 0.15s; font-family:'JetBrains Mono',monospace; }
-.modal-score-wrap:hover .score-why-btn { opacity:1; }
-.score-why-overlay { display:none; position:absolute; inset:0; background:var(--s3); border:0.5px solid var(--b2); border-radius:10px; padding:14px 16px; z-index:10; box-shadow:0 8px 32px rgba(0,0,0,0.4); overflow-y:auto; animation:fi 0.15s ease; }
-.modal-score-wrap:hover .score-why-overlay { display:block; }
+
+/* Botón ? — mismo estilo que band-tip-btn */
+.score-why-wrap { position:relative; display:inline-block; position:absolute; top:0; right:0; }
+.score-why-btn {
+  width:18px; height:18px; border-radius:50%; border:0.5px solid var(--mut);
+  background:transparent; color:var(--mut); font-size:10px; cursor:default;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0.6; transition:opacity 0.15s; font-family:'JetBrains Mono',monospace;
+}
+.score-why-wrap:hover .score-why-btn { opacity:1; }
+
+/* Tooltip flotante — mismo patrón que band-tip-box */
+.score-why-box {
+  display:none;
+  position:absolute;
+  bottom:calc(100% + 10px);
+  right:0;
+  width:300px;
+  background:var(--s3);
+  border:0.5px solid var(--b2);
+  border-radius:10px;
+  padding:14px 16px;
+  font-size:11px;
+  color:var(--sub);
+  line-height:1.6;
+  z-index:9999;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  pointer-events:none;
+}
+.score-why-wrap:hover .score-why-box { display:block; animation:fi 0.15s ease; }
+
 .swo-section { margin-bottom:8px; }
 .swo-title { font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--mut); margin-bottom:5px; display:flex; align-items:center; justify-content:space-between; }
-.swo-title span { color:var(--tx); font-size:11px; font-family:'Playfair Display',serif; letter-spacing:0; }
+.swo-title span { color:var(--tx); font-size:11px; font-family:'Playfair Display',serif; letter-spacing:0; text-transform:none; }
 .swo-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:3px; }
 .swo-label { font-size:10px; color:var(--sub); }
 .swo-pts { font-size:10px; color:var(--grn); white-space:nowrap; margin-left:8px; }
 .swo-divider { height:0.5px; background:var(--b1); margin:7px 0; }
-.swo-razon { font-size:11px; color:var(--sub); line-height:1.6; font-style:italic; }
+.swo-razon { font-size:11px; color:var(--sub); line-height:1.6; font-style:italic; padding-top:2px; }
 
 /* Contact & signals */
 .modal-signals { display:flex; flex-wrap:wrap; gap:5px; }
@@ -340,11 +367,27 @@ select option { background:#1a1d2e; color:#f0effe; }
         <div class="modal-contact-row" id="modal-contacto"></div>
       </div>
 
-      <!-- Scoring + overlay ? -->
+      <!-- Scoring + tooltip ? flotante -->
       <div>
         <div class="modal-section-title">scoring</div>
         <div class="modal-score-wrap">
-          <button class="score-why-btn">?</button>
+          <!-- Botón ? con tooltip flotante — igual que bandas -->
+          <div class="score-why-wrap">
+            <button class="score-why-btn">?</button>
+            <div class="score-why-box">
+              <div class="swo-section">
+                <div class="swo-title">Encaje <span id="swo-fit-total">—/40</span></div>
+                <div id="swo-fit-rows"></div>
+              </div>
+              <div class="swo-divider"></div>
+              <div class="swo-section">
+                <div class="swo-title">Fricción <span id="swo-opp-total">—/60</span></div>
+                <div id="swo-opp-rows"></div>
+              </div>
+              <div class="swo-divider"></div>
+              <div class="swo-razon" id="swo-razon"></div>
+            </div>
+          </div>
           <div class="modal-score-row">
             <div class="modal-score-box">
               <div class="modal-score-val" id="modal-fit">—</div>
@@ -358,19 +401,6 @@ select option { background:#1a1d2e; color:#f0effe; }
               <div class="modal-score-val" id="modal-total">—</div>
               <div class="modal-score-lbl">Total / 100</div>
             </div>
-          </div>
-          <div class="score-why-overlay">
-            <div class="swo-section">
-              <div class="swo-title">Encaje <span id="swo-fit-total">—/40</span></div>
-              <div id="swo-fit-rows"></div>
-            </div>
-            <div class="swo-divider"></div>
-            <div class="swo-section">
-              <div class="swo-title">Fricción <span id="swo-opp-total">—/60</span></div>
-              <div id="swo-opp-rows"></div>
-            </div>
-            <div class="swo-divider"></div>
-            <div class="swo-razon" id="swo-razon"></div>
           </div>
         </div>
         <div class="modal-signals" id="modal-signals" style="margin-top:10px;"></div>
