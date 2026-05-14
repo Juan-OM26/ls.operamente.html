@@ -279,7 +279,7 @@ select option { background:#1a1d2e; color:#f0effe; }
 
 /* Botón ? junto al título scoring */
 .score-why-wrap {
-  position: relative;
+  position: static;
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
@@ -299,29 +299,23 @@ select option { background:#1a1d2e; color:#f0effe; }
   transition: opacity 0.15s;
   font-family: 'JetBrains Mono', monospace;
   line-height: 1;
-  /* Resetear herencia del section-title */
   text-transform: none;
   letter-spacing: 0;
 }
 .score-why-wrap:hover .score-why-btn { opacity: 1; }
 
-/* Tooltip — posicionado a la derecha del ? */
+/* Tooltip — anclado al modal-body, centrado */
 .score-why-box {
   display: none;
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  left: auto;
-  transform: none;
+  position: fixed;
   width: 300px;
   background: var(--s3);
   border: 0.5px solid var(--b2);
   border-radius: 10px;
   padding: 14px 16px;
-  z-index: 9999;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  z-index: 99999;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
   pointer-events: none;
-  /* Resetear herencia del section-title */
   text-transform: none;
   letter-spacing: 0;
   font-size: 11px;
@@ -1131,6 +1125,21 @@ function copiar(e,texto,btn) {
 function showStatus(msg,type) { const el=document.getElementById('status-msg'); el.textContent=msg; el.className='status-msg show '+(type||''); }
 function showLoading(txt) { document.getElementById('loading-text').textContent=txt||'Cargando...'; document.getElementById('loading').classList.add('show'); }
 function hideLoading() { document.getElementById('loading').classList.remove('show'); }
+
+// ── TOOLTIP SCORING — centrado en el modal con JS ──
+document.addEventListener('mouseover', e => {
+  const wrap = e.target.closest('.score-why-wrap');
+  if (!wrap) return;
+  const box   = wrap.querySelector('.score-why-box');
+  const modal = document.querySelector('.modal');
+  const btn   = wrap.querySelector('.score-why-btn');
+  if (!box || !modal || !btn) return;
+  const mRect = modal.getBoundingClientRect();
+  const bRect = btn.getBoundingClientRect();
+  const boxW  = 300;
+  box.style.left = `${mRect.left + (mRect.width / 2) - (boxW / 2)}px`;
+  box.style.top  = `${bRect.bottom + 8}px`;
+});
 </script>
 </body>
 </html>
