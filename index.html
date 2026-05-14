@@ -847,21 +847,21 @@ function iniciarTimer(nq) {
   document.getElementById('timer-fill').style.width='0%';
   document.getElementById('timer-clock').textContent='00:00';
   document.getElementById('timer-fase').textContent=getFase(0);
-  document.getElementById('timer-nota').textContent=`~${Math.ceil(est/60)} min estimado · ${nq} búsqueda${nq>1?'s':''}`;
+  document.getElementById('timer-nota').textContent=`${nq} búsqueda${nq>1?'s':''}`;
   timerInterval=setInterval(()=>{ timerSeg++; document.getElementById('timer-clock').textContent=formatTime(timerSeg); document.getElementById('timer-fase').textContent=getFase(timerSeg); document.getElementById('timer-fill').style.width=Math.min(Math.round(timerSeg/est*100),94)+'%'; },1000);
 }
 function detenerTimer(exito) {
   clearInterval(timerInterval); timerInterval=null;
   document.getElementById('timer-fill').style.width='100%';
   if (exito) { ['timer-clock','timer-dot','timer-fill'].forEach(id=>document.getElementById(id).classList.add('done')); document.getElementById('timer-fase').textContent='Leads listos'; document.getElementById('timer-nota').textContent=`Completado en ${formatTime(timerSeg)}`; }
-  else { document.getElementById('timer-fase').textContent='Búsqueda finalizada'; document.getElementById('timer-nota').textContent=`Tiempo: ${formatTime(timerSeg)}`; }
+  else { document.getElementById('timer-fase').textContent='Sin resultados'; document.getElementById('timer-nota').textContent=`Tiempo: ${formatTime(timerSeg)}`; }
   setTimeout(()=>{ document.getElementById('timer-bar').classList.remove('show'); ['timer-clock','timer-dot','timer-fill'].forEach(id=>document.getElementById(id).classList.remove('done')); timerSeg=0; },5000);
 }
 function iniciarPolling(nq) {
   iniciarTimer(nq);
-  const inicio=Date.now(), maxEspera=20*60*1000;
+  const inicio=Date.now(), maxEspera=6*60*1000;
   pollingInterval=setInterval(async()=>{
-    if (Date.now()-inicio>maxEspera) { clearInterval(pollingInterval); pollingInterval=null; detenerTimer(false); showStatus('Tiempo de espera agotado — revisa N8N','err'); return; }
+    if (Date.now()-inicio>maxEspera) { clearInterval(pollingInterval); pollingInterval=null; detenerTimer(false); showStatus('La búsqueda finalizó — no se encontraron leads que califiquen el scoring de Operamente','wait'); return; }
     try {
       const todos=await sbFetch('leads?select=id&order=created_at.desc');
       if (todos.length>leadsAntes) {
