@@ -904,11 +904,14 @@ function renderNuevos() {
       <div>
         <div class="lead-name">${l.empresa||'—'}</div>
         <div class="lead-meta">
-          ${l.zona            ?`<span>◎ ${l.zona}</span>`:''}
-          ${l.telefono        ?`<span>↯ ${l.telefono}</span>`:''}
-          ${l.web             ?`<a href="${l.web.startsWith('http')?l.web:'https://'+l.web}" target="_blank" style="color:var(--acc);text-decoration:none;">↗ ${l.web}</a>`:''}
-          ${l.contacto_nombre ?`<span style="color:var(--tx);border-left:1px solid var(--b2);padding-left:10px;margin-left:2px;">👤 ${l.contacto_nombre}</span>`:''}
-          ${l.contacto_email  ?`<a href="mailto:${l.contacto_email}" style="color:var(--pink);text-decoration:none;">✉ ${l.contacto_email}</a>`:''}
+          ${[
+            l.zona            ? `<span>◎ ${l.zona}</span>` : '',
+            l.web             ? `<a href="${l.web.startsWith('http')?l.web:'https://'+l.web}" target="_blank" style="color:var(--acc);text-decoration:none;">↗ ${l.web}</a>` : '',
+            l.telefono        ? `<span>↯ ${l.telefono}</span>` : '',
+            l.contacto_nombre ? `<span style="color:var(--tx);">👤 ${l.contacto_nombre}</span>` : '',
+            l.contacto_email  ? `<a href="mailto:${l.contacto_email}" style="color:var(--pink);text-decoration:none;">✉ ${l.contacto_email}</a>` : '',
+            l.precio_nivel    ? `<span style="color:var(--grn);">💰 ${l.precio_nivel}</span>` : ''
+          ].filter(Boolean).join('<span style="color:var(--b3);margin:0 6px;">|</span>')}
         </div>
         ${l.razon_cuenta?`<div class="lead-razon">${l.razon_cuenta}</div>`:''}
         ${l.primer_mensaje?`<div class="lead-msg"><span style="flex:1;">${l.primer_mensaje}</span><button class="btn-copy" onclick="copiar(event,'${msg}',this)">copiar</button></div>`:''}
