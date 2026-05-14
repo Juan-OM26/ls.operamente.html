@@ -477,7 +477,8 @@ select option { background:#1a1d2e; color:#f0effe; }
         <div class="card">
           <div id="queries-list"></div>
           <button class="btn-add" onclick="addQuery()">+ añadir búsqueda</button>
-          <div class="results-hint">Cada búsqueda analiza hasta 20 empresas y entrega solo las que califican el scoring de Operamente.</span>
+          <div class="results-row">
+            <span class="results-hint">Cada búsqueda analiza hasta 20 empresas y entrega solo las que califican el scoring de Operamente.</span>
           </div>
         </div>
       </div>
@@ -819,19 +820,18 @@ async function ejecutar() {
   const ciudad  = document.getElementById('ciudad').value.trim()||'Madrid';
   const pais    = document.getElementById('pais').value.trim()||'España';
   const zona    = document.getElementById('zona').value.trim();
-  const num     = parseInt(document.getElementById('num-results').value)||5;
   const idiomas = Array.from(document.querySelectorAll('.lang-chip input:checked')).map(c=>c.value);
   const qs      = queries.filter(q=>q.term.trim()).map(q=>({sector:q.term.trim(),zona:zona?`${zona} ${ciudad}`:ciudad}));
   if (!qs.length) { showStatus('Añade al menos un término de búsqueda','err'); return; }
-  const payload = { job_id:`om_${Date.now()}`, timestamp:new Date().toISOString(), icp:{pais,ciudad,zona,idiomas,num_results:num}, queries:qs };
+  const payload = { job_id:`om_${Date.now()}`, timestamp:new Date().toISOString(), icp:{pais,ciudad,zona,idiomas}, queries:qs };
   const btn = document.getElementById('btn-run');
   btn.disabled=true; btn.textContent='Iniciando...';
   try {
     const res = await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if (res.ok) {
       leadsAntes = allLeads.length;
-      showStatus(`Prospección iniciada · ${qs.length} búsqueda${qs.length>1?'s':''} · ${num} resultados cada una`,'wait');
-      iniciarPolling(qs.length,num);
+      showStatus(`Prospección iniciada · ${qs.length} búsqueda${qs.length>1?'s':''}`,'wait');
+      iniciarPolling(qs.length);
     } else { showStatus('Error al conectar con el sistema — verifica que N8N esté activo','err'); }
   } catch(e) { showStatus('No se pudo conectar con el sistema','err'); }
   btn.disabled=false; btn.textContent='Iniciar prospección';
@@ -840,14 +840,14 @@ async function ejecutar() {
 // ── TIMER ──
 function formatTime(s) { return `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`; }
 function getFase(s) { return FASES.find(f=>s<f.hasta)?.texto||'Procesando...'; }
-function iniciarTimer(nq,nr) {
-  timerSeg=0; const est=Math.max(30,nq*nr*6);
+function iniciarTimer(nq) {
+  timerSeg=0; const est=Math.max(60,nq*25);
   document.getElementById('timer-bar').classList.add('show');
   ['timer-clock','timer-dot','timer-fill'].forEach(id=>document.getElementById(id).classList.remove('done'));
   document.getElementById('timer-fill').style.width='0%';
   document.getElementById('timer-clock').textContent='00:00';
   document.getElementById('timer-fase').textContent=getFase(0);
-  document.getElementById('timer-nota').textContent=`~${Math.ceil(est/60)} min estimado · ${nq} búsqueda${nq>1?'s':''} × ${nr} resultados`;
+  document.getElementById('timer-nota').textContent=`~${Math.ceil(est/60)} min estimado · ${nq} búsqueda${nq>1?'s':''}`;
   timerInterval=setInterval(()=>{ timerSeg++; document.getElementById('timer-clock').textContent=formatTime(timerSeg); document.getElementById('timer-fase').textContent=getFase(timerSeg); document.getElementById('timer-fill').style.width=Math.min(Math.round(timerSeg/est*100),94)+'%'; },1000);
 }
 function detenerTimer(exito) {
@@ -857,8 +857,8 @@ function detenerTimer(exito) {
   else { document.getElementById('timer-fase').textContent='Búsqueda finalizada'; document.getElementById('timer-nota').textContent=`Tiempo: ${formatTime(timerSeg)}`; }
   setTimeout(()=>{ document.getElementById('timer-bar').classList.remove('show'); ['timer-clock','timer-dot','timer-fill'].forEach(id=>document.getElementById(id).classList.remove('done')); timerSeg=0; },5000);
 }
-function iniciarPolling(nq,nr) {
-  iniciarTimer(nq,nr);
+function iniciarPolling(nq) {
+  iniciarTimer(nq);
   const inicio=Date.now(), maxEspera=20*60*1000;
   pollingInterval=setInterval(async()=>{
     if (Date.now()-inicio>maxEspera) { clearInterval(pollingInterval); pollingInterval=null; detenerTimer(false); showStatus('Tiempo de espera agotado — revisa N8N','err'); return; }
