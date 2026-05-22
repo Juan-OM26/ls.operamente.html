@@ -205,6 +205,9 @@ select option { background:#1a1d2e; color:#f0effe; }
 .btn-copy:hover  { border-color:var(--acc); color:var(--acc); }
 .btn-copy.copied { color:var(--grn); border-color:var(--grn); }
 .btn-export { background:none; border:0.5px solid var(--b2); border-radius:8px; color:var(--sub); font-family:'JetBrains Mono',monospace; font-size:12px; padding:7px 14px; cursor:pointer; transition:all 0.15s; }
+.sector-select { background:var(--s2); border:0.5px solid var(--b1); border-radius:20px; color:var(--sub); font-family:'JetBrains Mono',monospace; font-size:11px; padding:5px 14px; cursor:pointer; outline:none; transition:border-color 0.15s,color 0.15s; appearance:none; -webkit-appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23b0aed0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; padding-right:28px; }
+.sector-select:focus, .sector-select:hover { border-color:var(--acc); color:var(--acc); }
+.sector-select option { background:#1a1d2e; color:#f0effe; }
 .btn-export:hover { border-color:var(--acc); color:var(--acc); background:var(--ac3); }
 
 /* ── RUN BAR ── */
@@ -604,7 +607,10 @@ select option { background:#1a1d2e; color:#f0effe; }
           <button class="filter-btn" onclick="filterNuevos('Priority',this)">Prioritarios <span id="cnt-pri"></span></button>
           <button class="filter-btn" onclick="filterNuevos('Good',this)">Interesantes <span id="cnt-good"></span></button>
           <button class="filter-btn" onclick="filterNuevos('Low',this)">Descartar <span id="cnt-low"></span></button>
-          <div style="margin-left:auto;display:flex;gap:8px;">
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+            <select class="sector-select" id="sector-filter" onchange="renderNuevos()">
+              <option value="">todos los sectores</option>
+            </select>
             <input type="text" id="search-input" placeholder="buscar..." style="width:160px;padding:5px 12px;font-size:12px;" oninput="renderNuevos()">
             <button class="btn-export" onclick="exportarCSV()">↓ exportar</button>
           </div>
@@ -883,6 +889,19 @@ function renderNuevos() {
   const nuevos = allLeads.filter(l=>ESTADOS_NUEVOS.includes(l.estado||'Nuevo'));
   let leads    = filtroNuevos==='all'?nuevos:nuevos.filter(l=>l.banda===filtroNuevos);
   if (busq) leads=leads.filter(l=>(l.empresa||'').toLowerCase().includes(busq)||(l.sector||'').toLowerCase().includes(busq));
+
+  // — Poblar dropdown de sectores con los sectores únicos de los leads actuales —
+  const selSector = document.getElementById('sector-filter');
+  if (selSector) {
+    const sectorActual = selSector.value;
+    const sectoresUnicos = [...new Set(nuevos.map(l=>l.sector||'').filter(Boolean))].sort();
+    selSector.innerHTML = '<option value="">todos los sectores</option>' +
+      sectoresUnicos.map(s=>`<option value="${s}" ${s===sectorActual?'selected':''}>${s}</option>`).join('');
+  }
+
+  // — Filtrar por sector seleccionado —
+  const sectorFiltro = selSector?.value || '';
+  if (sectorFiltro) leads = leads.filter(l=>(l.sector||'') === sectorFiltro);
 
   const cnt = (b) => nuevos.filter(l=>l.banda===b).length;
   document.getElementById('cnt-all').textContent  = nuevos.length?`(${nuevos.length})`:'';
