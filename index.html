@@ -890,18 +890,78 @@ function renderNuevos() {
   let leads    = filtroNuevos==='all'?nuevos:nuevos.filter(l=>l.banda===filtroNuevos);
   if (busq) leads=leads.filter(l=>(l.empresa||'').toLowerCase().includes(busq)||(l.sector||'').toLowerCase().includes(busq));
 
-  // — Poblar dropdown de sectores con los sectores únicos de los leads actuales —
+  // — Poblar dropdown de sectores — agrupa por similitud automática —
   const selSector = document.getElementById('sector-filter');
   if (selSector) {
     const sectorActual = selSector.value;
-    const sectoresUnicos = [...new Set(nuevos.map(l=>l.sector||'').filter(Boolean))].sort();
+
+    // Normalización básica: minúsculas, sin tildes, sin espacios extra
+    const norm = s => s.toLowerCase().trim()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/\s+/g,' ');
+
+    // Similitud de Jaccard sobre bigramas — mide cuánto se parecen dos strings
+    const bigramas = s => { const b=new Set(); for(let i=0;i<s.length-1;i++) b.add(s.slice(i,i+2)); return b; };
+    const similitud = (a, b) => {
+      const ba = bigramas(norm(a)), bb = bigramas(norm(b));
+      const inter = [...ba].filter(x=>bb.has(x)).length;
+      const union = new Set([...ba,...bb]).size;
+      return union===0 ? 0 : inter/union;
+    };
+
+    // Recopilar sectores únicos con frecuencia
+    const freq = {};
+    nuevos.forEach(l => {
+      const s = (l.sector||'').trim();
+      if (s) freq[s] = (freq[s]||0) + 1;
+    });
+    const todos = Object.keys(freq);
+
+    // Agrupar: cada sector se une al grupo cuyo representante sea más similar (umbral 0.55)
+    const UMBRAL = 0.55;
+    const grupos = []; // [ { rep, miembros:[], count } ]
+
+    todos.sort((a,b)=>freq[b]-freq[a]); // procesar primero los más frecuentes
+
+    todos.forEach(s => {
+      let mejorGrupo = null, mejorSim = 0;
+      grupos.forEach(g => {
+        const sim = similitud(s, g.rep);
+        if (sim > mejorSim) { mejorSim = sim; mejorGrupo = g; }
+      });
+      if (mejorSim >= UMBRAL) {
+        mejorGrupo.miembros.push(s);
+        mejorGrupo.count += freq[s];
+      } else {
+        grupos.push({ rep: s, miembros: [s], count: freq[s] });
+      }
+    });
+
+    // Representante del grupo = el más frecuente, capitalizado
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+    grupos.sort((a,b) => cap(a.rep).localeCompare(cap(b.rep)));
+
     selSector.innerHTML = '<option value="">todos los sectores</option>' +
-      sectoresUnicos.map(s=>`<option value="${s}" ${s===sectorActual?'selected':''}>${s}</option>`).join('');
+      grupos.map(g => {
+        const normRep = norm(g.rep);
+        return `<option value="${normRep}" ${normRep===sectorActual?'selected':''}>${cap(g.rep)}</option>`;
+      }).join('');
+
+    // Guardar mapa norm->grupo para el filtro
+    window._sectorGrupos = {};
+    grupos.forEach(g => {
+      const normRep = norm(g.rep);
+      g.miembros.forEach(m => { window._sectorGrupos[norm(m)] = normRep; });
+    });
   }
 
-  // — Filtrar por sector seleccionado —
+  // — Filtrar por grupo de sector —
+  const norm2 = s => s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
   const sectorFiltro = selSector?.value || '';
-  if (sectorFiltro) leads = leads.filter(l=>(l.sector||'') === sectorFiltro);
+  if (sectorFiltro) leads = leads.filter(l => {
+    const n = norm2(l.sector||'');
+    return (window._sectorGrupos?.[n] || n) === sectorFiltro;
+  });
 
   const cnt = (b) => nuevos.filter(l=>l.banda===b).length;
   document.getElementById('cnt-all').textContent  = nuevos.length?`(${nuevos.length})`:'';
