@@ -29,8 +29,8 @@
   --b2:   rgba(255,255,255,0.13);
   --b3:   rgba(255,255,255,0.20);
   --tx:   #ffffff;
-  --sub:  #e8e6f8;   /* ← más blanco, antes #d0cef0 */
-  --mut:  #b0aed0;   /* ← más blanco, antes #8886aa */
+  --sub:  #e8e6f8;
+  --mut:  #b0aed0;
 }
 [data-theme="light"] {
   --bg:   #eeedf6;
@@ -72,12 +72,111 @@ aside { background:var(--s1); border-right:0.5px solid var(--b1); display:flex; 
 /* ── MAIN ── */
 main { display:flex; flex-direction:column; min-height:100vh; }
 .topbar { display:flex; align-items:center; justify-content:space-between; padding:16px 32px; border-bottom:0.5px solid var(--b1); background:var(--s1); position:sticky; top:0; z-index:10; transition:background 0.3s; }
-.page-title { font-family:'Playfair Display',serif; font-size:17px; font-weight:400; letter-spacing:-0.3px; color:var(--tx); }
-.page-sub { font-size:11px; color:var(--mut); font-family:'JetBrains Mono',monospace; margin-left:12px; }
-.topbar-right { display:flex; align-items:center; gap:10px; }
-.date-tag { font-size:11px; color:var(--sub); background:var(--s2); border:0.5px solid var(--b1); border-radius:20px; padding:4px 12px; }
+.topbar-left { display:flex; align-items:center; gap:12px; min-width:0; }
+.page-title { font-family:'Playfair Display',serif; font-size:17px; font-weight:400; letter-spacing:-0.3px; color:var(--tx); white-space:nowrap; }
+.page-sub { font-size:11px; color:var(--mut); font-family:'JetBrains Mono',monospace; white-space:nowrap; }
+.topbar-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.date-tag { font-size:11px; color:var(--sub); background:var(--s2); border:0.5px solid var(--b1); border-radius:20px; padding:4px 12px; white-space:nowrap; }
 .theme-btn { background:var(--s2); border:0.5px solid var(--b2); border-radius:20px; color:var(--sub); cursor:pointer; padding:5px 12px; font-size:12px; font-family:'JetBrains Mono',monospace; display:flex; align-items:center; gap:6px; transition:all 0.15s; user-select:none; }
 .theme-btn:hover { border-color:var(--acc); color:var(--acc); }
+
+/* ── HAMBURGER (mobile only) ── */
+.hamburger-btn {
+  display:none;
+  background:var(--s2);
+  border:0.5px solid var(--b2);
+  border-radius:8px;
+  color:var(--sub);
+  cursor:pointer;
+  width:36px; height:36px;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:4px;
+  flex-shrink:0;
+  transition:all 0.15s;
+}
+.hamburger-btn:hover { border-color:var(--acc); color:var(--acc); }
+.hamburger-btn span { display:block; width:16px; height:1.5px; background:currentColor; border-radius:2px; transition:all 0.2s; }
+.hamburger-btn.open span:nth-child(1) { transform:translateY(5.5px) rotate(45deg); }
+.hamburger-btn.open span:nth-child(2) { opacity:0; }
+.hamburger-btn.open span:nth-child(3) { transform:translateY(-5.5px) rotate(-45deg); }
+
+/* ── MOBILE NAV DRAWER ── */
+.mobile-nav-overlay {
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:50;
+  background:rgba(10,11,20,0.7);
+  backdrop-filter:blur(4px);
+  animation:fi 0.18s ease;
+}
+.mobile-nav-overlay.show { display:block; }
+.mobile-nav-drawer {
+  position:absolute;
+  top:0; left:0; bottom:0;
+  width:260px;
+  background:var(--s1);
+  border-right:0.5px solid var(--b2);
+  display:flex;
+  flex-direction:column;
+  padding:0;
+  animation:slideIn 0.22s ease;
+}
+@keyframes slideIn { from{transform:translateX(-100%)} to{transform:translateX(0)} }
+.drawer-header {
+  padding:20px 20px 16px;
+  border-bottom:0.5px solid var(--b1);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.drawer-logo { height:22px; opacity:0.9; }
+.drawer-close {
+  background:none;
+  border:0.5px solid var(--b1);
+  border-radius:8px;
+  color:var(--mut);
+  width:28px; height:28px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  font-size:13px;
+  transition:all 0.15s;
+}
+.drawer-close:hover { border-color:var(--red); color:var(--red); }
+.drawer-nav { padding:12px 0; flex:1; }
+.drawer-nav-item {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 20px;
+  cursor:pointer;
+  color:var(--sub);
+  font-size:13px;
+  font-family:'JetBrains Mono',monospace;
+  letter-spacing:0.02em;
+  transition:all 0.15s;
+  border-left:2px solid transparent;
+  user-select:none;
+  position:relative;
+}
+.drawer-nav-item:hover { color:var(--tx); background:var(--ac3); }
+.drawer-nav-item.active { color:var(--acc); border-left-color:var(--acc); background:var(--ac3); }
+.drawer-nav-icon { font-size:14px; width:18px; text-align:center; }
+.drawer-badge {
+  margin-left:auto;
+  font-size:10px;
+  background:var(--grad);
+  color:white;
+  padding:1px 7px;
+  border-radius:10px;
+  display:none;
+}
+.drawer-footer {
+  padding:16px 20px;
+  border-top:0.5px solid var(--b1);
+}
 
 /* ── CONTENIDO ── */
 .content { padding:28px 32px; flex:1; }
@@ -96,15 +195,8 @@ select option { background:#1a1d2e; color:#f0effe; }
 .search-bar-wrap { position:relative; margin-bottom:8px; }
 .search-bar-wrap input { padding:12px 44px 12px 16px; font-size:14px; border-radius:10px; }
 .search-icon { position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--mut); font-size:14px; pointer-events:none; }
-.query-item { display:grid; grid-template-columns:28px 1fr auto; gap:8px; align-items:center; margin-bottom:8px; animation:fi 0.15s ease; }
-.q-num { font-size:10px; color:var(--mut); text-align:center; }
-.btn-del { background:none; border:0.5px solid var(--b1); border-radius:8px; color:var(--mut); cursor:pointer; width:34px; height:38px; font-size:12px; transition:all 0.15s; display:flex; align-items:center; justify-content:center; }
-.btn-del:hover { border-color:var(--red); color:var(--red); background:var(--rd2); }
-.btn-add { background:none; border:0.5px dashed var(--b2); border-radius:8px; color:var(--sub); cursor:pointer; padding:9px; font-size:12px; font-family:'JetBrains Mono',monospace; text-align:center; transition:all 0.15s; margin-top:4px; width:100%; }
-.btn-add:hover { border-color:var(--acc); color:var(--acc); background:var(--ac3); }
 .results-row { display:flex; align-items:center; gap:12px; margin-top:14px; padding-top:14px; border-top:0.5px solid var(--b1); }
 .results-label { font-size:12px; color:var(--sub); white-space:nowrap; }
-.results-select { width:auto; padding:7px 12px; font-size:12px; flex-shrink:0; }
 .results-hint { font-size:11px; color:var(--mut); line-height:1.5; }
 .cfg2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 .cfg3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
@@ -273,59 +365,17 @@ select option { background:#1a1d2e; color:#f0effe; }
 .modal-section-title { font-size:10px; color:var(--mut); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
 .modal-section-title::after { content:''; flex:1; height:0.5px; background:var(--b1); }
 
-/* Scoring con tooltip ? — igual que band-tip-box */
 .modal-score-wrap { position:relative; }
 .modal-score-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 .modal-score-box { background:var(--s2); border:0.5px solid var(--b1); border-radius:10px; padding:12px 14px; text-align:center; }
 .modal-score-val { font-family:'Playfair Display',serif; font-size:24px; font-weight:500; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .modal-score-lbl { font-size:10px; color:var(--mut); margin-top:2px; letter-spacing:0.08em; text-transform:uppercase; }
 
-/* Botón ? junto al título scoring */
-.score-why-wrap {
-  position: static;
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-.score-why-btn {
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  border: 0.5px solid var(--mut);
-  background: transparent;
-  color: var(--mut);
-  font-size: 9px;
-  cursor: default;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.6;
-  transition: opacity 0.15s;
-  font-family: 'JetBrains Mono', monospace;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: 0;
-}
-.score-why-wrap:hover .score-why-btn { opacity: 1; }
-
-/* Tooltip — anclado al modal-body, centrado */
-.score-why-box {
-  display: none;
-  position: fixed;
-  width: 300px;
-  background: var(--s3);
-  border: 0.5px solid var(--b2);
-  border-radius: 10px;
-  padding: 14px 16px;
-  z-index: 99999;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-  pointer-events: none;
-  text-transform: none;
-  letter-spacing: 0;
-  font-size: 11px;
-  color: var(--sub);
-  line-height: 1.6;
-}
-.score-why-wrap:hover .score-why-box { display: block; animation: fi 0.15s ease; }
+.score-why-wrap { position:static; display:inline-flex; align-items:center; flex-shrink:0; }
+.score-why-btn { width:16px; height:16px; border-radius:50%; border:0.5px solid var(--mut); background:transparent; color:var(--mut); font-size:9px; cursor:default; display:flex; align-items:center; justify-content:center; opacity:0.6; transition:opacity 0.15s; font-family:'JetBrains Mono',monospace; line-height:1; text-transform:none; letter-spacing:0; }
+.score-why-wrap:hover .score-why-btn { opacity:1; }
+.score-why-box { display:none; position:fixed; width:300px; background:var(--s3); border:0.5px solid var(--b2); border-radius:10px; padding:14px 16px; z-index:99999; box-shadow:0 8px 32px rgba(0,0,0,0.6); pointer-events:none; text-transform:none; letter-spacing:0; font-size:11px; color:var(--sub); line-height:1.6; }
+.score-why-wrap:hover .score-why-box { display:block; animation:fi 0.15s ease; }
 
 .swo-section { margin-bottom:8px; }
 .swo-title { font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--mut); margin-bottom:5px; display:flex; align-items:center; justify-content:space-between; }
@@ -336,14 +386,12 @@ select option { background:#1a1d2e; color:#f0effe; }
 .swo-divider { height:0.5px; background:var(--b1); margin:7px 0; }
 .swo-razon { font-size:11px; color:var(--sub); line-height:1.6; font-style:italic; padding-top:2px; }
 
-/* Contact & signals */
 .modal-signals { display:flex; flex-wrap:wrap; gap:5px; }
 .modal-contact-row { display:flex; flex-direction:column; gap:6px; }
 .modal-contact-item { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--sub); }
 .modal-contact-item a { color:var(--acc); text-decoration:none; }
 .modal-contact-item a:hover { text-decoration:underline; }
 
-/* Notas */
 .notas-list { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; max-height:220px; overflow-y:auto; }
 .nota-item { background:var(--s2); border:0.5px solid var(--b1); border-radius:8px; padding:10px 12px; animation:fi 0.15s ease; }
 .nota-fecha { font-size:10px; color:var(--mut); margin-bottom:4px; }
@@ -357,17 +405,75 @@ select option { background:#1a1d2e; color:#f0effe; }
 .btn-nota:disabled { opacity:0.4; cursor:not-allowed; }
 .notas-empty { font-size:12px; color:var(--mut); text-align:center; padding:16px 0; }
 
+/* ── RESPONSIVE ── */
 @media(max-width:768px){
+  /* Ocultar sidebar de escritorio */
   .shell { grid-template-columns:1fr; }
   aside  { display:none; }
+
+  /* Topbar móvil limpio */
+  .topbar { padding:12px 16px; gap:8px; }
+  .topbar-left { flex:1; min-width:0; }
+  .page-title { font-size:15px; }
+  .page-sub { display:none; } /* Quitamos subtítulo en móvil, ocupa mucho */
+  .date-tag { display:none; } /* Quitamos fecha en móvil */
+  .hamburger-btn { display:flex; }
+
+  /* Contenido */
   .content { padding:16px; }
+
+  /* Grids */
   .metric-grid { grid-template-columns:repeat(2,1fr); }
   .cfg2,.cfg3  { grid-template-columns:1fr; }
-  .run-bar { padding:14px 16px; flex-direction:column; }
+  .bands       { grid-template-columns:1fr; }
+
+  /* Run bar */
+  .run-bar { padding:12px 16px; flex-direction:column; }
+  .btn-run { width:100%; text-align:center; }
+
+  /* Leads toolbar en móvil */
+  .leads-toolbar { gap:6px; }
+  .leads-toolbar > div { width:100%; }
+
+  /* Lead card en móvil */
+  .lead-card { grid-template-columns:1fr; }
+  .lead-right { flex-direction:row; align-items:center; }
+
+  /* Kanban scroll horizontal en móvil */
+  .kanban { grid-auto-flow:column; grid-auto-columns:minmax(220px,1fr); }
 }
 </style>
 </head>
 <body>
+
+<!-- ── MOBILE NAV OVERLAY ── -->
+<div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="cerrarDrawer(event)">
+  <div class="mobile-nav-drawer">
+    <div class="drawer-header">
+      <img id="drawer-logo" src="https://operamente-github.jdray1.easypanel.host/logo/Operamente.png" alt="Operamente" class="drawer-logo">
+      <button class="drawer-close" onclick="toggleDrawer()">✕</button>
+    </div>
+    <nav class="drawer-nav">
+      <div class="drawer-nav-item active" onclick="goTo('busqueda');toggleDrawer()" id="dnav-busqueda">
+        <span class="drawer-nav-icon">◎</span> Nueva búsqueda
+      </div>
+      <div class="drawer-nav-item" onclick="goTo('nuevos');toggleDrawer()" id="dnav-nuevos">
+        <span class="drawer-nav-icon">◈</span> Leads nuevos
+        <span class="drawer-badge" id="dbadge-nuevos"></span>
+      </div>
+      <div class="drawer-nav-item" onclick="goTo('pipeline');toggleDrawer()" id="dnav-pipeline">
+        <span class="drawer-nav-icon">⊞</span> Pipeline
+        <span class="drawer-badge" id="dbadge-pipe"></span>
+      </div>
+      <div class="drawer-nav-item" onclick="goTo('metricas');toggleDrawer()" id="dnav-metricas">
+        <span class="drawer-nav-icon">⌁</span> Métricas
+      </div>
+    </nav>
+    <div class="drawer-footer">
+      <div class="status-pill"><div class="dot"></div><span id="drawer-conn-status">Conectando...</span></div>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL DETALLE LEAD -->
 <div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
@@ -380,14 +486,10 @@ select option { background:#1a1d2e; color:#f0effe; }
       <button class="modal-close" onclick="cerrarModalBtn()">✕</button>
     </div>
     <div class="modal-body">
-
-      <!-- Contacto -->
       <div>
         <div class="modal-section-title">contacto</div>
         <div class="modal-contact-row" id="modal-contacto"></div>
       </div>
-
-      <!-- Scoring -->
       <div>
         <div class="modal-section-title" style="position:relative;">
           scoring
@@ -409,23 +511,12 @@ select option { background:#1a1d2e; color:#f0effe; }
           </div>
         </div>
         <div class="modal-score-row">
-          <div class="modal-score-box">
-            <div class="modal-score-val" id="modal-fit">—</div>
-            <div class="modal-score-lbl">Encaje / 40</div>
-          </div>
-          <div class="modal-score-box">
-            <div class="modal-score-val" id="modal-opp">—</div>
-            <div class="modal-score-lbl">Fricción / 60</div>
-          </div>
-          <div class="modal-score-box">
-            <div class="modal-score-val" id="modal-total">—</div>
-            <div class="modal-score-lbl">Total / 100</div>
-          </div>
+          <div class="modal-score-box"><div class="modal-score-val" id="modal-fit">—</div><div class="modal-score-lbl">Encaje / 40</div></div>
+          <div class="modal-score-box"><div class="modal-score-val" id="modal-opp">—</div><div class="modal-score-lbl">Fricción / 60</div></div>
+          <div class="modal-score-box"><div class="modal-score-val" id="modal-total">—</div><div class="modal-score-lbl">Total / 100</div></div>
         </div>
         <div class="modal-signals" id="modal-signals" style="margin-top:10px;"></div>
       </div>
-
-      <!-- Notas -->
       <div>
         <div class="modal-section-title">notas</div>
         <div class="notas-list" id="notas-list"></div>
@@ -434,7 +525,6 @@ select option { background:#1a1d2e; color:#f0effe; }
           <button class="btn-nota" id="btn-nota" onclick="guardarNota()">Guardar nota</button>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -464,7 +554,16 @@ select option { background:#1a1d2e; color:#f0effe; }
 
 <main>
   <div class="topbar">
-    <div class="page-title" id="page-title">Nueva búsqueda <span class="page-sub" id="page-sub">configura y lanza tu prospección</span></div>
+    <div class="topbar-left">
+      <!-- Hamburger solo en móvil -->
+      <button class="hamburger-btn" id="hamburger-btn" onclick="toggleDrawer()">
+        <span></span><span></span><span></span>
+      </button>
+      <div>
+        <div class="page-title" id="page-title">Nueva búsqueda</div>
+        <div class="page-sub" id="page-sub">configura y lanza tu prospección</div>
+      </div>
+    </div>
     <div class="topbar-right">
       <div class="date-tag" id="topbar-date"></div>
       <button class="theme-btn" onclick="toggleTheme()"><span id="theme-icon">☀</span><span id="theme-label">Claro</span></button>
@@ -478,10 +577,13 @@ select option { background:#1a1d2e; color:#f0effe; }
       <div>
         <div class="sec-label">qué buscar</div>
         <div class="card">
-          <div id="queries-list"></div>
-          <button class="btn-add" onclick="addQuery()">+ añadir búsqueda</button>
+          <!-- Una sola búsqueda, sin botón añadir -->
+          <div class="search-bar-wrap">
+            <input type="text" id="query-single" placeholder="ej: fisioterapia, taller mecánico, agencia de marketing...">
+            <span class="search-icon">⌕</span>
+          </div>
           <div class="results-row">
-            <span class="results-hint">Cada búsqueda analiza hasta 20 empresas y entrega solo las que califican el scoring de Operamente.</span>
+            <span class="results-hint">Analiza hasta 20 empresas y entrega solo las que califican el scoring de Operamente.</span>
           </div>
         </div>
       </div>
@@ -519,7 +621,6 @@ select option { background:#1a1d2e; color:#f0effe; }
         </div>
       </div>
 
-      <!-- BANDAS — alineadas con Scoring v2.0 -->
       <div>
         <div class="sec-label">cómo clasificamos los resultados</div>
         <div class="card">
@@ -527,8 +628,6 @@ select option { background:#1a1d2e; color:#f0effe; }
             Cada empresa recibe un score de 0 a 100: <strong style="color:var(--tx);">encaje</strong> (estructura y capacidad de pago) + <strong style="color:var(--tx);">fricción</strong> (operación manual sin automatizar). Mayor fricción sin sistema = mayor oportunidad para Operamente.
           </div>
           <div class="bands">
-
-            <!-- PRIORITARIO -->
             <div class="band priority-band" style="background:var(--gn2);border-color:rgba(0,212,170,0.2);">
               <div class="band-header">
                 <div><div class="band-name" style="color:var(--grn);">Prioritario</div><div class="band-range" style="color:var(--grn);">70–100</div></div>
@@ -549,8 +648,6 @@ select option { background:#1a1d2e; color:#f0effe; }
               </div>
               <div class="band-desc">Sin automatización — contactar hoy</div>
             </div>
-
-            <!-- INTERESANTE -->
             <div class="band good-band" style="background:var(--am2);border-color:rgba(245,190,90,0.2);">
               <div class="band-header">
                 <div><div class="band-name" style="color:var(--amb);">Interesante</div><div class="band-range" style="color:var(--amb);">50–69</div></div>
@@ -571,8 +668,6 @@ select option { background:#1a1d2e; color:#f0effe; }
               </div>
               <div class="band-desc">Fricción parcial — evaluar y nutrir</div>
             </div>
-
-            <!-- DESCARTAR -->
             <div class="band low-band">
               <div class="band-header">
                 <div><div class="band-name" style="color:var(--mut);">Descartar</div><div class="band-range" style="color:var(--mut);">0–49</div></div>
@@ -593,7 +688,6 @@ select option { background:#1a1d2e; color:#f0effe; }
               </div>
               <div class="band-desc">Ya automatizado o sin encaje</div>
             </div>
-
           </div>
         </div>
       </div>
@@ -607,7 +701,7 @@ select option { background:#1a1d2e; color:#f0effe; }
           <button class="filter-btn" onclick="filterNuevos('Priority',this)">Prioritarios <span id="cnt-pri"></span></button>
           <button class="filter-btn" onclick="filterNuevos('Good',this)">Interesantes <span id="cnt-good"></span></button>
           <button class="filter-btn" onclick="filterNuevos('Low',this)">Descartar <span id="cnt-low"></span></button>
-          <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
             <select class="sector-select" id="sector-filter" onchange="renderNuevos()">
               <option value="">todos los sectores</option>
             </select>
@@ -622,7 +716,7 @@ select option { background:#1a1d2e; color:#f0effe; }
     <!-- PIPELINE -->
     <div class="panel" id="panel-pipeline">
       <div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
           <div style="font-size:12px;color:var(--sub);">Leads en proceso — haz clic en una tarjeta para ver el detalle y añadir notas</div>
           <button class="btn-export" onclick="exportarCSV('pipeline')">↓ exportar pipeline</button>
         </div>
@@ -690,9 +784,7 @@ const FASES = [
   { hasta:999, texto:'Finalizando y sincronizando...' }
 ];
 
-// Mapa señales → etiqueta legible + puntos (alineado con Scoring v2.0)
 const SEÑAL_MAP = {
-  // FIT
   'tiene_equipo':            { label:'Equipo visible',             pts:'+10', dim:'fit' },
   'reseñas_200+':            { label:'Reseñas 200+',               pts:'+9',  dim:'fit' },
   'rating_excelente':        { label:'Rating excelente (≥4.5)',    pts:'+5',  dim:'fit' },
@@ -708,7 +800,6 @@ const SEÑAL_MAP = {
   'web_profesional':         { label:'Web profesional',            pts:'+5',  dim:'fit' },
   'volumen_reseñas':         { label:'Volumen alto de reseñas',    pts:'+5',  dim:'fit' },
   'ticket_medio_alto':       { label:'Ticket medio-alto',          pts:'+8',  dim:'fit' },
-  // OPP
   'sin_reservas_web':        { label:'Sin sistema de citas online', pts:'+15', dim:'opp' },
   'sin_reservas':            { label:'Sin sistema de citas online', pts:'+15', dim:'opp' },
   'contacto_manual_complejo':{ label:'Contacto manual complejo',   pts:'+10', dim:'opp' },
@@ -725,7 +816,6 @@ const SEÑAL_MAP = {
   'chatbot_basico':          { label:'Solo WhatsApp básico',        pts:'+4',  dim:'opp' },
   'señales_volumen':         { label:'Señales de alto volumen',    pts:'+4',  dim:'opp' },
   'negocio_activo':          { label:'Negocio activo',             pts:'+3',  dim:'opp' },
-  // Neutros (no suman pero se muestran)
   'tiene_reservas_propias':  { label:'Tiene reservas propias',     pts:'—',   dim:'opp' },
   'chatbot_avanzado':        { label:'Chatbot avanzado',           pts:'—',   dim:'opp' },
 };
@@ -733,16 +823,41 @@ const SEÑAL_MAP = {
 function señalLabel(s) { return SEÑAL_MAP[s]?.label || s.replace(/_/g,' '); }
 function señalPts(s)   { return SEÑAL_MAP[s]?.pts   || ''; }
 
-let allLeads = [], filtroNuevos = 'all', queries = [{ term:'' }];
+let allLeads = [], filtroNuevos = 'all';
 let timerInterval = null, pollingInterval = null, timerSeg = 0, leadsAntes = 0;
+let drawerOpen = false;
 
 // ── INIT ──
 const now = new Date();
 document.getElementById('topbar-date').textContent  = now.toLocaleDateString('es-ES',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
 document.getElementById('sidebar-date').textContent = now.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
 setTheme(localStorage.getItem('om_theme') || 'dark');
-renderQueries();
 cargarLeads();
+
+// ── DRAWER (móvil) ──
+function toggleDrawer() {
+  drawerOpen = !drawerOpen;
+  const overlay = document.getElementById('mobile-nav-overlay');
+  const btn = document.getElementById('hamburger-btn');
+  if (drawerOpen) {
+    overlay.classList.add('show');
+    btn.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  } else {
+    overlay.classList.remove('show');
+    btn.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+function cerrarDrawer(e) {
+  if (e.target === document.getElementById('mobile-nav-overlay')) toggleDrawer();
+}
+
+function syncDrawerNav(panel) {
+  ['busqueda','nuevos','pipeline','metricas'].forEach(p => {
+    document.getElementById('dnav-'+p)?.classList.toggle('active', p === panel);
+  });
+}
 
 // ── TEMA ──
 function setTheme(t) {
@@ -751,9 +866,11 @@ function setTheme(t) {
   const d = t === 'dark';
   document.getElementById('theme-icon').textContent  = d ? '☀' : '☾';
   document.getElementById('theme-label').textContent = d ? 'Claro' : 'Oscuro';
-  document.getElementById('logo-img').src = d
+  const logoSrc = d
     ? 'https://operamente-github.jdray1.easypanel.host/logo/Operamente.png'
     : 'https://operamente-github.jdray1.easypanel.host/logo/Operamente-dark.png';
+  document.getElementById('logo-img').src    = logoSrc;
+  document.getElementById('drawer-logo').src = logoSrc;
 }
 function toggleTheme() { setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); }
 
@@ -772,10 +889,16 @@ async function cargarLeads() {
   try {
     showLoading('Cargando leads...');
     allLeads = await sbFetch('leads?order=created_at.desc&limit=1000');
-    document.getElementById('conn-status').textContent = 'Conectado · Supabase';
+    const status = 'Conectado · Supabase';
+    document.getElementById('conn-status').textContent = status;
+    document.getElementById('drawer-conn-status').textContent = status;
     updateBadges(); renderNuevos(); renderKanban(); renderMetricas();
     hideLoading();
-  } catch(e) { hideLoading(); document.getElementById('conn-status').textContent = 'Sin conexión'; }
+  } catch(e) {
+    hideLoading();
+    document.getElementById('conn-status').textContent = 'Sin conexión';
+    document.getElementById('drawer-conn-status').textContent = 'Sin conexión';
+  }
 }
 
 async function actualizarEstado(id, estado) {
@@ -788,38 +911,28 @@ async function actualizarEstado(id, estado) {
 }
 
 // ── NAV ──
-const titles = { busqueda:['Nueva búsqueda','configura y lanza tu prospección'], nuevos:['Leads nuevos','sin interacción previa'], pipeline:['Pipeline','leads en proceso de contacto'], metricas:['Métricas','rendimiento del sistema'] };
+const titles = {
+  busqueda: ['Nueva búsqueda','configura y lanza tu prospección'],
+  nuevos:   ['Leads nuevos','sin interacción previa'],
+  pipeline: ['Pipeline','leads en proceso de contacto'],
+  metricas: ['Métricas','rendimiento del sistema']
+};
 function goTo(panel) {
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  ['busqueda','nuevos','pipeline','metricas'].forEach(p=>document.getElementById('nav-'+p)?.classList.remove('active'));
+  ['busqueda','nuevos','pipeline','metricas'].forEach(p=>{
+    document.getElementById('nav-'+p)?.classList.remove('active');
+  });
   document.getElementById('panel-'+panel).classList.add('active');
   document.getElementById('nav-'+panel).classList.add('active');
+  syncDrawerNav(panel);
   const [t,s] = titles[panel];
-  document.getElementById('page-title').childNodes[0].textContent = t+' ';
-  document.getElementById('page-sub').textContent = s;
-  document.getElementById('run-bar').style.display = panel==='busqueda'?'flex':'none';
+  document.getElementById('page-title').textContent = t;
+  document.getElementById('page-sub').textContent   = s;
+  document.getElementById('run-bar').style.display  = panel==='busqueda'?'flex':'none';
   if (panel==='nuevos')   renderNuevos();
   if (panel==='pipeline') renderKanban();
   if (panel==='metricas') renderMetricas();
 }
-
-// ── QUERIES ──
-function renderQueries() {
-  document.getElementById('queries-list').innerHTML = queries.map((q,i)=>`
-    <div class="query-item">
-      <div class="q-num">${String(i+1).padStart(2,'0')}</div>
-      <div class="search-bar-wrap" style="margin-bottom:0;">
-        <input type="text" value="${q.term}" placeholder="ej: fisioterapia, taller mecánico, agencia de marketing..." oninput="queries[${i}].term=this.value">
-        <span class="search-icon">⌕</span>
-      </div>
-      <button class="btn-del" onclick="removeQuery(${i})">✕</button>
-    </div>`).join('');
-}
-function addQuery() {
-  queries.push({term:''}); renderQueries();
-  setTimeout(()=>{ const inp=document.querySelectorAll('.query-item input'); if(inp.length) inp[inp.length-1].focus(); },50);
-}
-function removeQuery(i) { if(queries.length<=1) return; queries.splice(i,1); renderQueries(); }
 
 // ── EJECUTAR ──
 async function ejecutar() {
@@ -827,8 +940,9 @@ async function ejecutar() {
   const pais    = document.getElementById('pais').value.trim()||'España';
   const zona    = document.getElementById('zona').value.trim();
   const idiomas = Array.from(document.querySelectorAll('.lang-chip input:checked')).map(c=>c.value);
-  const qs      = queries.filter(q=>q.term.trim()).map(q=>({sector:q.term.trim(),zona:zona?`${zona} ${ciudad}`:ciudad}));
-  if (!qs.length) { showStatus('Añade al menos un término de búsqueda','err'); return; }
+  const term    = document.getElementById('query-single').value.trim();
+  if (!term) { showStatus('Escribe un sector o tipo de negocio para buscar','err'); return; }
+  const qs = [{ sector: term, zona: zona ? `${zona} ${ciudad}` : ciudad }];
   const payload = { job_id:`om_${Date.now()}`, timestamp:new Date().toISOString(), icp:{pais,ciudad,zona,idiomas}, queries:qs };
   const btn = document.getElementById('btn-run');
   btn.disabled=true; btn.textContent='Iniciando...';
@@ -836,8 +950,8 @@ async function ejecutar() {
     const res = await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if (res.ok) {
       leadsAntes = allLeads.length;
-      showStatus(`Prospección iniciada · ${qs.length} búsqueda${qs.length>1?'s':''}`,'wait');
-      iniciarPolling(qs.length);
+      showStatus('Prospección iniciada','wait');
+      iniciarPolling(1);
     } else { showStatus('Error al conectar con el sistema — verifica que N8N esté activo','err'); }
   } catch(e) { showStatus('No se pudo conectar con el sistema','err'); }
   btn.disabled=false; btn.textContent='Iniciar prospección';
@@ -890,17 +1004,10 @@ function renderNuevos() {
   let leads    = filtroNuevos==='all'?nuevos:nuevos.filter(l=>l.banda===filtroNuevos);
   if (busq) leads=leads.filter(l=>(l.empresa||'').toLowerCase().includes(busq)||(l.sector||'').toLowerCase().includes(busq));
 
-  // — Poblar dropdown de sectores — agrupa por similitud automática —
   const selSector = document.getElementById('sector-filter');
   if (selSector) {
     const sectorActual = selSector.value;
-
-    // Normalización básica: minúsculas, sin tildes, sin espacios extra
-    const norm = s => s.toLowerCase().trim()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-      .replace(/\s+/g,' ');
-
-    // Similitud de Jaccard sobre bigramas — mide cuánto se parecen dos strings
+    const norm = s => s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
     const bigramas = s => { const b=new Set(); for(let i=0;i<s.length-1;i++) b.add(s.slice(i,i+2)); return b; };
     const similitud = (a, b) => {
       const ba = bigramas(norm(a)), bb = bigramas(norm(b));
@@ -908,54 +1015,26 @@ function renderNuevos() {
       const union = new Set([...ba,...bb]).size;
       return union===0 ? 0 : inter/union;
     };
-
-    // Recopilar sectores únicos con frecuencia
     const freq = {};
-    nuevos.forEach(l => {
-      const s = (l.sector||'').trim();
-      if (s) freq[s] = (freq[s]||0) + 1;
-    });
+    nuevos.forEach(l => { const s = (l.sector||'').trim(); if (s) freq[s] = (freq[s]||0) + 1; });
     const todos = Object.keys(freq);
-
-    // Agrupar: cada sector se une al grupo cuyo representante sea más similar (umbral 0.55)
     const UMBRAL = 0.55;
-    const grupos = []; // [ { rep, miembros:[], count } ]
-
-    todos.sort((a,b)=>freq[b]-freq[a]); // procesar primero los más frecuentes
-
+    const grupos = [];
+    todos.sort((a,b)=>freq[b]-freq[a]);
     todos.forEach(s => {
       let mejorGrupo = null, mejorSim = 0;
-      grupos.forEach(g => {
-        const sim = similitud(s, g.rep);
-        if (sim > mejorSim) { mejorSim = sim; mejorGrupo = g; }
-      });
-      if (mejorSim >= UMBRAL) {
-        mejorGrupo.miembros.push(s);
-        mejorGrupo.count += freq[s];
-      } else {
-        grupos.push({ rep: s, miembros: [s], count: freq[s] });
-      }
+      grupos.forEach(g => { const sim = similitud(s, g.rep); if (sim > mejorSim) { mejorSim = sim; mejorGrupo = g; } });
+      if (mejorSim >= UMBRAL) { mejorGrupo.miembros.push(s); mejorGrupo.count += freq[s]; }
+      else grupos.push({ rep: s, miembros: [s], count: freq[s] });
     });
-
-    // Representante del grupo = el más frecuente, capitalizado
     const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
     grupos.sort((a,b) => cap(a.rep).localeCompare(cap(b.rep)));
-
     selSector.innerHTML = '<option value="">todos los sectores</option>' +
-      grupos.map(g => {
-        const normRep = norm(g.rep);
-        return `<option value="${normRep}" ${normRep===sectorActual?'selected':''}>${cap(g.rep)}</option>`;
-      }).join('');
-
-    // Guardar mapa norm->grupo para el filtro
+      grupos.map(g => { const normRep = norm(g.rep); return `<option value="${normRep}" ${normRep===sectorActual?'selected':''}>${cap(g.rep)}</option>`; }).join('');
     window._sectorGrupos = {};
-    grupos.forEach(g => {
-      const normRep = norm(g.rep);
-      g.miembros.forEach(m => { window._sectorGrupos[norm(m)] = normRep; });
-    });
+    grupos.forEach(g => { const normRep = norm(g.rep); g.miembros.forEach(m => { window._sectorGrupos[norm(m)] = normRep; }); });
   }
 
-  // — Filtrar por grupo de sector —
   const norm2 = s => s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
   const sectorFiltro = selSector?.value || '';
   if (sectorFiltro) leads = leads.filter(l => {
@@ -1056,12 +1135,8 @@ function abrirModal(id) {
   const l = allLeads.find(x=>x.id===id);
   if (!l) return;
   modalLeadId = id;
-
-  // Header
   document.getElementById('modal-title').textContent = l.empresa||'—';
   document.getElementById('modal-sub').textContent   = [l.sector,l.zona,l.automation_maturity?`madurez: ${l.automation_maturity}`:''].filter(Boolean).join(' · ');
-
-  // Contacto
   const filas = [
     l.telefono        ?`<div class="modal-contact-item"><span>↯</span><a href="tel:${l.telefono}">${l.telefono}</a></div>`:'',
     l.contacto_nombre ?`<div class="modal-contact-item"><span>👤</span><span>${l.contacto_nombre}</span></div>`:'',
@@ -1069,36 +1144,22 @@ function abrirModal(id) {
     l.web             ?`<div class="modal-contact-item"><span>↗</span><a href="${l.web.startsWith('http')?l.web:'https://'+l.web}" target="_blank">${l.web}</a></div>`:''
   ].filter(Boolean).join('');
   document.getElementById('modal-contacto').innerHTML = filas||'<div class="notas-empty">Sin datos de contacto</div>';
-
-  // Scoring
   document.getElementById('modal-fit').textContent   = l.fit_score         ??'—';
   document.getElementById('modal-opp').textContent   = l.opportunity_score ??'—';
   document.getElementById('modal-total').textContent = l.total_score        ??'—';
-
-  // Overlay ? — fit rows
   const fitSeñales = (l.fit_detalle||'').split(',').map(s=>s.trim()).filter(Boolean);
   document.getElementById('swo-fit-total').textContent = `${l.fit_score||0}/40`;
   document.getElementById('swo-fit-rows').innerHTML = fitSeñales.length
     ? fitSeñales.map(s=>`<div class="swo-row"><span class="swo-label">${señalLabel(s)}</span><span class="swo-pts">${señalPts(s)}</span></div>`).join('')
     : '<div class="swo-label" style="opacity:0.5">Sin señales de encaje</div>';
-
-  // Overlay ? — opp rows
   const oppSeñales = (l.opp_detalle||'').split(',').map(s=>s.trim()).filter(Boolean);
   document.getElementById('swo-opp-total').textContent = `${l.opportunity_score||0}/60`;
   document.getElementById('swo-opp-rows').innerHTML = oppSeñales.length
     ? oppSeñales.map(s=>`<div class="swo-row"><span class="swo-label">${señalLabel(s)}</span><span class="swo-pts">${señalPts(s)}</span></div>`).join('')
     : '<div class="swo-label" style="opacity:0.5">Sin señales de fricción</div>';
-
-  // Overlay ? — razón del Concierge
   document.getElementById('swo-razon').textContent = l.razon_cuenta||'';
-
-  // Tags de señales en lenguaje natural
   const todasSeñales = [...fitSeñales,...oppSeñales].filter(Boolean);
-  document.getElementById('modal-signals').innerHTML = todasSeñales.map(s=>
-    `<span class="tag tag-mut">${señalLabel(s)}</span>`
-  ).join('');
-
-  // Notas
+  document.getElementById('modal-signals').innerHTML = todasSeñales.map(s=>`<span class="tag tag-mut">${señalLabel(s)}</span>`).join('');
   renderNotas(l.notas||[]);
   document.getElementById('nota-input').value='';
   document.getElementById('modal-overlay').classList.add('show');
@@ -1159,23 +1220,18 @@ function updateBadges() {
   const n=allLeads.filter(l=>ESTADOS_NUEVOS.includes(l.estado||'Nuevo')).length;
   const p=allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado)).length;
   const bn=document.getElementById('badge-nuevos'), bp=document.getElementById('badge-pipe');
+  const dbn=document.getElementById('dbadge-nuevos'), dbp=document.getElementById('dbadge-pipe');
   bn.textContent=n; bn.style.display=n>0?'inline':'none';
   bp.textContent=p; bp.style.display=p>0?'inline':'none';
+  dbn.textContent=n; dbn.style.display=n>0?'inline':'none';
+  dbp.textContent=p; dbp.style.display=p>0?'inline':'none';
 }
 
-// ── EXPORTAR CSV — columnas alineadas con v2.0 ──
+// ── EXPORTAR CSV ──
 function exportarCSV(tipo) {
   let leads=tipo==='pipeline'?allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado)):allLeads;
   if (!leads.length) { showStatus('No hay leads para exportar','err'); return; }
-  const cols=[
-    'empresa','sector','zona','telefono','web',
-    'contacto_nombre','contacto_email','contacto_fuente','calidad_contacto',
-    'fit_score','opportunity_score','total_score','banda','automation_maturity','producto_recomendado',
-    'tiene_chatbot','tiene_reservas','tiene_crm','cta_manual',
-    'es_franquicia','franquicia_sin_sistema','dolor_activo','momento_compra',
-    'razon_cuenta','angulo_contacto','primer_mensaje',
-    'estado','fuente','fecha'
-  ];
+  const cols=['empresa','sector','zona','telefono','web','contacto_nombre','contacto_email','contacto_fuente','calidad_contacto','fit_score','opportunity_score','total_score','banda','automation_maturity','producto_recomendado','tiene_chatbot','tiene_reservas','tiene_crm','cta_manual','es_franquicia','franquicia_sin_sistema','dolor_activo','momento_compra','razon_cuenta','angulo_contacto','primer_mensaje','estado','fuente','fecha'];
   const rows=leads.map(l=>cols.map(c=>`"${(l[c]||'').toString().replace(/"/g,'""')}"`).join(','));
   const csv='\uFEFF'+[cols.join(','),...rows].join('\n');
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
@@ -1194,7 +1250,7 @@ function showStatus(msg,type) { const el=document.getElementById('status-msg'); 
 function showLoading(txt) { document.getElementById('loading-text').textContent=txt||'Cargando...'; document.getElementById('loading').classList.add('show'); }
 function hideLoading() { document.getElementById('loading').classList.remove('show'); }
 
-// ── TOOLTIP SCORING — centrado en el modal con JS ──
+// ── TOOLTIP SCORING ──
 document.addEventListener('mouseover', e => {
   const wrap = e.target.closest('.score-why-wrap');
   if (!wrap) return;
