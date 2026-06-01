@@ -698,16 +698,18 @@ select option { background:#1a1d2e; color:#f0effe; }
     <!-- LEADS NUEVOS -->
     <div class="panel" id="panel-nuevos">
       <div>
-        <div class="leads-toolbar">
-          <button class="filter-btn active" onclick="filterNuevos('all',this)">Todos <span id="cnt-all"></span></button>
-          <button class="filter-btn" onclick="filterNuevos('Priority',this)">Prioritarios <span id="cnt-pri"></span></button>
-          <button class="filter-btn" onclick="filterNuevos('Good',this)">Interesantes <span id="cnt-good"></span></button>
-          <button class="filter-btn" onclick="filterNuevos('Low',this)">Descartar <span id="cnt-low"></span></button>
-          <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-            <select class="sector-select" id="sector-filter" onchange="renderNuevos()">
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <button class="filter-btn active" onclick="filterNuevos('all',this)">Todos <span id="cnt-all"></span></button>
+            <button class="filter-btn" onclick="filterNuevos('Priority',this)">Prioritarios <span id="cnt-pri"></span></button>
+            <button class="filter-btn" onclick="filterNuevos('Good',this)">Interesantes <span id="cnt-good"></span></button>
+            <button class="filter-btn" onclick="filterNuevos('Low',this)">Descartar <span id="cnt-low"></span></button>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select class="sector-select" id="sector-filter" onchange="renderNuevos()" style="flex:1;border-radius:8px;padding:7px 32px 7px 12px;font-size:12px;">
               <option value="">todos los sectores</option>
             </select>
-            <input type="text" id="search-input" placeholder="buscar..." style="width:160px;padding:5px 12px;font-size:12px;" oninput="renderNuevos()">
+            <input type="text" id="search-input" placeholder="buscar..." style="flex:1;padding:7px 12px;font-size:12px;border-radius:8px;" oninput="renderNuevos()">
             <button class="btn-export" onclick="exportarCSV()">↓ exportar</button>
           </div>
         </div>
