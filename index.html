@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Operamente · Inteligencia Comercial</title>
+<link rel="icon" type="image/png" href="https://operamente-github.jdray1.easypanel.host/public/Om%20Logo.png">
+<link rel="apple-touch-icon" href="https://operamente-github.jdray1.easypanel.host/public/Om%20Logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -1072,7 +1074,7 @@ function renderNuevos() {
           ].filter(Boolean).join('<span style="color:var(--b3);margin:0 6px;">|</span>')}
         </div>
         ${l.razon_cuenta?`<div class="lead-razon">${l.razon_cuenta}</div>`:''}
-        ${l.brief_intel?`<div class="lead-razon" style="white-space:pre-line;border-left:2px solid var(--acc);padding-left:10px;border-radius:0 6px 6px 0;margin-bottom:8px;">${l.brief_intel}</div>`:''}
+        ${l.primer_mensaje?`<div class="lead-msg"><span style="flex:1;">${l.primer_mensaje}</span><button class="btn-copy" onclick="copiar(event,'${msg}',this)">copiar</button></div>`:''}
         <div class="lead-tags">
           <span class="tag ${bt}">${l.banda}</span>
           ${l.producto_recomendado&&l.producto_recomendado!=='Descartar'?`<span class="tag tag-grad">${l.producto_recomendado}</span>`:''}
@@ -1110,7 +1112,7 @@ function renderKanban() {
           <div class="k-card" onclick="abrirModal('${l.id}')">
             <div class="k-name">${l.empresa||'—'}${nCount?`<span class="k-notas-badge">✎ ${nCount}</span>`:''}</div>
             <div class="k-meta">${l.zona?`◎ ${l.zona}`:''} ${l.sector?`· ${l.sector}`:''} ${l.telefono?`<br>↯ ${l.telefono}`:''}</div>
-            ${l.brief_intel&&estado!=='Descartado'?`<div class="k-msg">${(l.brief_intel||'').substring(0,80)}${(l.brief_intel||'').length>80?'...':''}</div>`:''}
+            ${l.primer_mensaje&&estado!=='Descartado'?`<div class="k-msg">${l.primer_mensaje.substring(0,80)}${l.primer_mensaje.length>80?'...':''}</div>`:''}
             <div class="k-foot">
               <div class="lead-tags">
                 <span class="tag ${bc}" style="font-size:9px;">${l.banda}</span>
