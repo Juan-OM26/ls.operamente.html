@@ -389,15 +389,15 @@ select option { background:#1a1d2e; color:#f0effe; }
   <div class="login-box">
     <img id="login-logo" src="https://operamente-github.jdray1.easypanel.host/logo/Operamente.png" alt="Operamente" class="login-logo">
     <div>
-      <div class="login-title">Inteligencia Comercial</div>
+      <div class="login-title" id="t-login-title">Inteligencia Comercial</div>
     </div>
-    <div class="login-sub">Acceso restringido · Operamente</div>
+    <div class="login-sub" id="t-login-sub">Acceso restringido · Operamente</div>
     <div class="login-field">
-      <label>Contraseña</label>
+      <label id="t-login-label">Contraseña</label>
       <input class="login-input" id="login-input" type="password" placeholder="············" onkeydown="if(event.key==='Enter')loginSubmit()">
     </div>
     <div class="login-error" id="login-error"></div>
-    <button class="login-btn" onclick="loginSubmit()">Ingresar</button>
+    <button class="login-btn" onclick="loginSubmit()" id="t-login-btn">Ingresar</button>
     <div class="login-footer">operamente.com</div>
   </div>
 </div>
@@ -411,18 +411,18 @@ select option { background:#1a1d2e; color:#f0effe; }
     </div>
     <nav class="drawer-nav">
       <div class="drawer-nav-item active" onclick="goTo('busqueda');toggleDrawer()" id="dnav-busqueda">
-        <span class="drawer-nav-icon">◎</span> Nueva búsqueda
+        <span class="drawer-nav-icon">◎</span> <span id="t-dnav-busqueda">Nueva búsqueda</span>
       </div>
       <div class="drawer-nav-item" onclick="goTo('nuevos');toggleDrawer()" id="dnav-nuevos">
-        <span class="drawer-nav-icon">◈</span> Leads nuevos
+        <span class="drawer-nav-icon">◈</span> <span id="t-dnav-nuevos">Leads nuevos</span>
         <span class="drawer-badge" id="dbadge-nuevos"></span>
       </div>
       <div class="drawer-nav-item" onclick="goTo('pipeline');toggleDrawer()" id="dnav-pipeline">
-        <span class="drawer-nav-icon">⊞</span> Pipeline
+        <span class="drawer-nav-icon">⊞</span> <span id="t-dnav-pipeline">Pipeline</span>
         <span class="drawer-badge" id="dbadge-pipe"></span>
       </div>
       <div class="drawer-nav-item" onclick="goTo('metricas');toggleDrawer()" id="dnav-metricas">
-        <span class="drawer-nav-icon">⌁</span> Métricas
+        <span class="drawer-nav-icon">⌁</span> <span id="t-dnav-metricas">Métricas</span>
       </div>
     </nav>
     <div class="drawer-footer">
@@ -443,22 +443,22 @@ select option { background:#1a1d2e; color:#f0effe; }
     </div>
     <div class="modal-body">
       <div>
-        <div class="modal-section-title">contacto</div>
+        <div class="modal-section-title" id="t-modal-contacto">contacto</div>
         <div class="modal-contact-row" id="modal-contacto"></div>
       </div>
       <div>
         <div class="modal-section-title" style="position:relative;">
-          scoring
+          <span id="t-modal-scoring">scoring</span>
           <div class="score-why-wrap">
             <button class="score-why-btn">?</button>
             <div class="score-why-box">
               <div class="swo-section">
-                <div class="swo-title">Encaje <span id="swo-fit-total">—/40</span></div>
+                <div class="swo-title"><span id="t-swo-encaje">Encaje</span> <span id="swo-fit-total">—/40</span></div>
                 <div id="swo-fit-rows"></div>
               </div>
               <div class="swo-divider"></div>
               <div class="swo-section">
-                <div class="swo-title">Fricción <span id="swo-opp-total">—/60</span></div>
+                <div class="swo-title"><span id="t-swo-friccion">Fricción</span> <span id="swo-opp-total">—/60</span></div>
                 <div id="swo-opp-rows"></div>
               </div>
               <div class="swo-divider"></div>
@@ -467,18 +467,18 @@ select option { background:#1a1d2e; color:#f0effe; }
           </div>
         </div>
         <div class="modal-score-row">
-          <div class="modal-score-box"><div class="modal-score-val" id="modal-fit">—</div><div class="modal-score-lbl">Encaje / 40</div></div>
-          <div class="modal-score-box"><div class="modal-score-val" id="modal-opp">—</div><div class="modal-score-lbl">Fricción / 60</div></div>
-          <div class="modal-score-box"><div class="modal-score-val" id="modal-total">—</div><div class="modal-score-lbl">Total / 100</div></div>
+          <div class="modal-score-box"><div class="modal-score-val" id="modal-fit">—</div><div class="modal-score-lbl" id="t-lbl-encaje">Encaje / 40</div></div>
+          <div class="modal-score-box"><div class="modal-score-val" id="modal-opp">—</div><div class="modal-score-lbl" id="t-lbl-friccion">Fricción / 60</div></div>
+          <div class="modal-score-box"><div class="modal-score-val" id="modal-total">—</div><div class="modal-score-lbl" id="t-lbl-total">Total / 100</div></div>
         </div>
         <div class="modal-signals" id="modal-signals" style="margin-top:10px;"></div>
       </div>
       <div>
-        <div class="modal-section-title">notas</div>
+        <div class="modal-section-title" id="t-modal-notas">notas</div>
         <div class="notas-list" id="notas-list"></div>
         <div class="nota-input-wrap">
           <textarea class="nota-textarea" id="nota-input" placeholder="Añade una nota..."></textarea>
-          <button class="btn-nota" id="btn-nota" onclick="guardarNota()">Guardar nota</button>
+          <button class="btn-nota" id="btn-nota" onclick="guardarNota()"><span id="t-btn-guardar-nota">Guardar nota</span></button>
         </div>
       </div>
     </div>
@@ -494,13 +494,13 @@ select option { background:#1a1d2e; color:#f0effe; }
 <aside>
   <div class="logo-wrap">
     <img id="logo-img" src="https://operamente-github.jdray1.easypanel.host/logo/Operamente.png" alt="Operamente" class="logo-img">
-    <div class="logo-sub">inteligencia comercial</div>
+    <div class="logo-sub" id="t-logo-sub">inteligencia comercial</div>
   </div>
   <nav class="nav">
-    <div class="nav-item active" onclick="goTo('busqueda')" id="nav-busqueda"><span class="nav-icon">◎</span> Nueva búsqueda</div>
-    <div class="nav-item" onclick="goTo('nuevos')" id="nav-nuevos"><span class="nav-icon">◈</span> Leads nuevos<span class="nav-badge" id="badge-nuevos"></span></div>
-    <div class="nav-item" onclick="goTo('pipeline')" id="nav-pipeline"><span class="nav-icon">⊞</span> Pipeline<span class="nav-badge" id="badge-pipe"></span></div>
-    <div class="nav-item" onclick="goTo('metricas')" id="nav-metricas"><span class="nav-icon">⌁</span> Métricas</div>
+    <div class="nav-item active" onclick="goTo('busqueda')" id="nav-busqueda"><span class="nav-icon">◎</span> <span id="t-nav-busqueda">Nueva búsqueda</span></div>
+    <div class="nav-item" onclick="goTo('nuevos')" id="nav-nuevos"><span class="nav-icon">◈</span> <span id="t-nav-nuevos">Leads nuevos</span><span class="nav-badge" id="badge-nuevos"></span></div>
+    <div class="nav-item" onclick="goTo('pipeline')" id="nav-pipeline"><span class="nav-icon">⊞</span> <span id="t-nav-pipeline">Pipeline</span><span class="nav-badge" id="badge-pipe"></span></div>
+    <div class="nav-item" onclick="goTo('metricas')" id="nav-metricas"><span class="nav-icon">⌁</span> <span id="t-nav-metricas">Métricas</span></div>
   </nav>
   <div class="sidebar-footer">
     <div class="status-pill"><div class="dot"></div><span id="conn-status">Conectando...</span></div>
@@ -531,38 +531,38 @@ select option { background:#1a1d2e; color:#f0effe; }
     <!-- BUSQUEDA -->
     <div class="panel active" id="panel-busqueda">
       <div>
-        <div class="sec-label">qué buscar</div>
+        <div class="sec-label" id="t-sec-buscar">qué buscar</div>
         <div class="card">
           <div class="search-bar-wrap">
             <input type="text" id="query-single" placeholder="ej: fisioterapia, taller mecánico, agencia de marketing...">
             <span class="search-icon">⌕</span>
           </div>
           <div class="results-row">
-            <span class="results-hint">Analiza hasta 20 empresas y entrega solo las que califican el scoring de Operamente.</span>
+            <span class="results-hint" id="t-results-hint">Analiza hasta 20 empresas y entrega solo las que califican el scoring de Operamente.</span>
           </div>
         </div>
       </div>
 
       <div>
-        <div class="sec-label">dónde</div>
+        <div class="sec-label" id="t-sec-donde">dónde</div>
         <div class="card">
           <div class="cfg3">
-            <div class="field"><label>País</label><input type="text" id="pais" value="España" placeholder="España, México, Colombia..."></div>
-            <div class="field"><label>Ciudad</label><input type="text" id="ciudad" value="Madrid" placeholder="Madrid, CDMX, Bogotá..."></div>
+            <div class="field"><label id="t-label-pais">País</label><input type="text" id="pais" value="España" placeholder="España, México, Colombia..."></div>
+            <div class="field"><label id="t-label-ciudad">Ciudad</label><input type="text" id="ciudad" value="Madrid" placeholder="Madrid, CDMX, Bogotá..."></div>
             <div class="field">
-              <label>Barrio / Zona <span class="optional-tag">opcional</span></label>
+              <label id="t-label-zona">Barrio / Zona <span class="optional-tag" id="t-optional">opcional</span></label>
               <input type="text" id="zona" placeholder="Salamanca, Chamberí, Polanco...">
-              <div class="field-hint">Si lo dejas vacío busca en toda la ciudad</div>
+              <div class="field-hint" id="t-zona-hint">Si lo dejas vacío busca en toda la ciudad</div>
             </div>
           </div>
         </div>
       </div>
 
       <div>
-        <div class="sec-label">cómo</div>
+        <div class="sec-label" id="t-sec-como">cómo</div>
         <div class="card">
           <div class="field">
-            <label>Idioma de resultados</label>
+            <label id="t-label-idioma">Idioma de resultados</label>
             <div class="lang-grid">
               <label class="lang-chip on"><input type="checkbox" checked value="es" onchange="this.parentElement.classList.toggle('on',this.checked)"> Español</label>
               <label class="lang-chip"><input type="checkbox" value="en" onchange="this.parentElement.classList.toggle('on',this.checked)"> English</label>
@@ -571,24 +571,24 @@ select option { background:#1a1d2e; color:#f0effe; }
               <label class="lang-chip"><input type="checkbox" value="de" onchange="this.parentElement.classList.toggle('on',this.checked)"> Deutsch</label>
               <label class="lang-chip"><input type="checkbox" value="it" onchange="this.parentElement.classList.toggle('on',this.checked)"> Italiano</label>
             </div>
-            <div class="field-hint" style="margin-top:10px;">Selecciona uno o varios según el mercado</div>
+            <div class="field-hint" id="t-idioma-hint" style="margin-top:10px;">Selecciona uno o varios según el mercado</div>
           </div>
         </div>
       </div>
 
       <div>
-        <div class="sec-label">cómo clasificamos los resultados</div>
+        <div class="sec-label" id="t-sec-clasificamos">cómo clasificamos los resultados</div>
         <div class="card">
-          <div style="font-size:12px;color:var(--sub);margin-bottom:14px;line-height:1.7;">
+          <div style="font-size:12px;color:var(--sub);margin-bottom:14px;line-height:1.7;" id="t-clasificamos-desc">
             Cada empresa recibe un score de 0 a 100: <strong style="color:var(--tx);">encaje</strong> (estructura y capacidad de pago) + <strong style="color:var(--tx);">fricción</strong> (operación manual sin automatizar). Mayor fricción sin sistema = mayor oportunidad para Operamente.
           </div>
           <div class="bands">
             <div class="band priority-band" style="background:var(--gn2);border-color:rgba(0,212,170,0.2);">
               <div class="band-header">
-                <div><div class="band-name" style="color:var(--grn);">Prioritario</div><div class="band-range" style="color:var(--grn);">70–100</div></div>
+                <div><div class="band-name" style="color:var(--grn);" id="t-band-priority-name">Prioritario</div><div class="band-range" style="color:var(--grn);">70–100</div></div>
                 <div class="tip-wrap">
                   <button class="band-tip-btn" style="color:var(--grn);">?</button>
-                  <div class="band-tip-box">
+                  <div class="band-tip-box" id="t-band-priority-tip">
                     <strong>Criterios — Prioritario</strong>
                     <ul>
                       <li>Score total ≥ 70 puntos</li>
@@ -601,14 +601,14 @@ select option { background:#1a1d2e; color:#f0effe; }
                   </div>
                 </div>
               </div>
-              <div class="band-desc">Sin automatización — contactar hoy</div>
+              <div class="band-desc" id="t-band-priority-desc">Sin automatización — contactar hoy</div>
             </div>
             <div class="band good-band" style="background:var(--am2);border-color:rgba(245,190,90,0.2);">
               <div class="band-header">
-                <div><div class="band-name" style="color:var(--amb);">Interesante</div><div class="band-range" style="color:var(--amb);">50–69</div></div>
+                <div><div class="band-name" style="color:var(--amb);" id="t-band-good-name">Interesante</div><div class="band-range" style="color:var(--amb);">50–69</div></div>
                 <div class="tip-wrap">
                   <button class="band-tip-btn" style="color:var(--amb);">?</button>
-                  <div class="band-tip-box">
+                  <div class="band-tip-box" id="t-band-good-tip">
                     <strong>Criterios — Interesante</strong>
                     <ul>
                       <li>Score total entre 50 y 69 puntos</li>
@@ -621,14 +621,14 @@ select option { background:#1a1d2e; color:#f0effe; }
                   </div>
                 </div>
               </div>
-              <div class="band-desc">Fricción parcial — evaluar y nutrir</div>
+              <div class="band-desc" id="t-band-good-desc">Fricción parcial — evaluar y nutrir</div>
             </div>
             <div class="band low-band">
               <div class="band-header">
-                <div><div class="band-name" style="color:var(--mut);">Descartar</div><div class="band-range" style="color:var(--mut);">0–49</div></div>
+                <div><div class="band-name" style="color:var(--mut);" id="t-band-low-name">Descartar</div><div class="band-range" style="color:var(--mut);">0–49</div></div>
                 <div class="tip-wrap">
                   <button class="band-tip-btn" style="color:var(--mut);">?</button>
-                  <div class="band-tip-box">
+                  <div class="band-tip-box" id="t-band-low-tip">
                     <strong>Motivos de descarte</strong>
                     <ul>
                       <li>Madurez high o medium_high — 2+ herramientas digitales activas</li>
@@ -641,7 +641,7 @@ select option { background:#1a1d2e; color:#f0effe; }
                   </div>
                 </div>
               </div>
-              <div class="band-desc">Ya automatizado o sin encaje</div>
+              <div class="band-desc" id="t-band-low-desc">Ya automatizado o sin encaje</div>
             </div>
           </div>
         </div>
@@ -653,17 +653,17 @@ select option { background:#1a1d2e; color:#f0effe; }
       <div>
         <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-            <button class="filter-btn active" onclick="filterNuevos('all',this)">Todos <span id="cnt-all"></span></button>
-            <button class="filter-btn" onclick="filterNuevos('Priority',this)">Prioritarios <span id="cnt-pri"></span></button>
-            <button class="filter-btn" onclick="filterNuevos('Good',this)">Interesantes <span id="cnt-good"></span></button>
-            <button class="filter-btn" onclick="filterNuevos('Low',this)">Descartar <span id="cnt-low"></span></button>
+            <button class="filter-btn active" onclick="filterNuevos('all',this)"><span id="t-filter-all">Todos</span> <span id="cnt-all"></span></button>
+            <button class="filter-btn" onclick="filterNuevos('Priority',this)"><span id="t-filter-pri">Prioritarios</span> <span id="cnt-pri"></span></button>
+            <button class="filter-btn" onclick="filterNuevos('Good',this)"><span id="t-filter-good">Interesantes</span> <span id="cnt-good"></span></button>
+            <button class="filter-btn" onclick="filterNuevos('Low',this)"><span id="t-filter-low">Descartar</span> <span id="cnt-low"></span></button>
           </div>
           <div style="display:flex;gap:8px;align-items:center;">
             <select class="sector-select" id="sector-filter" onchange="renderNuevos()" style="flex:1;border-radius:8px;padding:7px 32px 7px 12px;font-size:12px;">
-              <option value="">todos los sectores</option>
+              <option value="" id="t-opt-todos-sectores">todos los sectores</option>
             </select>
             <input type="text" id="search-input" placeholder="buscar..." style="flex:1;padding:7px 12px;font-size:12px;border-radius:8px;" oninput="renderNuevos()">
-            <button class="btn-export" onclick="exportarCSV()">↓ exportar</button>
+            <button class="btn-export" onclick="exportarCSV()"><span id="t-btn-exportar">↓ exportar</span></button>
           </div>
         </div>
         <div class="leads-list" id="leads-container"></div>
@@ -674,8 +674,8 @@ select option { background:#1a1d2e; color:#f0effe; }
     <div class="panel" id="panel-pipeline">
       <div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
-          <div style="font-size:12px;color:var(--sub);">Leads en proceso — haz clic en una tarjeta para ver el detalle y añadir notas</div>
-          <button class="btn-export" onclick="exportarCSV('pipeline')">↓ exportar pipeline</button>
+          <div style="font-size:12px;color:var(--sub);" id="t-pipeline-desc">Leads en proceso — haz clic en una tarjeta para ver el detalle y añadir notas</div>
+          <button class="btn-export" onclick="exportarCSV('pipeline')"><span id="t-btn-exportar-pipeline">↓ exportar pipeline</span></button>
         </div>
         <div class="kanban" id="kanban-board"></div>
       </div>
@@ -684,27 +684,27 @@ select option { background:#1a1d2e; color:#f0effe; }
     <!-- METRICAS -->
     <div class="panel" id="panel-metricas">
       <div>
-        <div class="sec-label">rendimiento acumulado</div>
+        <div class="sec-label" id="t-sec-rendimiento">rendimiento acumulado</div>
         <div class="metric-grid">
-          <div class="metric"><div class="metric-val" id="m-total">—</div><div class="metric-label">Leads totales</div></div>
-          <div class="metric"><div class="metric-val" id="m-priority">—</div><div class="metric-label">Prioritarios</div></div>
-          <div class="metric"><div class="metric-val" id="m-good">—</div><div class="metric-label">Interesantes</div></div>
-          <div class="metric"><div class="metric-val" id="m-ratio">—</div><div class="metric-label">Tasa priority</div></div>
+          <div class="metric"><div class="metric-val" id="m-total">—</div><div class="metric-label" id="t-metric-total">Leads totales</div></div>
+          <div class="metric"><div class="metric-val" id="m-priority">—</div><div class="metric-label" id="t-metric-priority">Prioritarios</div></div>
+          <div class="metric"><div class="metric-val" id="m-good">—</div><div class="metric-label" id="t-metric-good">Interesantes</div></div>
+          <div class="metric"><div class="metric-val" id="m-ratio">—</div><div class="metric-label" id="t-metric-ratio">Tasa priority</div></div>
         </div>
       </div>
       <div class="cfg2">
-        <div><div class="sec-label">por estado</div><div class="card"><div id="chart-estados"></div></div></div>
-        <div><div class="sec-label">por producto recomendado</div><div class="card"><div id="chart-productos"></div></div></div>
+        <div><div class="sec-label" id="t-sec-por-estado">por estado</div><div class="card"><div id="chart-estados"></div></div></div>
+        <div><div class="sec-label" id="t-sec-por-producto">por producto recomendado</div><div class="card"><div id="chart-productos"></div></div></div>
       </div>
       <div style="display:flex;justify-content:flex-end;">
-        <button class="btn-export" onclick="exportarCSV()">↓ exportar todos los leads</button>
+        <button class="btn-export" onclick="exportarCSV()"><span id="t-btn-exportar-todos">↓ exportar todos los leads</span></button>
       </div>
     </div>
 
   </div>
 
   <div class="run-bar" id="run-bar">
-    <button class="btn-run" id="btn-run" onclick="ejecutar()">Iniciar prospección</button>
+    <button class="btn-run" id="btn-run" onclick="ejecutar()"><span id="t-btn-run">Iniciar prospección</span></button>
     <div class="run-right">
       <div class="status-msg" id="status-msg"></div>
       <div class="timer-bar" id="timer-bar">
@@ -733,12 +733,12 @@ const ESTADOS_PIPELINE = ['Contactado','En conversación','Reunión agendada','C
 const ESTADOS_KANBAN   = ['Contactado','En conversación','Reunión agendada','Cerrado','Descartado'];
 const ESTADO_COLORS    = { 'Contactado':'var(--acc)','En conversación':'var(--amb)','Reunión agendada':'var(--grn)','Cerrado':'var(--grn)','Descartado':'var(--mut)' };
 const FASES = [
-  { hasta:15,  texto:'Buscando empresas en la zona...' },
-  { hasta:45,  texto:'Accediendo a webs y detectando señales...' },
-  { hasta:90,  texto:'Analizando nivel de automatización...' },
-  { hasta:150, texto:'Puntuando oportunidades con IA...' },
-  { hasta:240, texto:'Guardando leads en base de datos...' },
-  { hasta:999, texto:'Finalizando y sincronizando...' }
+  { hasta:15,  key:'fase1' },
+  { hasta:45,  key:'fase2' },
+  { hasta:90,  key:'fase3' },
+  { hasta:150, key:'fase4' },
+  { hasta:240, key:'fase5' },
+  { hasta:999, key:'fase6' }
 ];
 
 const SEÑAL_MAP = {
@@ -780,6 +780,222 @@ const SEÑAL_MAP = {
 function señalLabel(s) { return SEÑAL_MAP[s]?.label || s.replace(/_/g,' '); }
 function señalPts(s)   { return SEÑAL_MAP[s]?.pts   || ''; }
 
+// DICCIONARIO DE TRADUCCION
+// Terminos compartidos con Concierge usan exactamente el mismo texto en ES/EN
+// que translations.js, para mantener vocabulario consistente entre dashboards.
+const T = {
+  es: {
+    nav_busqueda: 'Nueva búsqueda',
+    nav_nuevos: 'Leads nuevos',
+    nav_pipeline: 'Pipeline',
+    nav_metricas: 'Métricas',
+    logo_sub: 'inteligencia comercial',
+    conectando: 'Conectando...',
+    conectado: 'Conectado · Supabase',
+    sin_conexion: 'Sin conexión',
+    page_title_busqueda: 'Nueva búsqueda',
+    page_sub_busqueda: 'configura y lanza tu prospección',
+    page_title_nuevos: 'Leads nuevos',
+    page_sub_nuevos: 'sin interacción previa',
+    page_title_pipeline: 'Pipeline',
+    page_sub_pipeline: 'leads en proceso de contacto',
+    page_title_metricas: 'Métricas',
+    page_sub_metricas: 'rendimiento del sistema',
+    sec_buscar: 'qué buscar',
+    results_hint: 'Analiza hasta 20 empresas y entrega solo las que califican el scoring de Operamente.',
+    sec_donde: 'dónde',
+    label_pais: 'País',
+    label_ciudad: 'Ciudad',
+    label_zona: 'Barrio / Zona',
+    optional: 'opcional',
+    zona_hint: 'Si lo dejas vacío busca en toda la ciudad',
+    sec_como: 'cómo',
+    label_idioma: 'Idioma de resultados',
+    idioma_hint: 'Selecciona uno o varios según el mercado',
+    sec_clasificamos: 'cómo clasificamos los resultados',
+    clasificamos_desc: 'Cada empresa recibe un score de 0 a 100: <strong style="color:var(--tx);">encaje</strong> (estructura y capacidad de pago) + <strong style="color:var(--tx);">fricción</strong> (operación manual sin automatizar). Mayor fricción sin sistema = mayor oportunidad para Operamente.',
+    band_priority_name: 'Prioritario',
+    band_priority_desc: 'Sin automatización — contactar hoy',
+    band_priority_tip: '<strong>Criterios — Prioritario</strong><ul><li>Score total ≥ 70 puntos</li><li>Encaje ≥ 25 pts — equipo visible, reseñas 75+, empresa establecida</li><li>Fricción ≥ 35 pts — sin reservas online, contacto manual, sin chatbot</li><li>Madurez digital: low o medium (sin herramientas avanzadas)</li><li>Contacto del decisor encontrado (nombre o email directo)</li></ul><div class="tip-footer">Producto sugerido: Flow o Sinergia</div>',
+    band_good_name: 'Interesante',
+    band_good_desc: 'Fricción parcial — evaluar y nutrir',
+    band_good_tip: '<strong>Criterios — Interesante</strong><ul><li>Score total entre 50 y 69 puntos</li><li>Encaje ≥ 15 pts — empresa real con presencia digital</li><li>Al menos una fricción clara detectada</li><li>Puede tener WhatsApp básico o formulario sin coordinar</li><li>Madurez digital: low o medium</li></ul><div class="tip-footer">Producto sugerido: Impulso o Flow</div>',
+    band_low_name: 'Descartar',
+    band_low_desc: 'Ya automatizado o sin encaje',
+    band_low_tip: '<strong>Motivos de descarte</strong><ul><li>Madurez high o medium_high — 2+ herramientas digitales activas</li><li>Sistema propio con pago online + chatbot desarrollado</li><li>Encaje &lt; 10 pts — sin estructura mínima de empresa</li><li>Administración pública</li><li>Franquicia con software corporativo propio mencionado</li></ul><div class="tip-footer">No se guardan en la base de datos</div>',
+    filter_all: 'Todos',
+    filter_pri: 'Prioritarios',
+    filter_good: 'Interesantes',
+    filter_low: 'Descartar',
+    opt_todos_sectores: 'todos los sectores',
+    buscar_placeholder: 'buscar...',
+    btn_exportar: '↓ exportar',
+    pipeline_desc: 'Leads en proceso — haz clic en una tarjeta para ver el detalle y añadir notas',
+    btn_exportar_pipeline: '↓ exportar pipeline',
+    sec_rendimiento: 'rendimiento acumulado',
+    metric_total: 'Leads totales',
+    metric_priority: 'Prioritarios',
+    metric_good: 'Interesantes',
+    metric_ratio: 'Tasa priority',
+    sec_por_estado: 'por estado',
+    sec_por_producto: 'por producto recomendado',
+    btn_exportar_todos: '↓ exportar todos los leads',
+    btn_run: 'Iniciar prospección',
+    btn_run_iniciando: 'Iniciando...',
+    modal_contacto: 'contacto',
+    modal_scoring: 'scoring',
+    modal_notas: 'notas',
+    swo_encaje: 'Encaje',
+    swo_friccion: 'Fricción',
+    lbl_encaje: 'Encaje / 40',
+    lbl_friccion: 'Fricción / 60',
+    lbl_total: 'Total / 100',
+    nota_placeholder: 'Añade una nota...',
+    btn_guardar_nota: 'Guardar nota',
+    btn_guardando: 'Guardando...',
+    login_title: 'Inteligencia Comercial',
+    login_sub: 'Acceso restringido · Operamente',
+    login_label: 'Contraseña',
+    login_btn: 'Ingresar',
+    login_error: 'Contraseña incorrecta',
+    loading_leads: 'Cargando leads...',
+    fase1: 'Buscando empresas en la zona...',
+    fase2: 'Accediendo a webs y detectando señales...',
+    fase3: 'Analizando nivel de automatización...',
+    fase4: 'Puntuando oportunidades con IA...',
+    fase5: 'Guardando leads en base de datos...',
+    fase6: 'Finalizando y sincronizando...',
+    leads_listos: 'Leads listos',
+    completado_en: 'Completado en',
+    sin_resultados_timer: 'Sin resultados',
+    tiempo: 'Tiempo',
+    busqueda_iniciada: 'Prospección iniciada',
+    error_conexion_n8n: 'Error al conectar con el sistema — verifica que N8N esté activo',
+    error_no_conexion: 'No se pudo conectar con el sistema',
+    busqueda_vacia: 'Escribe un sector o tipo de negocio para buscar',
+    busqueda_sin_leads: 'La búsqueda finalizó — no se encontraron leads que califiquen el scoring de Operamente',
+    lead_nuevo_singular: 'lead nuevo encontrado',
+    lead_nuevo_plural: 'leads nuevos encontrados',
+    sin_leads_nuevos_titulo: 'Sin leads nuevos',
+    sin_leads_nuevos_sub: 'Lanza una búsqueda desde <em>Nueva búsqueda</em>',
+    sin_resultados_titulo: 'Sin resultados',
+    sin_resultados_sub: 'Ajusta los filtros',
+    sin_datos_contacto: 'Sin datos de contacto',
+    sin_senales_encaje: 'Sin señales de encaje',
+    sin_senales_friccion: 'Sin señales de fricción',
+    sin_notas: 'Sin notas todavía',
+    no_export: 'No hay leads para exportar',
+    sin_leads_etapa: 'Sin leads en esta etapa',
+    sin_datos_todavia: 'Sin datos todavía',
+  },
+  en: {
+    nav_busqueda: 'New search',
+    nav_nuevos: 'New leads',
+    nav_pipeline: 'Pipeline',
+    nav_metricas: 'Metrics',
+    logo_sub: 'commercial intelligence',
+    conectando: 'Connecting...',
+    conectado: 'Connected · Supabase',
+    sin_conexion: 'No connection',
+    page_title_busqueda: 'New search',
+    page_sub_busqueda: 'configure and launch your prospecting',
+    page_title_nuevos: 'New leads',
+    page_sub_nuevos: 'no previous interaction',
+    page_title_pipeline: 'Pipeline',
+    page_sub_pipeline: 'leads in contact process',
+    page_title_metricas: 'Metrics',
+    page_sub_metricas: 'system performance',
+    sec_buscar: 'what to search',
+    results_hint: "Analyzes up to 20 companies and delivers only those that meet Operamente's scoring.",
+    sec_donde: 'where',
+    label_pais: 'Country',
+    label_ciudad: 'City',
+    label_zona: 'Neighborhood / Zone',
+    optional: 'optional',
+    zona_hint: 'If left empty, searches the whole city',
+    sec_como: 'how',
+    label_idioma: 'Results language',
+    idioma_hint: 'Select one or more depending on the market',
+    sec_clasificamos: 'how we classify results',
+    clasificamos_desc: 'Each company gets a score from 0 to 100: <strong style="color:var(--tx);">fit</strong> (structure and ability to pay) + <strong style="color:var(--tx);">friction</strong> (manual operations without automation). More friction without a system = more opportunity for Operamente.',
+    band_priority_name: 'Priority',
+    band_priority_desc: 'No automation — contact today',
+    band_priority_tip: '<strong>Criteria — Priority</strong><ul><li>Total score ≥ 70 points</li><li>Fit ≥ 25 pts — visible team, 75+ reviews, established company</li><li>Friction ≥ 35 pts — no online booking, manual contact, no chatbot</li><li>Digital maturity: low or medium (no advanced tools)</li><li>Decision maker contact found (name or direct email)</li></ul><div class="tip-footer">Suggested product: Flow or Sinergia</div>',
+    band_good_name: 'Good fit',
+    band_good_desc: 'Partial friction — evaluate and nurture',
+    band_good_tip: '<strong>Criteria — Good fit</strong><ul><li>Total score between 50 and 69 points</li><li>Fit ≥ 15 pts — real company with digital presence</li><li>At least one clear friction detected</li><li>May have basic WhatsApp or uncoordinated form</li><li>Digital maturity: low or medium</li></ul><div class="tip-footer">Suggested product: Impulso or Flow</div>',
+    band_low_name: 'Discard',
+    band_low_desc: 'Already automated or no fit',
+    band_low_tip: '<strong>Reasons for discarding</strong><ul><li>High or medium-high maturity — 2+ active digital tools</li><li>Own system with online payment + developed chatbot</li><li>Fit &lt; 10 pts — no minimum company structure</li><li>Public administration</li><li>Franchise with own corporate software mentioned</li></ul><div class="tip-footer">Not saved to the database</div>',
+    filter_all: 'All',
+    filter_pri: 'Priority',
+    filter_good: 'Good fit',
+    filter_low: 'Discard',
+    opt_todos_sectores: 'all sectors',
+    buscar_placeholder: 'search...',
+    btn_exportar: '↓ export',
+    pipeline_desc: 'Leads in process — click on a card to see details and add notes',
+    btn_exportar_pipeline: '↓ export pipeline',
+    sec_rendimiento: 'cumulative performance',
+    metric_total: 'Total leads',
+    metric_priority: 'Priority',
+    metric_good: 'Good fit',
+    metric_ratio: 'Priority rate',
+    sec_por_estado: 'by status',
+    sec_por_producto: 'by recommended product',
+    btn_exportar_todos: '↓ export all leads',
+    btn_run: 'Start prospecting',
+    btn_run_iniciando: 'Starting...',
+    modal_contacto: 'contact',
+    modal_scoring: 'scoring',
+    modal_notas: 'notes',
+    swo_encaje: 'Fit',
+    swo_friccion: 'Friction',
+    lbl_encaje: 'Fit / 40',
+    lbl_friccion: 'Friction / 60',
+    lbl_total: 'Total / 100',
+    nota_placeholder: 'Add a note...',
+    btn_guardar_nota: 'Save note',
+    btn_guardando: 'Saving...',
+    login_title: 'Commercial Intelligence',
+    login_sub: 'Restricted access · Operamente',
+    login_label: 'Password',
+    login_btn: 'Sign in',
+    login_error: 'Incorrect password',
+    loading_leads: 'Loading leads...',
+    fase1: 'Searching companies in the area...',
+    fase2: 'Accessing websites and detecting signals...',
+    fase3: 'Analyzing automation level...',
+    fase4: 'Scoring opportunities with AI...',
+    fase5: 'Saving leads to database...',
+    fase6: 'Finishing and syncing...',
+    leads_listos: 'Leads ready',
+    completado_en: 'Completed in',
+    sin_resultados_timer: 'No results',
+    tiempo: 'Time',
+    busqueda_iniciada: 'Prospecting started',
+    error_conexion_n8n: 'Connection error — check that N8N is active',
+    error_no_conexion: 'Could not connect to the system',
+    busqueda_vacia: 'Write a sector or business type to search',
+    busqueda_sin_leads: "Search finished — no leads matched Operamente's scoring",
+    lead_nuevo_singular: 'new lead found',
+    lead_nuevo_plural: 'new leads found',
+    sin_leads_nuevos_titulo: 'No new leads',
+    sin_leads_nuevos_sub: 'Launch a search from <em>New search</em>',
+    sin_resultados_titulo: 'No results',
+    sin_resultados_sub: 'Adjust the filters',
+    sin_datos_contacto: 'No contact info',
+    sin_senales_encaje: 'No fit signals',
+    sin_senales_friccion: 'No friction signals',
+    sin_notas: 'No notes yet',
+    no_export: 'No leads to export',
+    sin_leads_etapa: 'No leads at this stage',
+    sin_datos_todavia: 'No data yet',
+  }
+};
+let currentLang = 'es';
+function t(key) { return T[currentLang]?.[key] ?? key; }
+
 let allLeads = [], filtroNuevos = 'all';
 let timerInterval = null, pollingInterval = null, timerSeg = 0, leadsAntes = 0;
 let drawerOpen = false;
@@ -799,35 +1015,47 @@ function loginSubmit() {
     inp.classList.remove("error");
     void inp.offsetWidth;
     inp.classList.add("error");
-    err.textContent = "Contraseña incorrecta";
+    err.textContent = t('login_error');
     inp.value="";
     setTimeout(()=>inp.classList.remove("error"),500);
   }
 }
 function checkAuth() {
+  currentLang = localStorage.getItem('om_lang') || 'es';
   if (sessionStorage.getItem("om_auth")==="1") {
     document.getElementById("login-gate").classList.add("hidden");
     initApp();
   } else {
     document.body.style.overflow="hidden";
-    const t = localStorage.getItem("om_theme")||"dark";
-    document.documentElement.setAttribute("data-theme",t);
-    const logoSrc = t==="dark"
+    const theme = localStorage.getItem("om_theme")||"dark";
+    document.documentElement.setAttribute("data-theme",theme);
+    const logoSrc = theme==="dark"
       ? "https://operamente-github.jdray1.easypanel.host/logo/Operamente.png"
       : "https://operamente-github.jdray1.easypanel.host/logo/Operamente-dark.png";
     document.getElementById("login-logo").src = logoSrc;
+    document.getElementById('lang-es')?.classList.toggle('on', currentLang === 'es');
+    document.getElementById('lang-en')?.classList.toggle('on', currentLang === 'en');
+    document.getElementById("t-login-title").textContent = t('login_title');
+    document.getElementById("t-login-sub").textContent = t('login_sub');
+    document.getElementById("t-login-label").textContent = t('login_label');
+    document.getElementById("t-login-btn").textContent = t('login_btn');
+    document.getElementById("login-input").placeholder = "············";
     document.getElementById("login-input").focus();
   }
 }
 
 // INIT
 function initApp() {
-  const now = new Date();
-  document.getElementById('topbar-date').textContent  = now.toLocaleDateString('es-ES',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
-  document.getElementById('sidebar-date').textContent = now.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
   setTheme(localStorage.getItem('om_theme') || 'dark');
   setLang(localStorage.getItem('om_lang') || 'es');
+  updateDateLocale();
   cargarLeads();
+}
+function updateDateLocale() {
+  const now = new Date();
+  const locale = currentLang === 'en' ? 'en-US' : 'es-ES';
+  document.getElementById('topbar-date').textContent  = now.toLocaleDateString(locale,{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  document.getElementById('sidebar-date').textContent = now.toLocaleDateString(locale,{day:'2-digit',month:'short',year:'numeric'});
 }
 checkAuth();
 
@@ -871,15 +1099,83 @@ function setTheme(t) {
 }
 function toggleTheme() { setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); }
 
-// IDIOMA (solo visual del boton ES|EN, sin tocar logica de datos)
+// IDIOMA
 function setLang(l) {
+  currentLang = l;
   localStorage.setItem('om_lang', l);
   document.getElementById('lang-es')?.classList.toggle('on', l === 'es');
   document.getElementById('lang-en')?.classList.toggle('on', l === 'en');
+  applyLang();
 }
 function toggleLang() {
   const actual = localStorage.getItem('om_lang') || 'es';
   setLang(actual === 'es' ? 'en' : 'es');
+}
+
+function applyLang() {
+  const map = {
+    't-nav-busqueda':'nav_busqueda','t-dnav-busqueda':'nav_busqueda',
+    't-nav-nuevos':'nav_nuevos','t-dnav-nuevos':'nav_nuevos',
+    't-nav-pipeline':'nav_pipeline','t-dnav-pipeline':'nav_pipeline',
+    't-nav-metricas':'nav_metricas','t-dnav-metricas':'nav_metricas',
+    't-logo-sub':'logo_sub',
+    't-sec-buscar':'sec_buscar','t-results-hint':'results_hint',
+    't-sec-donde':'sec_donde','t-label-pais':'label_pais','t-label-ciudad':'label_ciudad',
+    't-zona-hint':'zona_hint','t-sec-como':'sec_como','t-label-idioma':'label_idioma',
+    't-idioma-hint':'idioma_hint','t-sec-clasificamos':'sec_clasificamos',
+    't-band-priority-name':'band_priority_name','t-band-priority-desc':'band_priority_desc',
+    't-band-good-name':'band_good_name','t-band-good-desc':'band_good_desc',
+    't-band-low-name':'band_low_name','t-band-low-desc':'band_low_desc',
+    't-filter-all':'filter_all','t-filter-pri':'filter_pri','t-filter-good':'filter_good','t-filter-low':'filter_low',
+    't-opt-todos-sectores':'opt_todos_sectores',
+    't-btn-exportar':'btn_exportar','t-pipeline-desc':'pipeline_desc','t-btn-exportar-pipeline':'btn_exportar_pipeline',
+    't-sec-rendimiento':'sec_rendimiento','t-metric-total':'metric_total','t-metric-priority':'metric_priority',
+    't-metric-good':'metric_good','t-metric-ratio':'metric_ratio',
+    't-sec-por-estado':'sec_por_estado','t-sec-por-producto':'sec_por_producto','t-btn-exportar-todos':'btn_exportar_todos',
+    't-btn-run':'btn_run','t-modal-contacto':'modal_contacto','t-modal-scoring':'modal_scoring','t-modal-notas':'modal_notas',
+    't-swo-encaje':'swo_encaje','t-swo-friccion':'swo_friccion',
+    't-lbl-encaje':'lbl_encaje','t-lbl-friccion':'lbl_friccion','t-lbl-total':'lbl_total',
+    't-btn-guardar-nota':'btn_guardar_nota',
+    't-login-title':'login_title','t-login-sub':'login_sub','t-login-label':'login_label','t-login-btn':'login_btn',
+    't-optional':'optional',
+  };
+  Object.entries(map).forEach(([id,key])=>{ const el=document.getElementById(id); if(el) el.textContent=t(key); });
+
+  // HTML tips e items de select necesitan innerHTML, no textContent
+  const htmlMap = {
+    't-clasificamos-desc':'clasificamos_desc',
+    't-band-priority-tip':'band_priority_tip',
+    't-band-good-tip':'band_good_tip',
+    't-band-low-tip':'band_low_tip',
+  };
+  Object.entries(htmlMap).forEach(([id,key])=>{ const el=document.getElementById(id); if(el) el.innerHTML=t(key); });
+
+  const optTodos = document.getElementById('t-opt-todos-sectores');
+  if (optTodos) optTodos.textContent = t('opt_todos_sectores');
+
+  document.getElementById('nota-input')?.setAttribute('placeholder', t('nota_placeholder'));
+  document.getElementById('search-input')?.setAttribute('placeholder', t('buscar_placeholder'));
+  document.getElementById('loading-text').textContent = t('loading_leads');
+
+  // page-title / page-sub según el panel activo
+  const activePanel = document.querySelector('.panel.active')?.id?.replace('panel-','') || 'busqueda';
+  document.getElementById('page-title').textContent = t('page_title_'+activePanel);
+  document.getElementById('page-sub').textContent   = t('page_sub_'+activePanel);
+
+  // estado de conexion (si ya cargó)
+  const connEl = document.getElementById('conn-status');
+  if (connEl && connEl.textContent !== T.es.conectando && connEl.textContent !== T.en.conectando) {
+    const conectadoVal = connEl.textContent.includes('Conectado') || connEl.textContent.includes('Connected');
+    const txt = conectadoVal ? t('conectado') : t('sin_conexion');
+    connEl.textContent = txt;
+    document.getElementById('drawer-conn-status').textContent = txt;
+  }
+
+  // re-renderizar lo que depende de listas (para traducir vacios y textos generados)
+  if (typeof allLeads !== 'undefined' && allLeads.length >= 0) {
+    renderNuevos(); renderKanban(); renderMetricas();
+  }
+  if (document.getElementById('topbar-date').textContent) updateDateLocale();
 }
 
 // SUPABASE
@@ -889,23 +1185,23 @@ async function sbFetch(path, opts={}) {
     ...opts
   });
   if (!res.ok) throw new Error(await res.text());
-  const t = await res.text();
-  return t ? JSON.parse(t) : [];
+  const txt = await res.text();
+  return txt ? JSON.parse(txt) : [];
 }
 
 async function cargarLeads() {
   try {
-    showLoading('Cargando leads...');
+    showLoading(t('loading_leads'));
     allLeads = await sbFetch('leads?order=created_at.desc&limit=1000');
-    const status = 'Conectado · Supabase';
+    const status = t('conectado');
     document.getElementById('conn-status').textContent = status;
     document.getElementById('drawer-conn-status').textContent = status;
     updateBadges(); renderNuevos(); renderKanban(); renderMetricas();
     hideLoading();
   } catch(e) {
     hideLoading();
-    document.getElementById('conn-status').textContent = 'Sin conexión';
-    document.getElementById('drawer-conn-status').textContent = 'Sin conexión';
+    document.getElementById('conn-status').textContent = t('sin_conexion');
+    document.getElementById('drawer-conn-status').textContent = t('sin_conexion');
   }
 }
 
@@ -919,12 +1215,6 @@ async function actualizarEstado(id, estado) {
 }
 
 // NAV
-const titles = {
-  busqueda: ['Nueva búsqueda','configura y lanza tu prospección'],
-  nuevos:   ['Leads nuevos','sin interacción previa'],
-  pipeline: ['Pipeline','leads en proceso de contacto'],
-  metricas: ['Métricas','rendimiento del sistema']
-};
 function goTo(panel) {
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   ['busqueda','nuevos','pipeline','metricas'].forEach(p=>{
@@ -933,9 +1223,8 @@ function goTo(panel) {
   document.getElementById('panel-'+panel).classList.add('active');
   document.getElementById('nav-'+panel).classList.add('active');
   syncDrawerNav(panel);
-  const [t,s] = titles[panel];
-  document.getElementById('page-title').textContent = t;
-  document.getElementById('page-sub').textContent   = s;
+  document.getElementById('page-title').textContent = t('page_title_'+panel);
+  document.getElementById('page-sub').textContent   = t('page_sub_'+panel);
   document.getElementById('run-bar').style.display  = panel==='busqueda'?'flex':'none';
   if (panel==='nuevos')   renderNuevos();
   if (panel==='pipeline') renderKanban();
@@ -949,25 +1238,25 @@ async function ejecutar() {
   const zona    = document.getElementById('zona').value.trim();
   const idiomas = Array.from(document.querySelectorAll('.lang-chip input:checked')).map(c=>c.value);
   const term    = document.getElementById('query-single').value.trim();
-  if (!term) { showStatus('Escribe un sector o tipo de negocio para buscar','err'); return; }
+  if (!term) { showStatus(t('busqueda_vacia'),'err'); return; }
   const qs = [{ sector: term, zona: zona ? `${zona} ${ciudad}` : ciudad }];
   const payload = { job_id:`om_${Date.now()}`, timestamp:new Date().toISOString(), icp:{pais,ciudad,zona,idiomas}, queries:qs };
   const btn = document.getElementById('btn-run');
-  btn.disabled=true; btn.textContent='Iniciando...';
+  btn.disabled=true; btn.textContent=t('btn_run_iniciando');
   try {
     const res = await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if (res.ok) {
       leadsAntes = allLeads.length;
-      showStatus('Prospección iniciada','wait');
+      showStatus(t('busqueda_iniciada'),'wait');
       iniciarPolling(1);
-    } else { showStatus('Error al conectar con el sistema — verifica que N8N esté activo','err'); }
-  } catch(e) { showStatus('No se pudo conectar con el sistema','err'); }
-  btn.disabled=false; btn.textContent='Iniciar prospección';
+    } else { showStatus(t('error_conexion_n8n'),'err'); }
+  } catch(e) { showStatus(t('error_no_conexion'),'err'); }
+  btn.disabled=false; btn.textContent=t('btn_run');
 }
 
 // TIMER
 function formatTime(s) { return `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`; }
-function getFase(s) { return FASES.find(f=>s<f.hasta)?.texto||'Procesando...'; }
+function getFase(s) { const f = FASES.find(f=>s<f.hasta); return f ? t(f.key) : 'Procesando...'; }
 function iniciarTimer(nq) {
   timerSeg=0; const est=Math.max(60,nq*25);
   document.getElementById('timer-bar').classList.add('show');
@@ -975,28 +1264,29 @@ function iniciarTimer(nq) {
   document.getElementById('timer-fill').style.width='0%';
   document.getElementById('timer-clock').textContent='00:00';
   document.getElementById('timer-fase').textContent=getFase(0);
-  document.getElementById('timer-nota').textContent=`${nq} búsqueda${nq>1?'s':''}`;
+  document.getElementById('timer-nota').textContent=`${nq} ${currentLang==='en'?'search'+(nq>1?'es':''):'búsqueda'+(nq>1?'s':'')}`;
   timerInterval=setInterval(()=>{ timerSeg++; document.getElementById('timer-clock').textContent=formatTime(timerSeg); document.getElementById('timer-fase').textContent=getFase(timerSeg); document.getElementById('timer-fill').style.width=Math.min(Math.round(timerSeg/est*100),94)+'%'; },1000);
 }
 function detenerTimer(exito) {
   clearInterval(timerInterval); timerInterval=null;
   document.getElementById('timer-fill').style.width='100%';
-  if (exito) { ['timer-clock','timer-dot','timer-fill'].forEach(id=>document.getElementById(id).classList.add('done')); document.getElementById('timer-fase').textContent='Leads listos'; document.getElementById('timer-nota').textContent=`Completado en ${formatTime(timerSeg)}`; }
-  else { document.getElementById('timer-fase').textContent='Sin resultados'; document.getElementById('timer-nota').textContent=`Tiempo: ${formatTime(timerSeg)}`; }
+  if (exito) { ['timer-clock','timer-dot','timer-fill'].forEach(id=>document.getElementById(id).classList.add('done')); document.getElementById('timer-fase').textContent=t('leads_listos'); document.getElementById('timer-nota').textContent=`${t('completado_en')} ${formatTime(timerSeg)}`; }
+  else { document.getElementById('timer-fase').textContent=t('sin_resultados_timer'); document.getElementById('timer-nota').textContent=`${t('tiempo')}: ${formatTime(timerSeg)}`; }
   setTimeout(()=>{ document.getElementById('timer-bar').classList.remove('show'); ['timer-clock','timer-dot','timer-fill'].forEach(id=>document.getElementById(id).classList.remove('done')); timerSeg=0; },5000);
 }
 function iniciarPolling(nq) {
   iniciarTimer(nq);
   const inicio=Date.now(), maxEspera=6*60*1000;
   pollingInterval=setInterval(async()=>{
-    if (Date.now()-inicio>maxEspera) { clearInterval(pollingInterval); pollingInterval=null; detenerTimer(false); showStatus('La búsqueda finalizó — no se encontraron leads que califiquen el scoring de Operamente','wait'); return; }
+    if (Date.now()-inicio>maxEspera) { clearInterval(pollingInterval); pollingInterval=null; detenerTimer(false); showStatus(t('busqueda_sin_leads'),'wait'); return; }
     try {
       const todos=await sbFetch('leads?select=id&order=created_at.desc');
       if (todos.length>leadsAntes) {
         clearInterval(pollingInterval); pollingInterval=null; detenerTimer(true);
         await cargarLeads();
         const n=todos.length-leadsAntes;
-        showStatus(`${n} lead${n>1?'s':''} nuevo${n>1?'s':''} encontrado${n>1?'s':''}`,'ok');
+        const lbl = n>1 ? t('lead_nuevo_plural') : t('lead_nuevo_singular');
+        showStatus(`${n} ${lbl}`,'ok');
         setTimeout(()=>goTo('nuevos'),1500);
       }
     } catch(e) { console.error(e); }
@@ -1058,7 +1348,7 @@ function renderNuevos() {
 
   const c = document.getElementById('leads-container');
   if (!leads.length) {
-    c.innerHTML=`<div class="empty"><div class="empty-title">${filtroNuevos==='all'&&!busq?'Sin leads nuevos':'Sin resultados'}</div><div class="empty-sub">${filtroNuevos==='all'&&!busq?'Lanza una búsqueda desde <em>Nueva búsqueda</em>':'Ajusta los filtros'}</div></div>`;
+    c.innerHTML=`<div class="empty"><div class="empty-title">${filtroNuevos==='all'&&!busq?t('sin_leads_nuevos_titulo'):t('sin_resultados_titulo')}</div><div class="empty-sub">${filtroNuevos==='all'&&!busq?t('sin_leads_nuevos_sub'):t('sin_resultados_sub')}</div></div>`;
     return;
   }
   c.innerHTML = leads.map(l=>{
@@ -1130,7 +1420,7 @@ function renderKanban() {
               ${['Nuevo','Contactado','En conversación','Reunión agendada','Cerrado','Descartado'].map(e=>`<option ${l.estado===e?'selected':''}>${e}</option>`).join('')}
             </select>
           </div>`;
-        }).join(''):`<div class="k-empty">Sin leads en esta etapa</div>`}
+        }).join(''):`<div class="k-empty">${t('sin_leads_etapa')}</div>`}
       </div>
     </div>`;
   }).join('');
@@ -1151,7 +1441,7 @@ function abrirModal(id) {
     l.contacto_email  ?`<div class="modal-contact-item"><span>✉</span><a href="mailto:${l.contacto_email}">${l.contacto_email}</a></div>`:'',
     l.web             ?`<div class="modal-contact-item"><span>↗</span><a href="${l.web.startsWith('http')?l.web:'https://'+l.web}" target="_blank">${l.web}</a></div>`:''
   ].filter(Boolean).join('');
-  document.getElementById('modal-contacto').innerHTML = filas||'<div class="notas-empty">Sin datos de contacto</div>';
+  document.getElementById('modal-contacto').innerHTML = filas||`<div class="notas-empty">${t('sin_datos_contacto')}</div>`;
   document.getElementById('modal-fit').textContent   = l.fit_score         ??'—';
   document.getElementById('modal-opp').textContent   = l.opportunity_score ??'—';
   document.getElementById('modal-total').textContent = l.total_score        ??'—';
@@ -1159,12 +1449,12 @@ function abrirModal(id) {
   document.getElementById('swo-fit-total').textContent = `${l.fit_score||0}/40`;
   document.getElementById('swo-fit-rows').innerHTML = fitSeñales.length
     ? fitSeñales.map(s=>`<div class="swo-row"><span class="swo-label">${señalLabel(s)}</span><span class="swo-pts">${señalPts(s)}</span></div>`).join('')
-    : '<div class="swo-label" style="opacity:0.5">Sin señales de encaje</div>';
+    : `<div class="swo-label" style="opacity:0.5">${t('sin_senales_encaje')}</div>`;
   const oppSeñales = (l.opp_detalle||'').split(',').map(s=>s.trim()).filter(Boolean);
   document.getElementById('swo-opp-total').textContent = `${l.opportunity_score||0}/60`;
   document.getElementById('swo-opp-rows').innerHTML = oppSeñales.length
     ? oppSeñales.map(s=>`<div class="swo-row"><span class="swo-label">${señalLabel(s)}</span><span class="swo-pts">${señalPts(s)}</span></div>`).join('')
-    : '<div class="swo-label" style="opacity:0.5">Sin señales de fricción</div>';
+    : `<div class="swo-label" style="opacity:0.5">${t('sin_senales_friccion')}</div>`;
   document.getElementById('swo-razon').textContent = l.razon_cuenta||'';
   const todasSeñales = [...fitSeñales,...oppSeñales].filter(Boolean);
   document.getElementById('modal-signals').innerHTML = todasSeñales.map(s=>`<span class="tag tag-mut">${señalLabel(s)}</span>`).join('');
@@ -1179,7 +1469,7 @@ function cerrarModal(e) { if(e.target===document.getElementById('modal-overlay')
 
 function renderNotas(notas) {
   const el=document.getElementById('notas-list');
-  if (!notas||!notas.length) { el.innerHTML='<div class="notas-empty">Sin notas todavía</div>'; return; }
+  if (!notas||!notas.length) { el.innerHTML=`<div class="notas-empty">${t('sin_notas')}</div>`; return; }
   el.innerHTML=[...notas].reverse().map(n=>`
     <div class="nota-item">
       <div class="nota-fecha">${new Date(n.fecha).toLocaleString('es-ES',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
@@ -1191,7 +1481,7 @@ async function guardarNota() {
   const texto=document.getElementById('nota-input').value.trim();
   if (!texto||!modalLeadId) return;
   const btn=document.getElementById('btn-nota');
-  btn.disabled=true; btn.textContent='Guardando...';
+  btn.disabled=true; btn.textContent=t('btn_guardando');
   const l=allLeads.find(x=>x.id===modalLeadId);
   const notasNuevas=[...(Array.isArray(l.notas)?l.notas:[]),{fecha:new Date().toISOString(),texto}];
   try {
@@ -1199,7 +1489,7 @@ async function guardarNota() {
     l.notas=notasNuevas; renderNotas(notasNuevas); renderKanban();
     document.getElementById('nota-input').value='';
   } catch(e) { console.error(e); }
-  btn.disabled=false; btn.textContent='Guardar nota';
+  btn.disabled=false; btn.textContent=t('btn_guardar_nota');
 }
 
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&modalLeadId) cerrarModalBtn(); });
@@ -1213,7 +1503,7 @@ function renderMetricas() {
   document.getElementById('m-ratio').textContent    = total>0?Math.round(pri/total*100)+'%':'—';
   const rc=(elId,data,colors)=>{
     const el=document.getElementById(elId), tot=Object.values(data).reduce((a,b)=>a+b,0)||1;
-    el.innerHTML=Object.entries(data).length?Object.entries(data).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="chart-row"><div class="chart-label">${k}</div><div class="chart-bar-bg"><div class="chart-bar" style="background:${colors[k]||'var(--sub)'};width:${Math.round(v/tot*100)}%;"></div></div><div class="chart-val">${v}</div></div>`).join(''):'<div style="color:var(--mut);font-size:12px;padding:8px 0;">Sin datos todavía</div>';
+    el.innerHTML=Object.entries(data).length?Object.entries(data).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="chart-row"><div class="chart-label">${k}</div><div class="chart-bar-bg"><div class="chart-bar" style="background:${colors[k]||'var(--sub)'};width:${Math.round(v/tot*100)}%;"></div></div><div class="chart-val">${v}</div></div>`).join(''):`<div style="color:var(--mut);font-size:12px;padding:8px 0;">${t('sin_datos_todavia')}</div>`;
   };
   const estados={};
   allLeads.forEach(l=>{ const e=l.estado||'Nuevo'; estados[e]=(estados[e]||0)+1; });
@@ -1238,7 +1528,7 @@ function updateBadges() {
 // EXPORTAR CSV
 function exportarCSV(tipo) {
   let leads=tipo==='pipeline'?allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado)):allLeads;
-  if (!leads.length) { showStatus('No hay leads para exportar','err'); return; }
+  if (!leads.length) { showStatus(t('no_export'),'err'); return; }
   const cols=['empresa','sector','zona','telefono','web','contacto_nombre','contacto_email','contacto_fuente','calidad_contacto','fit_score','opportunity_score','total_score','banda','automation_maturity','producto_recomendado','tiene_chatbot','tiene_reservas','tiene_crm','cta_manual','es_franquicia','franquicia_sin_sistema','dolor_activo','momento_compra','razon_cuenta','angulo_contacto','primer_mensaje','estado','fuente','fecha'];
   const rows=leads.map(l=>cols.map(c=>`"${(l[c]||'').toString().replace(/"/g,'""')}"`).join(','));
   const csv='\uFEFF'+[cols.join(','),...rows].join('\n');
