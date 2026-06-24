@@ -1021,6 +1021,12 @@ function loginSubmit() {
   }
 }
 function checkAuth() {
+  // Login automático si viene desde el Hub
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('from') === 'hub') {
+    sessionStorage.setItem("om_auth","1");
+  }
+
   currentLang = localStorage.getItem('om_lang') || 'es';
   if (sessionStorage.getItem("om_auth")==="1") {
     document.getElementById("login-gate").classList.add("hidden");
