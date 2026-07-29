@@ -211,6 +211,11 @@ select option { background:#1a1d2e; color:#f0effe; }
 .k-col[data-estado="Reunión agendada"]::after { background:var(--grn); }
 .k-col[data-estado="Cerrado"]::after          { background:var(--grad); }
 .k-col[data-estado="Descartado"]::after       { background:var(--mut); }
+.k-col[data-linkedin="sin_conexion"]::after      { background:var(--mut); }
+.k-col[data-linkedin="conexion_enviada"]::after  { background:var(--acc); }
+.k-col[data-linkedin="aceptado"]::after          { background:var(--pink); }
+.k-col[data-linkedin="mensaje_enviado"]::after   { background:var(--amb); }
+.k-col[data-linkedin="respondio"]::after         { background:var(--grn); }
 .k-header { padding:14px 15px 10px; border-bottom:0.5px solid var(--b1); display:flex; align-items:center; justify-content:space-between; }
 .k-title  { font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; }
 .k-count  { font-size:11px; color:var(--mut); background:var(--s1); border:0.5px solid var(--b1); padding:1px 8px; border-radius:10px; }
@@ -224,6 +229,14 @@ select option { background:#1a1d2e; color:#f0effe; }
 .k-score  { font-family:'Fraunces',serif; font-size:13px; font-weight:600; }
 .k-empty  { padding:24px 14px; text-align:center; color:var(--mut); font-size:11px; }
 .k-notas-badge { font-size:9px; color:var(--acc); background:var(--ac2); border-radius:8px; padding:1px 6px; margin-left:4px; }
+.k-li-badge { font-size:10px; color:var(--sub); display:flex; align-items:center; gap:5px; margin-top:8px; padding-top:8px; border-top:0.5px dashed var(--b1); }
+.k-li-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+
+/* VIEW TOGGLE */
+.view-toggle { display:inline-flex; background:var(--s2); border:0.5px solid var(--b1); border-radius:10px; padding:3px; gap:2px; }
+.view-toggle-btn { font-size:12px; padding:6px 14px; border-radius:7px; color:var(--mut); cursor:pointer; user-select:none; transition:all 0.15s; font-family:'Inter',sans-serif; }
+.view-toggle-btn:hover { color:var(--tx); }
+.view-toggle-btn.active { background:var(--s1); border:0.5px solid var(--b2); color:var(--tx); font-weight:500; }
 
 /* BUTTONS */
 .btn-copy { background:none; border:0.5px solid var(--b1); border-radius:6px; color:var(--mut); padding:3px 9px; font-size:10px; font-family:'Inter',sans-serif; cursor:pointer; transition:all 0.15s; white-space:nowrap; flex-shrink:0; }
@@ -337,6 +350,7 @@ select option { background:#1a1d2e; color:#f0effe; }
 .btn-nota:hover { opacity:0.88; }
 .btn-nota:disabled { opacity:0.4; cursor:not-allowed; }
 .notas-empty { font-size:12px; color:var(--mut); text-align:center; padding:16px 0; }
+.modal-li-hint { font-size:10px; color:var(--mut); margin-top:6px; }
 
 /* RESPONSIVE */
 @media(max-width:768px){
@@ -472,6 +486,11 @@ select option { background:#1a1d2e; color:#f0effe; }
           <div class="modal-score-box"><div class="modal-score-val" id="modal-total">—</div><div class="modal-score-lbl" id="t-lbl-total">Total / 100</div></div>
         </div>
         <div class="modal-signals" id="modal-signals" style="margin-top:10px;"></div>
+      </div>
+      <div>
+        <div class="modal-section-title" id="t-modal-linkedin"><i class="ti ti-brand-linkedin"></i> estado linkedin</div>
+        <select id="modal-linkedin-sel" class="estado-sel" style="width:100%;" onchange="actualizarLinkedinEstado(modalLeadId,this.value)"></select>
+        <div class="modal-li-hint" id="modal-linkedin-updated"></div>
       </div>
       <div>
         <div class="modal-section-title" id="t-modal-notas">notas</div>
@@ -673,8 +692,14 @@ select option { background:#1a1d2e; color:#f0effe; }
     <!-- PIPELINE -->
     <div class="panel" id="panel-pipeline">
       <div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
-          <div style="font-size:12px;color:var(--sub);" id="t-pipeline-desc">Leads en proceso — haz clic en una tarjeta para ver el detalle y añadir notas</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <div class="view-toggle" id="pipeline-view-toggle">
+              <span class="view-toggle-btn active" onclick="setPipelineView('comercial')" id="t-view-comercial">Pipeline comercial</span>
+              <span class="view-toggle-btn" onclick="setPipelineView('linkedin')" id="t-view-linkedin">Progreso LinkedIn</span>
+            </div>
+            <div style="font-size:12px;color:var(--sub);" id="t-pipeline-desc">Leads en proceso — haz clic en una tarjeta para ver el detalle y añadir notas</div>
+          </div>
           <button class="btn-export" onclick="exportarCSV('pipeline')"><span id="t-btn-exportar-pipeline">↓ exportar pipeline</span></button>
         </div>
         <div class="kanban" id="kanban-board"></div>
@@ -732,6 +757,11 @@ const ESTADOS_NUEVOS   = ['Nuevo'];
 const ESTADOS_PIPELINE = ['Contactado','En conversación','Reunión agendada','Cerrado','Descartado'];
 const ESTADOS_KANBAN   = ['Contactado','En conversación','Reunión agendada','Cerrado','Descartado'];
 const ESTADO_COLORS    = { 'Contactado':'var(--acc)','En conversación':'var(--amb)','Reunión agendada':'var(--grn)','Cerrado':'var(--grn)','Descartado':'var(--mut)' };
+
+const LINKEDIN_STATUSES = ['sin_conexion','conexion_enviada','aceptado','mensaje_enviado','respondio'];
+const LINKEDIN_COLORS   = { 'sin_conexion':'var(--mut)','conexion_enviada':'var(--acc)','aceptado':'var(--pink)','mensaje_enviado':'var(--amb)','respondio':'var(--grn)' };
+let pipelineView = 'comercial';
+
 const FASES = [
   { hasta:15,  key:'fase1' },
   { hasta:45,  key:'fase2' },
@@ -845,6 +875,7 @@ const T = {
     modal_contacto: 'contacto',
     modal_scoring: 'scoring',
     modal_notas: 'notas',
+    modal_linkedin: 'estado linkedin',
     swo_encaje: 'Encaje',
     swo_friccion: 'Fricción',
     lbl_encaje: 'Encaje / 40',
@@ -887,6 +918,18 @@ const T = {
     no_export: 'No hay leads para exportar',
     sin_leads_etapa: 'Sin leads en esta etapa',
     sin_datos_todavia: 'Sin datos todavía',
+    view_comercial: 'Pipeline comercial',
+    view_linkedin: 'Progreso LinkedIn',
+    li_sin_conexion: 'Sin conexión',
+    li_conexion_enviada: 'Se envió conexión',
+    li_aceptado: 'Aceptó',
+    li_mensaje_enviado: 'Se envió mensaje',
+    li_respondio: 'Respondió',
+    li_actualizado: 'Actualizado',
+    li_hoy: 'hoy',
+    li_hace_1_dia: 'hace 1 día',
+    li_hace_dias: 'hace {n} días',
+    li_nunca: 'sin actualizar',
   },
   en: {
     nav_busqueda: 'New search',
@@ -949,6 +992,7 @@ const T = {
     modal_contacto: 'contact',
     modal_scoring: 'scoring',
     modal_notas: 'notes',
+    modal_linkedin: 'linkedin status',
     swo_encaje: 'Fit',
     swo_friccion: 'Friction',
     lbl_encaje: 'Fit / 40',
@@ -991,10 +1035,30 @@ const T = {
     no_export: 'No leads to export',
     sin_leads_etapa: 'No leads at this stage',
     sin_datos_todavia: 'No data yet',
+    view_comercial: 'Sales pipeline',
+    view_linkedin: 'LinkedIn progress',
+    li_sin_conexion: 'Not connected',
+    li_conexion_enviada: 'Connection sent',
+    li_aceptado: 'Accepted',
+    li_mensaje_enviado: 'Message sent',
+    li_respondio: 'Replied',
+    li_actualizado: 'Updated',
+    li_hoy: 'today',
+    li_hace_1_dia: '1 day ago',
+    li_hace_dias: '{n} days ago',
+    li_nunca: 'not updated',
   }
 };
 let currentLang = 'es';
 function t(key) { return T[currentLang]?.[key] ?? key; }
+function liLabel(status) { return t('li_'+(status||'sin_conexion')); }
+function liTimeAgo(iso) {
+  if (!iso) return t('li_nunca');
+  const diff = Math.floor((Date.now()-new Date(iso).getTime())/86400000);
+  if (diff<=0) return t('li_hoy');
+  if (diff===1) return t('li_hace_1_dia');
+  return t('li_hace_dias').replace('{n}',diff);
+}
 
 let allLeads = [], filtroNuevos = 'all';
 let timerInterval = null, pollingInterval = null, timerSeg = 0, leadsAntes = 0;
@@ -1139,11 +1203,13 @@ function applyLang() {
     't-metric-good':'metric_good','t-metric-ratio':'metric_ratio',
     't-sec-por-estado':'sec_por_estado','t-sec-por-producto':'sec_por_producto','t-btn-exportar-todos':'btn_exportar_todos',
     't-btn-run':'btn_run','t-modal-contacto':'modal_contacto','t-modal-scoring':'modal_scoring','t-modal-notas':'modal_notas',
+    't-modal-linkedin':'modal_linkedin',
     't-swo-encaje':'swo_encaje','t-swo-friccion':'swo_friccion',
     't-lbl-encaje':'lbl_encaje','t-lbl-friccion':'lbl_friccion','t-lbl-total':'lbl_total',
     't-btn-guardar-nota':'btn_guardar_nota',
     't-login-title':'login_title','t-login-sub':'login_sub','t-login-label':'login_label','t-login-btn':'login_btn',
     't-optional':'optional',
+    't-view-comercial':'view_comercial','t-view-linkedin':'view_linkedin',
   };
   Object.entries(map).forEach(([id,key])=>{ const el=document.getElementById(id); if(el) el.textContent=t(key); });
 
@@ -1220,6 +1286,20 @@ async function actualizarEstado(id, estado) {
   } catch(e) { console.error(e); }
 }
 
+async function actualizarLinkedinEstado(id, linkedin_status) {
+  if (!id) return;
+  try {
+    const linkedin_status_updated_at = new Date().toISOString();
+    await sbFetch(`leads?id=eq.${id}`, { method:'PATCH', body:JSON.stringify({linkedin_status, linkedin_status_updated_at}) });
+    const l = allLeads.find(x => x.id === id);
+    if (l) { l.linkedin_status = linkedin_status; l.linkedin_status_updated_at = linkedin_status_updated_at; }
+    renderKanban();
+    if (modalLeadId === id) {
+      document.getElementById('modal-linkedin-updated').textContent = `${t('li_actualizado')}: ${liTimeAgo(linkedin_status_updated_at)}`;
+    }
+  } catch(e) { console.error(e); }
+}
+
 // NAV
 function goTo(panel) {
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
@@ -1235,6 +1315,14 @@ function goTo(panel) {
   if (panel==='nuevos')   renderNuevos();
   if (panel==='pipeline') renderKanban();
   if (panel==='metricas') renderMetricas();
+}
+
+// PIPELINE VIEW TOGGLE
+function setPipelineView(view) {
+  pipelineView = view;
+  document.getElementById('t-view-comercial').classList.toggle('active', view==='comercial');
+  document.getElementById('t-view-linkedin').classList.toggle('active', view==='linkedin');
+  renderKanban();
 }
 
 // EJECUTAR
@@ -1396,6 +1484,7 @@ function renderNuevos() {
 
 // KANBAN
 function renderKanban() {
+  if (pipelineView === 'linkedin') { renderKanbanLinkedin(); return; }
   const pipeline = allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado));
   const board    = document.getElementById('kanban-board');
   board.style.gridTemplateColumns=`repeat(${ESTADOS_KANBAN.length},minmax(200px,1fr))`;
@@ -1410,6 +1499,8 @@ function renderKanban() {
           const bc=l.banda==='Priority'?'tag-grn':l.banda==='Good'?'tag-amb':'tag-mut';
           const sc=l.banda==='Priority'?'var(--grn)':l.banda==='Good'?'var(--amb)':'var(--mut)';
           const nCount=Array.isArray(l.notas)?l.notas.length:0;
+          const liStatus = l.linkedin_status || 'sin_conexion';
+          const liColor  = LINKEDIN_COLORS[liStatus]||'var(--mut)';
           return `
           <div class="k-card" onclick="abrirModal('${l.id}')">
             <div class="k-name">${l.empresa||'—'}${nCount?`<span class="k-notas-badge">✎ ${nCount}</span>`:''}</div>
@@ -1425,8 +1516,34 @@ function renderKanban() {
             <select class="estado-sel" style="width:100%;font-size:11px;margin-top:8px;" onclick="event.stopPropagation()" onchange="event.stopPropagation();actualizarEstado('${l.id}',this.value)">
               ${['Nuevo','Contactado','En conversación','Reunión agendada','Cerrado','Descartado'].map(e=>`<option ${l.estado===e?'selected':''}>${e}</option>`).join('')}
             </select>
+            <div class="k-li-badge"><span class="k-li-dot" style="background:${liColor};"></span>${liLabel(liStatus)}</div>
           </div>`;
         }).join(''):`<div class="k-empty">${t('sin_leads_etapa')}</div>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderKanbanLinkedin() {
+  const pipeline = allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado) && l.estado!=='Descartado');
+  const board    = document.getElementById('kanban-board');
+  board.style.gridTemplateColumns=`repeat(${LINKEDIN_STATUSES.length},minmax(180px,1fr))`;
+  board.innerHTML = LINKEDIN_STATUSES.map(status=>{
+    const cards = pipeline.filter(l=>(l.linkedin_status||'sin_conexion')===status);
+    const color = LINKEDIN_COLORS[status]||'var(--mut)';
+    return `
+    <div class="k-col" data-linkedin="${status}">
+      <div class="k-header"><span class="k-title" style="color:${color};">${liLabel(status)}</span><span class="k-count">${cards.length}</span></div>
+      <div class="k-body">
+        ${cards.length?cards.map(l=>`
+          <div class="k-card" onclick="abrirModal('${l.id}')">
+            <div class="k-name">${l.empresa||'—'}</div>
+            <div class="k-meta">${l.zona?`◎ ${l.zona}`:''}</div>
+            <select class="estado-sel" style="width:100%;font-size:11px;margin-top:6px;" onclick="event.stopPropagation()" onchange="event.stopPropagation();actualizarLinkedinEstado('${l.id}',this.value)">
+              ${LINKEDIN_STATUSES.map(s=>`<option value="${s}" ${status===s?'selected':''}>${liLabel(s)}</option>`).join('')}
+            </select>
+            <div class="k-li-badge" style="border-top:none;padding-top:0;margin-top:6px;">${liTimeAgo(l.linkedin_status_updated_at)}</div>
+          </div>`).join(''):`<div class="k-empty">${t('sin_leads_etapa')}</div>`}
       </div>
     </div>`;
   }).join('');
@@ -1464,6 +1581,9 @@ function abrirModal(id) {
   document.getElementById('swo-razon').textContent = l.razon_cuenta||'';
   const todasSeñales = [...fitSeñales,...oppSeñales].filter(Boolean);
   document.getElementById('modal-signals').innerHTML = todasSeñales.map(s=>`<span class="tag tag-mut">${señalLabel(s)}</span>`).join('');
+  const liStatus = l.linkedin_status || 'sin_conexion';
+  document.getElementById('modal-linkedin-sel').innerHTML = LINKEDIN_STATUSES.map(s=>`<option value="${s}" ${liStatus===s?'selected':''}>${liLabel(s)}</option>`).join('');
+  document.getElementById('modal-linkedin-updated').textContent = `${t('li_actualizado')}: ${liTimeAgo(l.linkedin_status_updated_at)}`;
   renderNotas(l.notas||[]);
   document.getElementById('nota-input').value='';
   document.getElementById('modal-overlay').classList.add('show');
@@ -1535,7 +1655,7 @@ function updateBadges() {
 function exportarCSV(tipo) {
   let leads=tipo==='pipeline'?allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado)):allLeads;
   if (!leads.length) { showStatus(t('no_export'),'err'); return; }
-  const cols=['empresa','sector','zona','telefono','web','contacto_nombre','contacto_email','contacto_fuente','calidad_contacto','fit_score','opportunity_score','total_score','banda','automation_maturity','producto_recomendado','tiene_chatbot','tiene_reservas','tiene_crm','cta_manual','es_franquicia','franquicia_sin_sistema','dolor_activo','momento_compra','razon_cuenta','angulo_contacto','primer_mensaje','estado','fuente','fecha'];
+  const cols=['empresa','sector','zona','telefono','web','contacto_nombre','contacto_email','contacto_fuente','calidad_contacto','fit_score','opportunity_score','total_score','banda','automation_maturity','producto_recomendado','tiene_chatbot','tiene_reservas','tiene_crm','cta_manual','es_franquicia','franquicia_sin_sistema','dolor_activo','momento_compra','razon_cuenta','angulo_contacto','primer_mensaje','estado','linkedin_status','linkedin_status_updated_at','fuente','fecha'];
   const rows=leads.map(l=>cols.map(c=>`"${(l[c]||'').toString().replace(/"/g,'""')}"`).join(','));
   const csv='\uFEFF'+[cols.join(','),...rows].join('\n');
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
