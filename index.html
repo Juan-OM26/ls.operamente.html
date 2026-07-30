@@ -702,6 +702,12 @@ select option { background:#1a1d2e; color:#f0effe; }
           </div>
           <button class="btn-export" onclick="exportarCSV('pipeline')"><span id="t-btn-exportar-pipeline">↓ exportar pipeline</span></button>
         </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
+          <select class="sector-select" id="pipeline-sector-filter" onchange="renderKanban()" style="min-width:180px;border-radius:8px;padding:7px 32px 7px 12px;font-size:12px;">
+            <option value="" id="t-opt-todos-sectores-pipeline">todos los sectores</option>
+          </select>
+          <input type="text" id="pipeline-search-input" placeholder="buscar por nombre..." style="flex:1;min-width:160px;padding:7px 12px;font-size:12px;border-radius:8px;" oninput="renderKanban()">
+        </div>
         <div class="kanban" id="kanban-board"></div>
       </div>
     </div>
@@ -859,6 +865,7 @@ const T = {
     filter_low: 'Descartar',
     opt_todos_sectores: 'todos los sectores',
     buscar_placeholder: 'buscar...',
+    buscar_nombre_placeholder: 'buscar por nombre...',
     btn_exportar: '↓ exportar',
     pipeline_desc: 'Leads en proceso — haz clic en una tarjeta para ver el detalle y añadir notas',
     btn_exportar_pipeline: '↓ exportar pipeline',
@@ -976,6 +983,7 @@ const T = {
     filter_low: 'Discard',
     opt_todos_sectores: 'all sectors',
     buscar_placeholder: 'search...',
+    buscar_nombre_placeholder: 'search by name...',
     btn_exportar: '↓ export',
     pipeline_desc: 'Leads in process — click on a card to see details and add notes',
     btn_exportar_pipeline: '↓ export pipeline',
@@ -1227,6 +1235,9 @@ function applyLang() {
 
   document.getElementById('nota-input')?.setAttribute('placeholder', t('nota_placeholder'));
   document.getElementById('search-input')?.setAttribute('placeholder', t('buscar_placeholder'));
+  document.getElementById('pipeline-search-input')?.setAttribute('placeholder', t('buscar_nombre_placeholder'));
+  const optTodosPipe = document.getElementById('t-opt-todos-sectores-pipeline');
+  if (optTodosPipe) optTodosPipe.textContent = t('opt_todos_sectores');
   document.getElementById('loading-text').textContent = t('loading_leads');
 
   // page-title / page-sub según el panel activo
@@ -1387,6 +1398,49 @@ function iniciarPolling(nq) {
   },15000);
 }
 
+// SECTOR — normalización y agrupamiento fuzzy (compartido entre Leads nuevos y Pipeline)
+function normSector(s) { return s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' '); }
+function construirGrupoSector(baseLeads, selectEl, mapaGlobal) {
+  const sectorActual = selectEl.value;
+  const bigramas = s => { const b=new Set(); for(let i=0;i<s.length-1;i++) b.add(s.slice(i,i+2)); return b; };
+  const similitud = (a, b) => {
+    const ba = bigramas(normSector(a)), bb = bigramas(normSector(b));
+    const inter = [...ba].filter(x=>bb.has(x)).length;
+    const union = new Set([...ba,...bb]).size;
+    return union===0 ? 0 : inter/union;
+  };
+  const freq = {};
+  baseLeads.forEach(l => { const s = (l.sector||'').trim(); if (s) freq[s] = (freq[s]||0) + 1; });
+  const todos = Object.keys(freq);
+  const UMBRAL = 0.55;
+  const grupos = [];
+  todos.sort((a,b)=>freq[b]-freq[a]);
+  todos.forEach(s => {
+    let mejorGrupo = null, mejorSim = 0;
+    grupos.forEach(g => { const sim = similitud(s, g.rep); if (sim > mejorSim) { mejorSim = sim; mejorGrupo = g; } });
+    if (mejorSim >= UMBRAL) { mejorGrupo.miembros.push(s); mejorGrupo.count += freq[s]; }
+    else grupos.push({ rep: s, miembros: [s], count: freq[s] });
+  });
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  grupos.sort((a,b) => cap(a.rep).localeCompare(cap(b.rep)));
+  selectEl.innerHTML = `<option value="">${t('opt_todos_sectores')}</option>` +
+    grupos.map(g => { const normRep = normSector(g.rep); return `<option value="${normRep}" ${normRep===sectorActual?'selected':''}>${cap(g.rep)}</option>`; }).join('');
+  const mapa = {};
+  grupos.forEach(g => { const normRep = normSector(g.rep); g.miembros.forEach(m => { mapa[normSector(m)] = normRep; }); });
+  window[mapaGlobal] = mapa;
+}
+function filtrarPorSectorYNombre(leads, selectEl, searchEl, mapaGlobal) {
+  let out = leads;
+  const sectorFiltro = selectEl?.value || '';
+  if (sectorFiltro) out = out.filter(l => {
+    const n = normSector(l.sector||'');
+    return (window[mapaGlobal]?.[n] || n) === sectorFiltro;
+  });
+  const busq = (searchEl?.value||'').toLowerCase().trim();
+  if (busq) out = out.filter(l => (l.empresa||'').toLowerCase().includes(busq));
+  return out;
+}
+
 // LEADS NUEVOS
 function filterNuevos(banda,btn) { filtroNuevos=banda; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderNuevos(); }
 
@@ -1397,40 +1451,11 @@ function renderNuevos() {
   if (busq) leads=leads.filter(l=>(l.empresa||'').toLowerCase().includes(busq)||(l.sector||'').toLowerCase().includes(busq));
 
   const selSector = document.getElementById('sector-filter');
-  if (selSector) {
-    const sectorActual = selSector.value;
-    const norm = s => s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
-    const bigramas = s => { const b=new Set(); for(let i=0;i<s.length-1;i++) b.add(s.slice(i,i+2)); return b; };
-    const similitud = (a, b) => {
-      const ba = bigramas(norm(a)), bb = bigramas(norm(b));
-      const inter = [...ba].filter(x=>bb.has(x)).length;
-      const union = new Set([...ba,...bb]).size;
-      return union===0 ? 0 : inter/union;
-    };
-    const freq = {};
-    nuevos.forEach(l => { const s = (l.sector||'').trim(); if (s) freq[s] = (freq[s]||0) + 1; });
-    const todos = Object.keys(freq);
-    const UMBRAL = 0.55;
-    const grupos = [];
-    todos.sort((a,b)=>freq[b]-freq[a]);
-    todos.forEach(s => {
-      let mejorGrupo = null, mejorSim = 0;
-      grupos.forEach(g => { const sim = similitud(s, g.rep); if (sim > mejorSim) { mejorSim = sim; mejorGrupo = g; } });
-      if (mejorSim >= UMBRAL) { mejorGrupo.miembros.push(s); mejorGrupo.count += freq[s]; }
-      else grupos.push({ rep: s, miembros: [s], count: freq[s] });
-    });
-    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-    grupos.sort((a,b) => cap(a.rep).localeCompare(cap(b.rep)));
-    selSector.innerHTML = '<option value="">todos los sectores</option>' +
-      grupos.map(g => { const normRep = norm(g.rep); return `<option value="${normRep}" ${normRep===sectorActual?'selected':''}>${cap(g.rep)}</option>`; }).join('');
-    window._sectorGrupos = {};
-    grupos.forEach(g => { const normRep = norm(g.rep); g.miembros.forEach(m => { window._sectorGrupos[norm(m)] = normRep; }); });
-  }
+  if (selSector) construirGrupoSector(nuevos, selSector, '_sectorGrupos');
 
-  const norm2 = s => s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
   const sectorFiltro = selSector?.value || '';
   if (sectorFiltro) leads = leads.filter(l => {
-    const n = norm2(l.sector||'');
+    const n = normSector(l.sector||'');
     return (window._sectorGrupos?.[n] || n) === sectorFiltro;
   });
 
@@ -1485,7 +1510,10 @@ function renderNuevos() {
 // KANBAN
 function renderKanban() {
   if (pipelineView === 'linkedin') { renderKanbanLinkedin(); return; }
-  const pipeline = allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado));
+  const pipelineTodo = allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado));
+  const selSectorPipe = document.getElementById('pipeline-sector-filter');
+  if (selSectorPipe) construirGrupoSector(pipelineTodo, selSectorPipe, '_sectorGruposPipeline');
+  const pipeline = filtrarPorSectorYNombre(pipelineTodo, selSectorPipe, document.getElementById('pipeline-search-input'), '_sectorGruposPipeline');
   const board    = document.getElementById('kanban-board');
   board.style.gridTemplateColumns=`repeat(${ESTADOS_KANBAN.length},minmax(200px,1fr))`;
   board.innerHTML = ESTADOS_KANBAN.map(estado=>{
@@ -1525,7 +1553,10 @@ function renderKanban() {
 }
 
 function renderKanbanLinkedin() {
-  const pipeline = allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado) && l.estado!=='Descartado');
+  const pipelineTodo = allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado) && l.estado!=='Descartado');
+  const selSectorPipe = document.getElementById('pipeline-sector-filter');
+  if (selSectorPipe) construirGrupoSector(pipelineTodo, selSectorPipe, '_sectorGruposPipeline');
+  const pipeline = filtrarPorSectorYNombre(pipelineTodo, selSectorPipe, document.getElementById('pipeline-search-input'), '_sectorGruposPipeline');
   const board    = document.getElementById('kanban-board');
   board.style.gridTemplateColumns=`repeat(${LINKEDIN_STATUSES.length},minmax(180px,1fr))`;
   board.innerHTML = LINKEDIN_STATUSES.map(status=>{
