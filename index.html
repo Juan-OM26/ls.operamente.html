@@ -209,7 +209,7 @@ select option { background:#1a1d2e; color:#f0effe; }
 .k-col[data-estado="Contactado"]::after       { background:var(--acc); }
 .k-col[data-estado="En conversación"]::after  { background:var(--amb); }
 .k-col[data-estado="Reunión agendada"]::after { background:var(--grn); }
-.k-col[data-estado="Cerrado"]::after          { background:var(--grad); }
+.k-col[data-estado="Cerrado"]::after          { background:var(--pink); }
 .k-col[data-estado="Descartado"]::after       { background:var(--mut); }
 .k-col[data-linkedin="sin_conexion"]::after      { background:var(--mut); }
 .k-col[data-linkedin="conexion_enviada"]::after  { background:var(--acc); }
@@ -700,13 +700,13 @@ select option { background:#1a1d2e; color:#f0effe; }
             </div>
             <div style="font-size:12px;color:var(--sub);" id="t-pipeline-desc">Leads en proceso — haz clic en una tarjeta para ver el detalle y añadir notas</div>
           </div>
-          <button class="btn-export" onclick="exportarCSV('pipeline')"><span id="t-btn-exportar-pipeline">↓ exportar pipeline</span></button>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
-          <select class="sector-select" id="pipeline-sector-filter" onchange="renderKanban()" style="min-width:180px;border-radius:8px;padding:7px 32px 7px 12px;font-size:12px;">
-            <option value="" id="t-opt-todos-sectores-pipeline">todos los sectores</option>
-          </select>
-          <input type="text" id="pipeline-search-input" placeholder="buscar por nombre..." style="flex:1;min-width:160px;padding:7px 12px;font-size:12px;border-radius:8px;" oninput="renderKanban()">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <select class="sector-select" id="pipeline-sector-filter" onchange="renderKanban()" style="width:150px;">
+              <option value="" id="t-opt-todos-sectores-pipeline">todos los sectores</option>
+            </select>
+            <input type="text" id="pipeline-search-input" placeholder="buscar por nombre..." style="width:170px;padding:5px 12px;font-size:11px;border-radius:20px;" oninput="renderKanban()">
+            <button class="btn-export" onclick="exportarCSV('pipeline')"><span id="t-btn-exportar-pipeline">↓ exportar pipeline</span></button>
+          </div>
         </div>
         <div class="kanban" id="kanban-board"></div>
       </div>
@@ -762,7 +762,7 @@ const WEBHOOK     = 'https://operamente-n8n.jdray1.easypanel.host/webhook/d3f22d
 const ESTADOS_NUEVOS   = ['Nuevo'];
 const ESTADOS_PIPELINE = ['Contactado','En conversación','Reunión agendada','Cerrado','Descartado'];
 const ESTADOS_KANBAN   = ['Contactado','En conversación','Reunión agendada','Cerrado','Descartado'];
-const ESTADO_COLORS    = { 'Contactado':'var(--acc)','En conversación':'var(--amb)','Reunión agendada':'var(--grn)','Cerrado':'var(--grn)','Descartado':'var(--mut)' };
+const ESTADO_COLORS    = { 'Contactado':'var(--acc)','En conversación':'var(--amb)','Reunión agendada':'var(--grn)','Cerrado':'var(--pink)','Descartado':'var(--mut)' };
 
 const LINKEDIN_STATUSES = ['sin_conexion','conexion_enviada','aceptado','mensaje_enviado','respondio'];
 const LINKEDIN_COLORS   = { 'sin_conexion':'var(--mut)','conexion_enviada':'var(--acc)','aceptado':'var(--pink)','mensaje_enviado':'var(--amb)','respondio':'var(--grn)' };
@@ -1664,7 +1664,7 @@ function renderMetricas() {
   };
   const estados={};
   allLeads.forEach(l=>{ const e=l.estado||'Nuevo'; estados[e]=(estados[e]||0)+1; });
-  rc('chart-estados',estados,{'Nuevo':'var(--sub)','Contactado':'var(--acc)','En conversación':'var(--amb)','Reunión agendada':'var(--grn)','Cerrado':'var(--grn)','Descartado':'var(--mut)'});
+  rc('chart-estados',estados,{'Nuevo':'var(--sub)','Contactado':'var(--acc)','En conversación':'var(--amb)','Reunión agendada':'var(--grn)','Cerrado':'var(--pink)','Descartado':'var(--mut)'});
   const prods={};
   allLeads.filter(l=>l.producto_recomendado&&l.producto_recomendado!=='Descartar').forEach(l=>{ prods[l.producto_recomendado]=(prods[l.producto_recomendado]||0)+1; });
   rc('chart-productos',prods,{'Impulso':'var(--acc)','Flow':'var(--amb)','Sinergia':'var(--grn)'});
@@ -1673,7 +1673,7 @@ function renderMetricas() {
 // BADGES
 function updateBadges() {
   const n=allLeads.filter(l=>ESTADOS_NUEVOS.includes(l.estado||'Nuevo')).length;
-  const p=allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado)).length;
+  const p=allLeads.filter(l=>ESTADOS_PIPELINE.includes(l.estado) && l.estado!=='Descartado').length;
   const bn=document.getElementById('badge-nuevos'), bp=document.getElementById('badge-pipe');
   const dbn=document.getElementById('dbadge-nuevos'), dbp=document.getElementById('dbadge-pipe');
   bn.textContent=n; bn.style.display=n>0?'inline':'none';
